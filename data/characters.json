@@ -2,106 +2,169 @@
   {
     "slug": "kiana-kaslana",
     "en": "Kiana Kaslana",
-    "zh": "琪亞娜·卡斯蘭娜"
+    "zh": "琪亞娜·卡斯蘭娜",
+    "battlesuit": "Herrscher of Finality",
+    "image": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Herrscher%20of%20Finality%20%28Portrait%29.png",
+    "source": "https://honkaiimpact3.fandom.com/wiki/File:Herrscher%20of%20Finality%20%28Portrait%29.png"
   },
   {
     "slug": "raiden-mei",
     "en": "Raiden Mei",
-    "zh": "雷電芽衣"
+    "zh": "雷電芽衣",
+    "battlesuit": "Herrscher of Origin",
+    "image": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Herrscher%20of%20Origin%20%28Portrait%29.png",
+    "source": "https://honkaiimpact3.fandom.com/wiki/File:Herrscher%20of%20Origin%20%28Portrait%29.png"
   },
   {
     "slug": "bronya-zaychik",
     "en": "Bronya Zaychik",
-    "zh": "布洛妮婭·捷伊慈克"
+    "zh": "布洛妮婭·捷伊慈克",
+    "battlesuit": "Herrscher of Truth",
+    "image": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Herrscher%20of%20Truth%20%28Portrait%29.png",
+    "source": "https://honkaiimpact3.fandom.com/wiki/File:Herrscher%20of%20Truth%20%28Portrait%29.png"
   },
   {
     "slug": "himeko-murata",
     "en": "Himeko Murata",
-    "zh": "姬子·村田"
+    "zh": "姬子·村田",
+    "battlesuit": "Vermilion Knight: Eclipse",
+    "image": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Vermilion%20Knight%20-%20Eclipse%20%28Portrait%29.png",
+    "source": "https://honkaiimpact3.fandom.com/wiki/File:Vermilion%20Knight%20-%20Eclipse%20%28Portrait%29.png"
   },
   {
     "slug": "theresa-apocalypse",
     "en": "Theresa Apocalypse",
-    "zh": "德麗莎·阿波卡利斯"
+    "zh": "德麗莎·阿波卡利斯",
+    "battlesuit": "Celestial Hymn",
+    "image": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Celestial%20Hymn%20%28Portrait%29.png",
+    "source": "https://honkaiimpact3.fandom.com/wiki/File:Celestial%20Hymn%20%28Portrait%29.png"
   },
   {
     "slug": "fischl",
     "en": "Fischl",
-    "zh": "菲謝爾"
+    "zh": "菲謝爾",
+    "battlesuit": "Prinzessin der Verurteilung!",
+    "image": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Prinzessin%20der%20Verurteilung%21%20%28Portrait%29.png",
+    "source": "https://honkaiimpact3.fandom.com/wiki/File:Prinzessin%20der%20Verurteilung%21%20%28Portrait%29.png"
   },
   {
     "slug": "yae-sakura",
     "en": "Yae Sakura",
-    "zh": "八重櫻"
+    "zh": "八重櫻",
+    "battlesuit": "Flame Sakitama",
+    "image": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Flame%20Sakitama%20%28Portrait%29.png",
+    "source": "https://honkaiimpact3.fandom.com/wiki/File:Flame%20Sakitama%20%28Portrait%29.png"
   },
   {
     "slug": "elysia",
     "en": "Elysia",
-    "zh": "愛莉希雅"
+    "zh": "愛莉希雅",
+    "battlesuit": "Miss Pink Elf♪",
+    "image": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Miss%20Pink%20Elf%E2%99%AA%20%28Portrait%29.png",
+    "source": "https://honkaiimpact3.fandom.com/wiki/File:Miss%20Pink%20Elf%E2%99%AA%20%28Portrait%29.png"
   },
   {
     "slug": "mobius",
     "en": "Mobius",
-    "zh": "梅比烏斯"
+    "zh": "梅比烏斯",
+    "battlesuit": "Infinite Ouroboros",
+    "image": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Infinite%20Ouroboros%20%28Portrait%29.png",
+    "source": "https://honkaiimpact3.fandom.com/wiki/File:Infinite%20Ouroboros%20%28Portrait%29.png"
   },
   {
     "slug": "eden",
     "en": "Eden",
-    "zh": "伊甸"
+    "zh": "伊甸",
+    "battlesuit": "Golden Diva",
+    "image": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Golden%20Diva%20%28Portrait%29.png",
+    "source": "https://honkaiimpact3.fandom.com/wiki/File:Golden%20Diva%20%28Portrait%29.png"
   },
   {
     "slug": "aponia",
     "en": "Aponia",
-    "zh": "阿波尼亞"
+    "zh": "阿波尼亞",
+    "battlesuit": "Disciplinary Perdition",
+    "image": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Disciplinary%20Perdition%20%28Portrait%29.png",
+    "source": "https://honkaiimpact3.fandom.com/wiki/File:Disciplinary%20Perdition%20%28Portrait%29.png"
   },
   {
     "slug": "vill-v",
     "en": "Vill-V",
-    "zh": "維爾薇"
+    "zh": "維爾薇",
+    "battlesuit": "Helical Contraption",
+    "image": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Helical%20Contraption%20%28Portrait%29.png",
+    "source": "https://honkaiimpact3.fandom.com/wiki/File:Helical%20Contraption%20%28Portrait%29.png"
   },
   {
     "slug": "griseo",
     "en": "Griseo",
-    "zh": "格雷修"
+    "zh": "格雷修",
+    "battlesuit": "Starry Impression",
+    "image": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Starry%20Impression%20%28Portrait%29.png",
+    "source": "https://honkaiimpact3.fandom.com/wiki/File:Starry%20Impression%20%28Portrait%29.png"
   },
   {
     "slug": "pardofelis",
     "en": "Pardofelis",
-    "zh": "帕朵菲莉絲"
+    "zh": "帕朵菲莉絲",
+    "battlesuit": "Reverist Calico",
+    "image": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Reverist%20Calico%20%28Portrait%29.png",
+    "source": "https://honkaiimpact3.fandom.com/wiki/File:Reverist%20Calico%20%28Portrait%29.png"
   },
   {
     "slug": "li-sushang",
     "en": "Li Sushang",
-    "zh": "李素裳"
+    "zh": "李素裳",
+    "battlesuit": "Jade Knight",
+    "image": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Jade%20Knight%20%28Portrait%29.png",
+    "source": "https://honkaiimpact3.fandom.com/wiki/File:Jade%20Knight%20%28Portrait%29.png"
   },
   {
     "slug": "susannah",
     "en": "Susannah Manatt",
-    "zh": "蘇珊娜·曼納特"
+    "zh": "蘇珊娜·曼納特",
+    "battlesuit": "Valkyrie Quicksand",
+    "image": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Valkyrie%20Quicksand%20%28Portrait%29.png",
+    "source": "https://honkaiimpact3.fandom.com/wiki/File:Valkyrie%20Quicksand%20%28Portrait%29.png"
   },
   {
     "slug": "prometheus",
     "en": "PROMETHEUS",
-    "zh": "普羅米修斯"
+    "zh": "普羅米修斯",
+    "battlesuit": "Terminal Aide 0017",
+    "image": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Terminal%20Aide%200017%20%28Portrait%29.png",
+    "source": "https://honkaiimpact3.fandom.com/wiki/File:Terminal%20Aide%200017%20%28Portrait%29.png"
   },
   {
     "slug": "carole-pepper",
     "en": "Carole Pepper",
-    "zh": "卡蘿爾·佩珀"
+    "zh": "卡蘿爾·佩珀",
+    "battlesuit": "Sweet 'n' Spicy",
+    "image": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Sweet%20%27n%27%20Spicy%20%28Portrait%29.png",
+    "source": "https://honkaiimpact3.fandom.com/wiki/File:Sweet%20%27n%27%20Spicy%20%28Portrait%29.png"
   },
   {
     "slug": "sirin",
     "en": "Sirin",
-    "zh": "西琳"
+    "zh": "西琳",
+    "battlesuit": "Miracle ☆ Magical Girl",
+    "image": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Miracle%20%E2%98%86%20Magical%20Girl%20%28Portrait%29.png",
+    "source": "https://honkaiimpact3.fandom.com/wiki/File:Miracle%20%E2%98%86%20Magical%20Girl%20%28Portrait%29.png"
   },
   {
     "slug": "thelema-nutriscu",
     "en": "Thelema Nutriscu",
-    "zh": "泰蕾瑪·納特里斯庫"
+    "zh": "泰蕾瑪·納特里斯庫",
+    "battlesuit": "Mad Pleasure: Shadowbringer",
+    "image": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Mad%20Pleasure%20-%20Shadowbringer%20%28Portrait%29.png",
+    "source": "https://honkaiimpact3.fandom.com/wiki/File:Mad%20Pleasure%20-%20Shadowbringer%20%28Portrait%29.png"
   },
   {
     "slug": "lunar-vow-crimson-love",
     "en": "Lunar Vow: Crimson Love",
-    "zh": "月下誓約・予愛以心"
+    "zh": "月下誓約・予愛以心",
+    "battlesuit": "Lunar Vow: Crimson Love",
+    "image": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Lunar%20Vow%20-%20Crimson%20Love%20%28Portrait%29.png",
+    "source": "https://honkaiimpact3.fandom.com/wiki/File:Lunar%20Vow%20-%20Crimson%20Love%20%28Portrait%29.png"
   }
 ]
