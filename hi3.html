@@ -1,17 +1,66 @@
-<section id="hi3-gallery">
-  <div class="header">
-    <div class="title">
-      <h1>崩壞3rd 角色圖鑑</h1>
-      <span class="sub">支援搜尋 · 點圖放大 · 艦長私人老婆展示牆</span>
-      <p class="desc">輸入角色英文名或中文名即可搜尋。之後會慢慢加埋每隻角色嘅簡短介紹同個人評語。</p>
-    </div>
-    <div class="controls">
-      <input class="input" id="search" type="search" placeholder="🔎 搜尋角色（英文 / 中文）">
-    </div>
-  </div>
-  <div class="grid" id="grid"></div>
-</section>
-<link rel="stylesheet" href="./assets/hi3-gallery/styles.css">
-<script src="./assets/hi3-gallery/script.js"
-        data-img-base="./assets/hi3/characters/"
-        data-json="./data/characters.json"></script>
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#090b0c">
+    <meta name="description" content="Bernie’s Honkai Realm《崩壞3rd》角色圖鑑，支援中英文角色搜尋及圖片放大。">
+    <title>角色圖鑑 // Bernie’s Honkai Realm</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="assets/hi3-gallery/styles.css">
+    <script src="site.js" defer></script>
+    <script src="assets/hi3-gallery/script.js" data-img-base="assets/hi3/characters/" data-json="data/characters.json" defer></script>
+</head>
+<body class="database-page">
+    <header>
+        <h1>角色圖鑑</h1>
+        <p>CHARACTER DATABASE // HI3 ARCHIVE</p>
+        <nav aria-label="主要導覽">
+            <ul>
+                <li><a href="index.html">首頁</a></li>
+                <li><a href="guide.html">攻略專區</a></li>
+                <li><a href="gallery.html">相片庫</a></li>
+                <li><a href="honkai-info.html">崩壞三資料</a></li>
+                <li><a href="captain-line.html">艦長線</a></li>
+                <li><a href="hi3.html" aria-current="page">角色圖鑑</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="hi3-gallery" data-reveal>
+            <div class="gallery-heading">
+                <div>
+                    <span class="gallery-kicker">DATABASE / LIVE INDEX</span>
+                    <h2>女武神檔案</h2>
+                    <p>輸入角色英文名、中文名或者 slug 即可篩選。按角色圖片可以開啟大圖。</p>
+                </div>
+                <div class="gallery-counter">
+                    <span>DISPLAYING</span>
+                    <strong id="result-count">00</strong>
+                    <small>FILES</small>
+                </div>
+            </div>
+
+            <div class="controls">
+                <label class="search-panel" for="search">
+                    <span>SEARCH QUERY</span>
+                    <input class="input" id="search" type="search" placeholder="輸入角色名稱…" autocomplete="off">
+                    <b aria-hidden="true">⌕</b>
+                </label>
+            </div>
+
+            <div class="grid" id="grid" aria-live="polite"></div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <a class="site-brand site-brand--footer" href="index.html">
+            <span class="site-brand__mark">BR</span>
+            <span class="site-brand__copy"><strong>HONKAI REALM</strong><small>CHARACTER DATABASE</small></span>
+        </a>
+        <p>角色圖像及名稱權利屬於其原權利持有人；本頁為非官方個人收藏資料庫。</p>
+        <span>© <b data-current-year>2026</b> BERNIE LEUNG</span>
+    </footer>
+</body>
+</html>
