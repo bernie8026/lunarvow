@@ -1,0 +1,36 @@
+.card .thumb {
+  object-fit: contain;
+  padding: 12px 12px 0;
+}
+
+.tag {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lb-panel small {
+  display: block;
+  margin-top: 10px;
+  color: #8c9694;
+  font-size: 0.64rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+}
+
+#lb-source {
+  display: inline-flex;
+  margin-top: 22px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #d8ff2f;
+  color: #d8ff2f;
+  font-size: 0.58rem;
+  font-weight: 950;
+  letter-spacing: 0.11em;
+  text-decoration: none;
+}
+
+#lb-source[hidden] {
+  display: none;
+}
