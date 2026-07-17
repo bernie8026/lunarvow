@@ -1,52 +1,74 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-HK">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>艦長線 - Bernie’s Honkai Realm</title>
+    <meta name="theme-color" content="#090b0c">
+    <meta name="description" content="Bernie’s Honkai Realm 艦長線劇情及角色紀錄。">
+    <title>艦長線 // Bernie’s Honkai Realm</title>
     <link rel="stylesheet" href="style.css">
+    <script src="site.js" defer></script>
 </head>
 <body>
     <header>
         <h1>艦長線</h1>
-        <nav>
+        <p>NARRATIVE LOG // CAPTAINVERSE RECORD</p>
+        <nav aria-label="主要導覽">
             <ul>
                 <li><a href="index.html">首頁</a></li>
                 <li><a href="guide.html">攻略專區</a></li>
                 <li><a href="gallery.html">相片庫</a></li>
                 <li><a href="honkai-info.html">崩壞三資料</a></li>
-                <li><a href="captain-line.html">艦長線</a></li>
-            <li><a href="/hi3.html">HI3 角色圖鑑</a></li>
-</ul>
+                <li><a href="captain-line.html" aria-current="page">艦長線</a></li>
+                <li><a href="hi3.html">角色圖鑑</a></li>
+            </ul>
         </nav>
     </header>
+
     <main>
-        <section>
-            <h2>艦長線簡介</h2>
-            <p>艦長線是《崩壞3rd》中的一條重要劇情線，玩家將扮演艦長，指揮女武神們對抗崩壞。這條劇情線不僅展現了角色的成長，還揭示了崩壞世界的深層秘密。</p>
+        <section data-reveal>
+            <span class="update-tag">LOG 00 // OVERVIEW</span>
+            <h2>艦長宇宙</h2>
+            <p>艦長線係一系列以艦長、唔同世界泡同角色關係為核心嘅活動故事。佢同主線有唔同敘事方向，亦係月下誓約・予愛以心故事最重要嘅背景。</p>
         </section>
-        <section>
-            <h2>第一章：初識女武神</h2>
-                <li>第二章：崩壞的真相</li>
-                <li>第三章：最終決戰</li>
-            </ul>
+
+        <section class="featured-guide" data-reveal>
+            <span class="update-tag">PRIMARY SUBJECT</span>
+            <h2>月下與艦長</h2>
+            <p>月下嘅故事核心係漫長等待、跨越世界嘅追尋，以及同艦長重新相遇。呢一部分之後會按活動、時間線同重要場景逐步整理。</p>
+            <p><a class="primary-link" href="lunar-vow-guide.html">OPEN LUNAR VOW FILE →</a></p>
         </section>
-        <section>
-            <h2>艦長線的角色</h2>
+
+        <section data-reveal>
+            <span class="update-tag">LOG DIRECTORY</span>
+            <h2>紀錄分類</h2>
+            <ol>
+                <li>角色初次相遇與世界泡背景。</li>
+                <li>艦長團隊、活動角色及關係發展。</li>
+                <li>月下重逢、戰衣故事及後續紀錄。</li>
+            </ol>
+        </section>
+
+        <section data-reveal>
+            <span class="update-tag">RELATED SUBJECTS</span>
+            <h2>主要人物</h2>
             <ul>
-                <li>艦長（玩家角色）</li>
-                <li>琪亞娜·卡斯蘭娜</li>
-                <li>雷電芽衣</li>
-                <li>布洛妮婭·扎伊切克</li>
+                <li>艦長</li>
+                <li>月下誓約・予愛以心</li>
+                <li>觀星</li>
+                <li>迷城駭兔</li>
+                <li>艦長線其他世界泡角色</li>
             </ul>
-        </section>
-        <section>
-            <h2>艦長線的經典場景</h2>
-            <div class="photo-grid">
-                <img src="images/captain1.jpg" alt="艦長線場景 1">
-                <img src="images/captain2.jpg" alt="艦長線場景 2">
-            </div>
         </section>
     </main>
+
+    <footer class="site-footer">
+        <a class="site-brand site-brand--footer" href="index.html">
+            <span class="site-brand__mark">BR</span>
+            <span class="site-brand__copy"><strong>HONKAI REALM</strong><small>NARRATIVE LOG</small></span>
+        </a>
+        <p>艦長線資料會按活動內容逐步補充，暫時以索引形式展示。</p>
+        <span>© <b data-current-year>2026</b> BERNIE LEUNG</span>
+    </footer>
 </body>
 </html>
