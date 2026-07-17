@@ -1,83 +1,167 @@
+(() => {
+  'use strict';
 
-const el = (sel, root=document)=>root.querySelector(sel);
-const IMG_BASE = (document.currentScript.dataset.imgBase || '/assets/hi3/characters/');
-const JSON_URL = (document.currentScript.dataset.json || '/data/characters.json');
+  const script = document.currentScript;
+  const IMG_BASE = script?.dataset.imgBase || 'assets/hi3/characters/';
+  const JSON_URL = script?.dataset.json || 'data/characters.json';
+  const PLACEHOLDER = 'assets/placeholder.png';
 
-function slugToSrc(slug){
-  const exts = ['webp','png','jpg','jpeg','avif'];
-  return exts.map(ext => `${IMG_BASE}${slug}.${ext}`);
-}
+  const slugToSources = (slug) => ['webp', 'png', 'jpg', 'jpeg', 'avif']
+    .map((extension) => `${IMG_BASE}${slug}.${extension}`);
 
-function createCard(c){
-  const card = document.createElement('article');
-  card.className = 'card';
-  const img = document.createElement('img');
-  img.className = 'thumb';
-  img.alt = `${c.en} ${c.zh?"/ "+c.zh:""} | Honkai Impact 3rd`;
-  img.loading = 'lazy';
+  const createName = (character) => {
+    const name = document.createElement('div');
+    name.className = 'name';
+    name.append(document.createTextNode(character.en));
 
-  const sources = slugToSrc(c.slug);
-  let idx = 0;
-  const placeholder = '/assets/placeholder.png';
-  const tryNext = () => {
-    if(idx >= sources.length){ img.src = placeholder; return; }
-    img.src = sources[idx++];
+    if (character.zh) {
+      const chineseName = document.createElement('span');
+      chineseName.className = 'zh';
+      chineseName.textContent = character.zh;
+      name.appendChild(chineseName);
+    }
+
+    return name;
   };
-  img.onerror = tryNext;
-  tryNext();
 
-  const meta = document.createElement('div'); meta.className = 'meta';
-  const name = document.createElement('div'); name.className = 'name';
-  name.innerHTML = `${c.en}${c.zh ? '<span class="zh">（'+c.zh+'）</span>' : ''}`;
+  const createCard = (character) => {
+    const card = document.createElement('article');
+    card.className = 'card';
+    card.tabIndex = 0;
+    card.setAttribute('role', 'button');
+    card.setAttribute('aria-label', `開啟 ${character.zh || character.en} 圖片`);
 
-  const tag = document.createElement('div');
-  tag.className = 'tag';
-  tag.textContent = '女武神 Valkyrie';
+    const image = document.createElement('img');
+    image.className = 'thumb';
+    image.alt = `${character.en}${character.zh ? ` / ${character.zh}` : ''} | Honkai Impact 3rd`;
+    image.loading = 'lazy';
+    image.decoding = 'async';
 
-  meta.appendChild(name); meta.appendChild(tag);
-  card.appendChild(img); card.appendChild(meta);
+    const sources = slugToSources(character.slug);
+    let sourceIndex = 0;
 
-  card.addEventListener('click', () => openLightbox(img.currentSrc || img.src, name.textContent));
-  return card;
-}
+    const tryNextSource = () => {
+      if (sourceIndex >= sources.length) {
+        image.onerror = null;
+        image.src = PLACEHOLDER;
+        return;
+      }
+      image.src = sources[sourceIndex++];
+    };
 
-let LIGHTBOX;
-function ensureLightbox(){
-  if(LIGHTBOX) return;
-  LIGHTBOX = document.createElement('dialog'); LIGHTBOX.className = 'lightbox';
-  LIGHTBOX.innerHTML = `<img class="lb-img" alt=""><div class="hidden" id="lbCaption"></div>`;
-  document.body.appendChild(LIGHTBOX);
-  LIGHTBOX.addEventListener('click', (e)=>{ if(e.target === LIGHTBOX) LIGHTBOX.close(); })
-  document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape' && LIGHTBOX.open) LIGHTBOX.close(); })
-}
-function openLightbox(src, alt){
-  ensureLightbox();
-  const img = document.querySelector('.lb-img'); img.src = src; img.alt = alt;
-  LIGHTBOX.showModal();
-}
+    image.onerror = tryNextSource;
+    tryNextSource();
 
-async function load(){
-  const res = await fetch(JSON_URL).catch(()=>null);
-  let list = [];
-  if(res && res.ok){ list = await res.json(); }
-  const grid = document.querySelector('#grid');
-  const input = document.querySelector('#search');
+    const meta = document.createElement('div');
+    meta.className = 'meta';
 
-  const normalize = s => (s||'').toLowerCase().replace(/\s+/g,'');
-  const hay = list.map(c => ({...c, _h: normalize(c.en + (c.zh||'') + (c.slug||''))}));
+    const tag = document.createElement('div');
+    tag.className = 'tag';
+    tag.textContent = 'VALKYRIE // CHARACTER FILE';
 
-  const render = (items)=>{
-    grid.innerHTML='';
-    const frag = document.createDocumentFragment();
-    items.forEach(c => frag.appendChild(createCard(c)));
-    grid.appendChild(frag);
+    meta.append(createName(character), tag);
+    card.append(image, meta);
+
+    const open = () => openLightbox(image.currentSrc || image.src, `${character.en}${character.zh ? ` / ${character.zh}` : ''}`);
+    card.addEventListener('click', open);
+    card.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        open();
+      }
+    });
+
+    return card;
   };
-  render(hay);
 
-  input.addEventListener('input', ()=>{
-    const q = normalize(input.value);
-    render( hay.filter(c => c._h.includes(q)) );
-  });
-}
+  let lightbox;
 
-document.addEventListener('DOMContentLoaded', load);
+  const ensureLightbox = () => {
+    if (lightbox) return lightbox;
+
+    lightbox = document.createElement('dialog');
+    lightbox.className = 'lightbox';
+    lightbox.innerHTML = `
+      <div class="lb-shell">
+        <img class="lb-img" alt="">
+        <div class="lb-panel">
+          <div>
+            <span>CHARACTER VISUAL</span>
+            <p id="lb-caption"></p>
+          </div>
+          <button class="lb-close" type="button">CLOSE FILE</button>
+        </div>
+      </div>`;
+
+    document.body.appendChild(lightbox);
+
+    lightbox.addEventListener('click', (event) => {
+      if (event.target === lightbox) lightbox.close();
+    });
+
+    lightbox.querySelector('.lb-close').addEventListener('click', () => lightbox.close());
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && lightbox.open) lightbox.close();
+    });
+
+    return lightbox;
+  };
+
+  const openLightbox = (source, caption) => {
+    const dialog = ensureLightbox();
+    const image = dialog.querySelector('.lb-img');
+    image.src = source;
+    image.alt = caption;
+    dialog.querySelector('#lb-caption').textContent = caption;
+    dialog.showModal();
+  };
+
+  const load = async () => {
+    const grid = document.querySelector('#grid');
+    const input = document.querySelector('#search');
+    const resultCount = document.querySelector('#result-count');
+    if (!grid || !input) return;
+
+    let list = [];
+
+    try {
+      const response = await fetch(JSON_URL);
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      list = await response.json();
+    } catch (error) {
+      grid.innerHTML = '<p class="empty-state">DATABASE OFFLINE // 無法載入角色資料</p>';
+      if (resultCount) resultCount.textContent = '00';
+      console.error('Unable to load character database:', error);
+      return;
+    }
+
+    const normalize = (value) => (value || '').toLowerCase().replace(/\s+/g, '');
+    const searchable = list.map((character) => ({
+      ...character,
+      _search: normalize(`${character.en}${character.zh || ''}${character.slug || ''}`)
+    }));
+
+    const render = (items) => {
+      grid.replaceChildren();
+      if (resultCount) resultCount.textContent = String(items.length).padStart(2, '0');
+
+      if (!items.length) {
+        grid.innerHTML = '<p class="empty-state">NO MATCHING FILE // 搵唔到相符角色</p>';
+        return;
+      }
+
+      const fragment = document.createDocumentFragment();
+      items.forEach((character) => fragment.appendChild(createCard(character)));
+      grid.appendChild(fragment);
+    };
+
+    render(searchable);
+
+    input.addEventListener('input', () => {
+      const query = normalize(input.value);
+      render(searchable.filter((character) => character._search.includes(query)));
+    });
+  };
+
+  document.addEventListener('DOMContentLoaded', load, { once: true });
+})();
