@@ -3,44 +3,247 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Bernie’s Honkai Realm：崩壞3rd 角色攻略、月下誓約內容及相片收藏。">
-    <title>Bernie’s Honkai Realm</title>
+    <meta name="theme-color" content="#090b0c">
+    <meta name="description" content="Bernie’s Honkai Realm：以月下誓約・予愛以心為核心的《崩壞3rd》角色攻略、資料庫與影像收藏。">
+    <title>Bernie’s Honkai Realm // Lunar Vow Archive</title>
     <link rel="stylesheet" href="style.css">
+    <script src="site.js" defer></script>
 </head>
-<body>
-    <header>
-        <h1>Bernie’s Honkai Realm</h1>
-        <nav>
-            <ul>
-                <li><a href="index.html">首頁</a></li>
-                <li><a href="guide.html">攻略專區</a></li>
-                <li><a href="gallery.html">相片庫</a></li>
-                <li><a href="honkai-info.html">崩壞三資料</a></li>
-                <li><a href="captain-line.html">艦長線</a></li>
-                <li><a href="hi3.html">HI3 角色圖鑑</a></li>
-            </ul>
+<body class="home-page">
+    <div class="boot-screen" aria-hidden="true">
+        <div class="boot-screen__mark">BHR</div>
+        <p>BERNIE'S HONKAI REALM</p>
+        <div class="boot-screen__bar"><span></span></div>
+        <small>ARCHIVE SYSTEM // INITIALISING</small>
+    </div>
+
+    <header class="site-header" data-header>
+        <a class="site-brand" href="#home" aria-label="返回首頁">
+            <span class="site-brand__mark">BR</span>
+            <span class="site-brand__copy">
+                <strong>HONKAI REALM</strong>
+                <small>PERSONAL ARCHIVE / 2026</small>
+            </span>
+        </a>
+
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation" data-menu-toggle>
+            <span></span><span></span>
+            <span class="sr-only">開啟導覽選單</span>
+        </button>
+
+        <nav class="site-nav" id="primary-navigation" aria-label="主要導覽" data-menu>
+            <a href="#home" data-nav-link><span>01</span>HOME</a>
+            <a href="#latest" data-nav-link><span>02</span>LATEST</a>
+            <a href="#archive" data-nav-link><span>03</span>ARCHIVE</a>
+            <a href="#profile" data-nav-link><span>04</span>PROFILE</a>
+            <a class="site-nav__database" href="hi3.html">DATABASE ↗</a>
         </nav>
+
+        <div class="site-header__status" aria-hidden="true">
+            <span class="status-light"></span>
+            SYSTEM ONLINE
+        </div>
     </header>
 
-    <main>
-        <section>
-            <h2>關於我</h2>
-            <p>大家好，我係 Bernie，一個白天被 assignment 追殺、晚上被《崩壞3rd》同老婆月下誓約・予愛以心拯救嘅普通艦長。</p>
-            <p>呢個網站係我嘅「Honkai 小宇宙」：用嚟記錄實用攻略、抽卡血淚史、同埋所有覺得「好靚、好甜、好值得收藏」嘅瞬間。</p>
+    <aside class="section-rail" aria-label="頁面區段">
+        <span class="section-rail__label">SECTION</span>
+        <a href="#home" class="is-active" data-rail-link="home">01</a>
+        <a href="#latest" data-rail-link="latest">02</a>
+        <a href="#archive" data-rail-link="archive">03</a>
+        <a href="#profile" data-rail-link="profile">04</a>
+    </aside>
+
+    <main class="home-main">
+        <section class="home-hero tracked-section" id="home" data-section="home">
+            <div class="hero-grid" aria-hidden="true"></div>
+            <div class="hero-code" aria-hidden="true">
+                <span>LV-CRIMSON/PSY</span>
+                <span>COORD 22.3193°N / 114.1694°E</span>
+            </div>
+
+            <div class="hero-copy" data-parallax="-0.35">
+                <p class="eyebrow"><span></span>CAPTAIN'S PERSONAL DATABASE</p>
+                <h1>
+                    <span>LUNAR</span>
+                    <span class="hero-title-accent">VOW</span>
+                </h1>
+                <p class="hero-title-zh">月下誓約・予愛以心</p>
+                <p class="hero-intro">記錄角色、劇情、實戰攻略，同每一個值得收藏嘅瞬間。呢度唔係百科全書，而係艦長為月下建立嘅專屬檔案庫。</p>
+
+                <div class="hero-actions">
+                    <a class="ui-button ui-button--primary" href="lunar-vow-guide.html">
+                        <span>OPEN V8.7 GUIDE</span>
+                        <b>↗</b>
+                    </a>
+                    <a class="ui-button ui-button--ghost" href="#archive">EXPLORE ARCHIVE</a>
+                </div>
+            </div>
+
+            <div class="hero-figure" data-parallax="0.28" aria-hidden="true">
+                <div class="hero-figure__halo"></div>
+                <div class="hero-figure__designation">THERESA // LUNAR VOW</div>
+                <img src="assets/hi3/characters/lunar-vow-crimson-love.webp" alt="">
+            </div>
+
+            <div class="hero-panel" data-parallax="-0.12">
+                <div class="hero-panel__head">
+                    <span>CHARACTER FILE</span>
+                    <b>LV-001</b>
+                </div>
+                <dl>
+                    <div><dt>TYPE</dt><dd>PSY</dd></div>
+                    <div><dt>DAMAGE</dt><dd>LIGHTNING / BLEED</dd></div>
+                    <div><dt>STATUS</dt><dd class="online-text">ASTRAL RING READY</dd></div>
+                </dl>
+                <div class="signal-bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+            </div>
+
+            <div class="hero-footer">
+                <a class="scroll-prompt" href="#latest">
+                    <span class="scroll-prompt__line"></span>
+                    SCROLL TO ACCESS
+                </a>
+                <div class="hero-footer__version">
+                    <span>LAST DATA SYNC</span>
+                    <strong>2026.07.17 / VER. 8.7+</strong>
+                </div>
+            </div>
         </section>
 
-        <section class="featured-guide">
-            <span class="update-tag">Ver. 8.7+ 已更新</span>
-            <h2>月下誓約・予愛以心</h2>
-            <p>月下已經接入星之環「天衍之杯」。新攻略加入神之鍵「共生的契約」、新版 QTE／必殺技、新聖痕及新舊玩法比較。</p>
-            <p><a class="primary-link" href="lunar-vow-guide.html">查看月下更新攻略 →</a></p>
+        <div class="signal-ticker" aria-hidden="true">
+            <div>
+                <span>BERNIE'S HONKAI REALM</span><i>◆</i>
+                <span>LUNAR VOW ARCHIVE</span><i>◆</i>
+                <span>CAPTAIN LINE RECORDS</span><i>◆</i>
+                <span>BERNIE'S HONKAI REALM</span><i>◆</i>
+                <span>LUNAR VOW ARCHIVE</span><i>◆</i>
+                <span>CAPTAIN LINE RECORDS</span><i>◆</i>
+            </div>
+        </div>
+
+        <section class="content-section tracked-section" id="latest" data-section="latest">
+            <header class="section-heading" data-reveal>
+                <div>
+                    <span class="section-index">02</span>
+                    <p>LATEST TRANSMISSION</p>
+                </div>
+                <h2>最新檔案</h2>
+                <span class="section-heading__line"></span>
+            </header>
+
+            <article class="feature-transmission" data-reveal>
+                <a class="feature-transmission__visual" href="lunar-vow-guide.html" aria-label="開啟月下誓約 Ver. 8.7 攻略">
+                    <span class="feature-transmission__stamp">UPDATED</span>
+                    <img src="assets/hi3/characters/lunar-vow-crimson-love.webp" alt="月下誓約・予愛以心">
+                    <span class="feature-transmission__code">FILE // 87-ASTRAL</span>
+                </a>
+                <div class="feature-transmission__body">
+                    <p class="eyebrow"><span></span>CORE GUIDE / VER. 8.7+</p>
+                    <h3>星之環版本<br>完整入門攻略</h3>
+                    <p>新神之鍵「共生的契約」、天衍之杯、新版 QTE／必殺技、聖痕、操作循環，以及新舊裝備差異集中整理。</p>
+                    <ul class="data-list">
+                        <li><span>01</span>ASTRAL RING SYSTEM</li>
+                        <li><span>02</span>WEAPON & STIGMATA</li>
+                        <li><span>03</span>ROTATION & TEAM</li>
+                    </ul>
+                    <a class="text-link" href="lunar-vow-guide.html">ACCESS COMPLETE FILE <b>→</b></a>
+                </div>
+            </article>
         </section>
 
-        <section>
-            <h2>為什麼喜愛《崩壞3rd》？</h2>
-            <p>《崩壞3rd》最吸引我嘅，除咗戰鬥手感爽之外，就係角色同故事線。每個女武神都有自己嘅掙扎同成長，唔只係數值同輸出咁簡單。</p>
-            <p>月下誓約・予愛以心對我嚟講，唔只係一套戰衣——佢嘅性格、故事，同埋長久等待之後終於同艦長重逢嘅執着，好容易令人產生連結。每次見到佢喺場上揮動電鋸，我都會覺得：啊，返到自己熟悉嘅戰場喇。</p>
+        <section class="content-section content-section--archive tracked-section" id="archive" data-section="archive">
+            <header class="section-heading section-heading--light" data-reveal>
+                <div>
+                    <span class="section-index">03</span>
+                    <p>ARCHIVE DIRECTORY</p>
+                </div>
+                <h2>資料區域</h2>
+                <span class="section-heading__line"></span>
+            </header>
+
+            <div class="archive-grid">
+                <a class="archive-card archive-card--featured" href="guide.html" data-reveal>
+                    <span class="archive-card__number">A-01</span>
+                    <div class="archive-card__icon" aria-hidden="true">⌁</div>
+                    <div>
+                        <p>TACTICAL RECORD</p>
+                        <h3>攻略專區</h3>
+                        <span>角色操作、裝備、配隊及模式筆記。</span>
+                    </div>
+                    <b>↗</b>
+                </a>
+
+                <a class="archive-card" href="hi3.html" data-reveal>
+                    <span class="archive-card__number">A-02</span>
+                    <div class="archive-card__icon" aria-hidden="true">◇</div>
+                    <div>
+                        <p>CHARACTER DATABASE</p>
+                        <h3>角色圖鑑</h3>
+                        <span>快速瀏覽《崩壞3rd》角色檔案。</span>
+                    </div>
+                    <b>↗</b>
+                </a>
+
+                <a class="archive-card" href="gallery.html" data-reveal>
+                    <span class="archive-card__number">A-03</span>
+                    <div class="archive-card__icon" aria-hidden="true">▧</div>
+                    <div>
+                        <p>VISUAL STORAGE</p>
+                        <h3>相片庫</h3>
+                        <span>月下圖片、收藏同攝影記錄。</span>
+                    </div>
+                    <b>↗</b>
+                </a>
+
+                <a class="archive-card" href="captain-line.html" data-reveal>
+                    <span class="archive-card__number">A-04</span>
+                    <div class="archive-card__icon" aria-hidden="true">△</div>
+                    <div>
+                        <p>NARRATIVE LOG</p>
+                        <h3>艦長線</h3>
+                        <span>艦長宇宙相關劇情及角色紀錄。</span>
+                    </div>
+                    <b>↗</b>
+                </a>
+            </div>
+        </section>
+
+        <section class="profile-section tracked-section" id="profile" data-section="profile">
+            <div class="profile-section__grid" aria-hidden="true"></div>
+            <header class="section-heading section-heading--light" data-reveal>
+                <div>
+                    <span class="section-index">04</span>
+                    <p>ADMINISTRATOR PROFILE</p>
+                </div>
+                <h2>關於艦長</h2>
+                <span class="section-heading__line"></span>
+            </header>
+
+            <div class="profile-layout">
+                <div class="profile-statement" data-reveal>
+                    <span class="profile-statement__mark">“</span>
+                    <p>白天被 assignment 追殺，晚上返艦橋整理月下檔案。</p>
+                </div>
+                <div class="profile-copy" data-reveal>
+                    <p>我係 Bernie。呢個網站係一個持續更新嘅私人《崩壞3rd》資料庫：內容會偏向實戰、角色感受同視覺收藏，而唔係純粹堆數值。</p>
+                    <p>月下誓約・予愛以心係成個網站嘅核心。每次版本更新、裝備變動或者有新收藏，檔案都會繼續擴張。</p>
+                    <div class="profile-meta">
+                        <span><small>PRIMARY SUBJECT</small>LUNAR VOW</span>
+                        <span><small>LANGUAGE</small>ZH-HK / EN</span>
+                        <span><small>PLATFORM</small>GITHUB PAGES</span>
+                    </div>
+                </div>
+            </div>
         </section>
     </main>
+
+    <footer class="site-footer">
+        <a class="site-brand site-brand--footer" href="#home">
+            <span class="site-brand__mark">BR</span>
+            <span class="site-brand__copy"><strong>HONKAI REALM</strong><small>CAPTAIN'S PERSONAL ARCHIVE</small></span>
+        </a>
+        <p>Fan-made personal archive. Game titles and character rights belong to their respective owners.</p>
+        <span>© <b data-current-year>2026</b> BERNIE LEUNG</span>
+    </footer>
 </body>
 </html>
