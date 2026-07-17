@@ -3,45 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#090b0c">
     <meta name="description" content="Bernie’s Honkai Realm 攻略專區，收錄月下誓約・予愛以心 Ver. 8.7+ 星之環攻略。">
-    <title>攻略專區 - Bernie’s Honkai Realm</title>
+    <title>攻略專區 // Bernie’s Honkai Realm</title>
     <link rel="stylesheet" href="style.css">
+    <script src="site.js" defer></script>
 </head>
 <body>
     <header>
         <h1>攻略專區</h1>
-        <nav>
+        <p>TACTICAL RECORD // COMBAT ARCHIVE</p>
+        <nav aria-label="主要導覽">
             <ul>
                 <li><a href="index.html">首頁</a></li>
-                <li><a href="guide.html">攻略專區</a></li>
+                <li><a href="guide.html" aria-current="page">攻略專區</a></li>
                 <li><a href="gallery.html">相片庫</a></li>
                 <li><a href="honkai-info.html">崩壞三資料</a></li>
                 <li><a href="captain-line.html">艦長線</a></li>
-                <li><a href="hi3.html">HI3 角色圖鑑</a></li>
+                <li><a href="hi3.html">角色圖鑑</a></li>
             </ul>
         </nav>
     </header>
 
     <main>
-        <section>
+        <section data-reveal>
+            <span class="update-tag">ARCHIVE OVERVIEW</span>
             <h2>攻略導覽</h2>
-            <p>呢度會慢慢收集我自己寫嘅《崩壞3rd》攻略，會偏向「實戰 + 個人感想」多過純數值分析，適合想輕鬆睇、又唔想被一大堆專有名詞嚇親嘅艦長。</p>
+            <p>呢度會慢慢收集我自己寫嘅《崩壞3rd》攻略，內容偏向「實戰 + 個人感想」，適合想快速掌握操作、裝備同配隊重點嘅艦長。</p>
             <ul>
-                <li><strong>角色攻略：</strong>主打老婆月下誓約・予愛以心，其次係我常用嘅主 C / 輔助。</li>
-                <li><strong>模式小貼士：</strong>包括星之環、樂土、深淵基本概念等內容。</li>
+                <li><strong>角色攻略：</strong>主打月下誓約・予愛以心，其次係常用主 C 同輔助。</li>
+                <li><strong>模式小貼士：</strong>包括星之環、古之樂土、深淵基本概念等內容。</li>
             </ul>
         </section>
 
-        <section class="featured-guide">
-            <span class="update-tag">2026-07-17 更新</span>
-            <h2>最新攻略</h2>
-            <h3><a href="lunar-vow-guide.html">月下誓約・予愛以心：Ver. 8.7+ 星之環完整入門</a></h3>
+        <section class="featured-guide" data-reveal>
+            <span class="update-tag">2026-07-17 // UPDATED</span>
+            <h2>最新核心檔案</h2>
+            <h3>月下誓約・予愛以心：Ver. 8.7+ 星之環完整入門</h3>
             <p>加入新神之鍵「共生的契約」、星之環「天衍之杯」、新版 QTE／必殺技、新舊裝備比較、操作循環及配隊方向。</p>
-            <p><a class="primary-link" href="lunar-vow-guide.html">立即查看月下更新攻略 →</a></p>
+            <p><a class="primary-link" href="lunar-vow-guide.html">ACCESS COMPLETE GUIDE →</a></p>
         </section>
 
-        <section>
-            <h2>之後準備寫嘅攻略（計劃中）</h2>
+        <section data-reveal>
+            <span class="update-tag">UPCOMING FILES</span>
+            <h2>計劃中</h2>
             <ul>
                 <li>月下誓約：古之樂土星之爆發／星之環充能兩套流派。</li>
                 <li>真理之律者：傳統元素隊輔助及輸出用法。</li>
@@ -49,27 +54,38 @@
             </ul>
         </section>
 
-        <section>
-            <h2>草稿板（臨時記一記）</h2>
-            <p>呢個只係前端小玩具，用嚟臨時記低你啱啱諗到嘅攻略重點。重新整理網頁就會清空，唔會真係發佈到網站。</p>
+        <section data-reveal>
+            <span class="update-tag">LOCAL SCRATCHPAD</span>
+            <h2>草稿板</h2>
+            <p>呢個只係前端暫存工具。重新整理網頁後內容會清空，唔會發佈到 GitHub。</p>
             <div id="articles"></div>
-            <textarea id="newArticle" placeholder="隨手寫低少少想法，例如：『月下星之爆發循環點樣再快啲？』"></textarea>
-            <button onclick="postArticle()">加到上面暫存</button>
+            <textarea id="newArticle" placeholder="例如：月下星之爆發循環點樣再快啲？"></textarea>
+            <button type="button" onclick="postArticle()">ADD TEMPORARY NOTE</button>
         </section>
     </main>
 
+    <footer class="site-footer">
+        <a class="site-brand site-brand--footer" href="index.html">
+            <span class="site-brand__mark">BR</span>
+            <span class="site-brand__copy"><strong>HONKAI REALM</strong><small>TACTICAL RECORD</small></span>
+        </a>
+        <p>內容以個人實戰理解為主；實際效果以遊戲內最新版本為準。</p>
+        <span>© <b data-current-year>2026</b> BERNIE LEUNG</span>
+    </footer>
+
     <script>
         function postArticle() {
-            const content = document.getElementById('newArticle').value;
-            if (content.trim() === '') return;
+            const textarea = document.getElementById('newArticle');
+            const content = textarea.value.trim();
+            if (!content) return;
 
-            const articleDiv = document.createElement('div');
+            const article = document.createElement('div');
             const paragraph = document.createElement('p');
             const divider = document.createElement('hr');
             paragraph.textContent = content;
-            articleDiv.append(paragraph, divider);
-            document.getElementById('articles').prepend(articleDiv);
-            document.getElementById('newArticle').value = '';
+            article.append(paragraph, divider);
+            document.getElementById('articles').prepend(article);
+            textarea.value = '';
         }
     </script>
 </body>
