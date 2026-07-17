@@ -9,6 +9,13 @@
   const slugToSources = (slug) => ['webp', 'png', 'jpg', 'jpeg', 'avif']
     .map((extension) => `${IMG_BASE}${slug}.${extension}`);
 
+  const characterSources = (character) => {
+    const sources = [];
+    if (character.image) sources.push(character.image);
+    sources.push(...slugToSources(character.slug));
+    return [...new Set(sources)];
+  };
+
   const createName = (character) => {
     const name = document.createElement('div');
     name.className = 'name';
@@ -36,8 +43,9 @@
     image.alt = `${character.en}${character.zh ? ` / ${character.zh}` : ''} | Honkai Impact 3rd`;
     image.loading = 'lazy';
     image.decoding = 'async';
+    image.referrerPolicy = 'no-referrer';
 
-    const sources = slugToSources(character.slug);
+    const sources = characterSources(character);
     let sourceIndex = 0;
 
     const tryNextSource = () => {
@@ -57,12 +65,18 @@
 
     const tag = document.createElement('div');
     tag.className = 'tag';
-    tag.textContent = 'VALKYRIE // CHARACTER FILE';
+    tag.textContent = character.battlesuit || 'VALKYRIE // CHARACTER FILE';
 
     meta.append(createName(character), tag);
     card.append(image, meta);
 
-    const open = () => openLightbox(image.currentSrc || image.src, `${character.en}${character.zh ? ` / ${character.zh}` : ''}`);
+    const open = () => openLightbox(
+      image.currentSrc || image.src,
+      `${character.en}${character.zh ? ` / ${character.zh}` : ''}`,
+      character.battlesuit || '',
+      character.source || ''
+    );
+
     card.addEventListener('click', open);
     card.addEventListener('keydown', (event) => {
       if (event.key === 'Enter' || event.key === ' ') {
@@ -88,6 +102,8 @@
           <div>
             <span>CHARACTER VISUAL</span>
             <p id="lb-caption"></p>
+            <small id="lb-battlesuit"></small>
+            <a id="lb-source" href="#" target="_blank" rel="noopener noreferrer">SOURCE FILE ↗</a>
           </div>
           <button class="lb-close" type="button">CLOSE FILE</button>
         </div>
@@ -107,12 +123,23 @@
     return lightbox;
   };
 
-  const openLightbox = (source, caption) => {
+  const openLightbox = (source, caption, battlesuit, sourcePage) => {
     const dialog = ensureLightbox();
     const image = dialog.querySelector('.lb-img');
+    const sourceLink = dialog.querySelector('#lb-source');
+
     image.src = source;
     image.alt = caption;
     dialog.querySelector('#lb-caption').textContent = caption;
+    dialog.querySelector('#lb-battlesuit').textContent = battlesuit;
+
+    if (sourcePage) {
+      sourceLink.href = sourcePage;
+      sourceLink.hidden = false;
+    } else {
+      sourceLink.hidden = true;
+    }
+
     dialog.showModal();
   };
 
@@ -138,7 +165,7 @@
     const normalize = (value) => (value || '').toLowerCase().replace(/\s+/g, '');
     const searchable = list.map((character) => ({
       ...character,
-      _search: normalize(`${character.en}${character.zh || ''}${character.slug || ''}`)
+      _search: normalize(`${character.en}${character.zh || ''}${character.slug || ''}${character.battlesuit || ''}`)
     }));
 
     const render = (items) => {
