@@ -1,0 +1,159 @@
+/* Crimson Rose theme — mature red / rose-pink accents */
+:root {
+    --signal: #ff3d68;
+    --signal-dark: #b31343;
+    --danger: #ff7895;
+    --crimson: #8e1237;
+    --rose: #ff5a82;
+    --rose-soft: #ff9aae;
+}
+
+::selection,
+body::selection {
+    background: var(--signal);
+    color: var(--ink);
+}
+
+/* Global glow and system accents */
+.status-light {
+    background: var(--signal);
+    box-shadow: 0 0 15px rgba(255, 61, 104, 0.86);
+}
+
+.boot-screen::after {
+    background: linear-gradient(transparent 50%, rgba(255, 61, 104, 0.055) 50%);
+    background-size: 100% 4px;
+}
+
+.boot-screen__mark,
+.site-nav a span,
+body.inner-page .site-header .site-nav a span,
+body.lunar-guide .site-header .site-nav a span {
+    color: rgba(255, 90, 130, 0.82);
+}
+
+.home-hero {
+    background:
+        radial-gradient(circle at 72% 40%, rgba(177, 25, 70, 0.34), transparent 31%),
+        linear-gradient(105deg, #090a0b 0%, #151014 52%, #090a0b 100%);
+}
+
+.home-hero::before {
+    background:
+        repeating-linear-gradient(90deg, transparent 0 124px, rgba(255, 255, 255, 0.035) 125px, transparent 126px),
+        linear-gradient(transparent 50%, rgba(255, 61, 104, 0.028) 50%);
+    background-size: auto, 100% 4px;
+}
+
+.profile-section {
+    background:
+        radial-gradient(circle at 80% 65%, rgba(190, 25, 76, 0.28), transparent 27%),
+        #0b0d0f;
+}
+
+.feature-transmission__visual {
+    background:
+        radial-gradient(circle at 55% 38%, rgba(214, 37, 91, 0.62), transparent 32%),
+        linear-gradient(145deg, #121416, #29151e);
+}
+
+/* Cards, notices and tactical panels */
+.featured-guide {
+    border-color: rgba(255, 61, 104, 0.62) !important;
+    background:
+        linear-gradient(135deg, rgba(255, 61, 104, 0.105), transparent 54%),
+        rgba(18, 22, 24, 0.95) !important;
+}
+
+.guide-card.recommended {
+    border-color: var(--signal);
+    background: linear-gradient(145deg, rgba(255, 61, 104, 0.11), #0c1011 58%);
+}
+
+.note {
+    border-left-color: var(--signal);
+    background: rgba(255, 61, 104, 0.075);
+}
+
+.highlight-section {
+    border-left-color: var(--signal) !important;
+}
+
+/* Inner-page hero */
+.page-hero {
+    background:
+        radial-gradient(circle at 76% 42%, rgba(191, 25, 76, 0.3), transparent 29%),
+        linear-gradient(115deg, #090a0b 0%, #171116 58%, #090a0b 100%);
+}
+
+/* Character database */
+.gallery-kicker,
+.gallery-counter strong,
+.search-panel > b,
+.lb-panel span,
+#lb-source {
+    color: var(--signal);
+}
+
+.card::before,
+.card::after {
+    background: var(--signal);
+}
+
+.tag {
+    border-left-color: var(--signal);
+    background: rgba(255, 61, 104, 0.075);
+}
+
+dialog.lightbox {
+    border-color: rgba(255, 61, 104, 0.62);
+}
+
+#lb-source {
+    border-bottom-color: var(--signal);
+}
+
+/* Fine-tune translucent green remnants from older styles */
+.site-nav a span,
+body.inner-page .site-header .site-nav a span,
+body.lunar-guide .site-header .site-nav a span {
+    color: rgba(255, 90, 130, 0.72);
+}
+
+.featured-guide,
+.guide-card.recommended,
+.note,
+.tag {
+    --legacy-highlight: rgba(255, 61, 104, 0.08);
+}
+
+/* Scrollbar, supported browsers */
+* {
+    scrollbar-color: var(--signal) #111416;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #111416;
+}
+
+::-webkit-scrollbar-thumb {
+    border: 2px solid #111416;
+    background: linear-gradient(180deg, var(--signal), var(--crimson));
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--rose);
+}
+
+/* Softer rose glow on hover — still industrial, not candy-like */
+.ui-button--primary:hover,
+.primary-link:hover,
+body:not(.home-page) button:hover,
+.site-nav__database:hover {
+    box-shadow: 0 0 0 1px rgba(255, 61, 104, 0.4), 0 10px 28px rgba(142, 18, 55, 0.28);
+}
