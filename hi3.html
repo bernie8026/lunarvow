@@ -7,26 +7,40 @@
     <meta name="description" content="Bernie’s Honkai Realm《崩壞3rd》角色圖鑑，支援中英文角色搜尋及圖片放大。">
     <title>角色圖鑑 // Bernie’s Honkai Realm</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="assets/inner-header.css">
     <link rel="stylesheet" href="assets/hi3-gallery/styles.css">
     <link rel="stylesheet" href="assets/hi3-gallery/source.css">
     <script src="site.js" defer></script>
     <script src="assets/hi3-gallery/script.js" data-img-base="assets/hi3/characters/" data-json="data/characters.json" defer></script>
 </head>
-<body class="database-page">
-    <header>
-        <h1>角色圖鑑</h1>
-        <p>CHARACTER DATABASE // HI3 ARCHIVE</p>
-        <nav aria-label="主要導覽">
-            <ul>
-                <li><a href="index.html">首頁</a></li>
-                <li><a href="guide.html">攻略專區</a></li>
-                <li><a href="gallery.html">相片庫</a></li>
-                <li><a href="honkai-info.html">崩壞三資料</a></li>
-                <li><a href="captain-line.html">艦長線</a></li>
-                <li><a href="hi3.html" aria-current="page">角色圖鑑</a></li>
-            </ul>
+<body class="inner-page database-page">
+    <header class="site-header" data-header>
+        <a class="site-brand" href="index.html" aria-label="返回首頁">
+            <span class="site-brand__mark">BR</span>
+            <span class="site-brand__copy"><strong>HONKAI REALM</strong><small>CHARACTER DATABASE</small></span>
+        </a>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation" data-menu-toggle>
+            <span></span><span></span><span class="sr-only">開啟導覽選單</span>
+        </button>
+        <nav class="site-nav" id="primary-navigation" aria-label="主要導覽" data-menu>
+            <a href="index.html" data-nav-link><span>01</span>HOME</a>
+            <a href="guide.html" data-nav-link><span>02</span>GUIDE</a>
+            <a href="gallery.html" data-nav-link><span>03</span>GALLERY</a>
+            <a href="honkai-info.html" data-nav-link><span>04</span>DATA</a>
+            <a href="captain-line.html" data-nav-link><span>05</span>CAPTAIN</a>
+            <a class="site-nav__database" href="hi3.html" aria-current="page">DATABASE ↗</a>
         </nav>
+        <div class="site-header__status" aria-hidden="true"><span class="status-light"></span>SYSTEM ONLINE</div>
     </header>
+
+    <section class="page-hero">
+        <div class="page-hero__copy">
+            <p class="eyebrow"><span></span>CHARACTER DATABASE // HI3 ARCHIVE</p>
+            <h1>角色圖鑑</h1>
+            <p class="page-hero__description">角色、戰衣肖像、中文名同英文名全部集中喺可搜尋資料庫。</p>
+        </div>
+        <span class="page-hero__code">FILE / A-02 // DATABASE</span>
+    </section>
 
     <main>
         <section id="hi3-gallery" data-reveal>
