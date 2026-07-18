@@ -7,23 +7,37 @@
     <meta name="description" content="《崩壞3rd》基本資料、角色及遊戲特色整理。">
     <title>崩壞三資料 // Bernie’s Honkai Realm</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="assets/inner-header.css">
     <script src="site.js" defer></script>
 </head>
-<body>
-    <header>
-        <h1>崩壞三資料</h1>
-        <p>GENERAL DATABASE // HONKAI IMPACT 3RD</p>
-        <nav aria-label="主要導覽">
-            <ul>
-                <li><a href="index.html">首頁</a></li>
-                <li><a href="guide.html">攻略專區</a></li>
-                <li><a href="gallery.html">相片庫</a></li>
-                <li><a href="honkai-info.html" aria-current="page">崩壞三資料</a></li>
-                <li><a href="captain-line.html">艦長線</a></li>
-                <li><a href="hi3.html">角色圖鑑</a></li>
-            </ul>
+<body class="inner-page data-page">
+    <header class="site-header" data-header>
+        <a class="site-brand" href="index.html" aria-label="返回首頁">
+            <span class="site-brand__mark">BR</span>
+            <span class="site-brand__copy"><strong>HONKAI REALM</strong><small>GENERAL DATABASE</small></span>
+        </a>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation" data-menu-toggle>
+            <span></span><span></span><span class="sr-only">開啟導覽選單</span>
+        </button>
+        <nav class="site-nav" id="primary-navigation" aria-label="主要導覽" data-menu>
+            <a href="index.html" data-nav-link><span>01</span>HOME</a>
+            <a href="guide.html" data-nav-link><span>02</span>GUIDE</a>
+            <a href="gallery.html" data-nav-link><span>03</span>GALLERY</a>
+            <a href="honkai-info.html" aria-current="page" data-nav-link><span>04</span>DATA</a>
+            <a href="captain-line.html" data-nav-link><span>05</span>CAPTAIN</a>
+            <a class="site-nav__database" href="hi3.html">DATABASE ↗</a>
         </nav>
+        <div class="site-header__status" aria-hidden="true"><span class="status-light"></span>SYSTEM ONLINE</div>
     </header>
+
+    <section class="page-hero">
+        <div class="page-hero__copy">
+            <p class="eyebrow"><span></span>GENERAL DATABASE // HONKAI IMPACT 3RD</p>
+            <h1>崩壞三資料</h1>
+            <p class="page-hero__description">世界觀、角色、戰鬥系統同養成內容嘅基礎索引。</p>
+        </div>
+        <span class="page-hero__code">FILE / A-04 // DATA</span>
+    </section>
 
     <main>
         <section data-reveal>
