@@ -7,23 +7,37 @@
     <meta name="description" content="Bernie’s Honkai Realm 艦長線劇情及角色紀錄。">
     <title>艦長線 // Bernie’s Honkai Realm</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="assets/inner-header.css">
     <script src="site.js" defer></script>
 </head>
-<body>
-    <header>
-        <h1>艦長線</h1>
-        <p>NARRATIVE LOG // CAPTAINVERSE RECORD</p>
-        <nav aria-label="主要導覽">
-            <ul>
-                <li><a href="index.html">首頁</a></li>
-                <li><a href="guide.html">攻略專區</a></li>
-                <li><a href="gallery.html">相片庫</a></li>
-                <li><a href="honkai-info.html">崩壞三資料</a></li>
-                <li><a href="captain-line.html" aria-current="page">艦長線</a></li>
-                <li><a href="hi3.html">角色圖鑑</a></li>
-            </ul>
+<body class="inner-page captain-page">
+    <header class="site-header" data-header>
+        <a class="site-brand" href="index.html" aria-label="返回首頁">
+            <span class="site-brand__mark">BR</span>
+            <span class="site-brand__copy"><strong>HONKAI REALM</strong><small>NARRATIVE LOG</small></span>
+        </a>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation" data-menu-toggle>
+            <span></span><span></span><span class="sr-only">開啟導覽選單</span>
+        </button>
+        <nav class="site-nav" id="primary-navigation" aria-label="主要導覽" data-menu>
+            <a href="index.html" data-nav-link><span>01</span>HOME</a>
+            <a href="guide.html" data-nav-link><span>02</span>GUIDE</a>
+            <a href="gallery.html" data-nav-link><span>03</span>GALLERY</a>
+            <a href="honkai-info.html" data-nav-link><span>04</span>DATA</a>
+            <a href="captain-line.html" aria-current="page" data-nav-link><span>05</span>CAPTAIN</a>
+            <a class="site-nav__database" href="hi3.html">DATABASE ↗</a>
         </nav>
+        <div class="site-header__status" aria-hidden="true"><span class="status-light"></span>SYSTEM ONLINE</div>
     </header>
+
+    <section class="page-hero">
+        <div class="page-hero__copy">
+            <p class="eyebrow"><span></span>NARRATIVE LOG // CAPTAINVERSE RECORD</p>
+            <h1>艦長線</h1>
+            <p class="page-hero__description">世界泡、角色關係同月下重逢故事嘅敘事紀錄庫。</p>
+        </div>
+        <span class="page-hero__code">FILE / A-05 // CAPTAIN</span>
+    </section>
 
     <main>
         <section data-reveal>
