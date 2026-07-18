@@ -1,6 +1,15 @@
 (() => {
     'use strict';
 
+    const themeId = 'crimson-rose-theme';
+    if (!document.getElementById(themeId)) {
+        const themeLink = document.createElement('link');
+        themeLink.id = themeId;
+        themeLink.rel = 'stylesheet';
+        themeLink.href = 'assets/red-pink-theme.css';
+        document.head.appendChild(themeLink);
+    }
+
     const body = document.body;
     const bootScreen = document.querySelector('.boot-screen');
     const header = document.querySelector('[data-header]');
