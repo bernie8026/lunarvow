@@ -3,28 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#090b0c">
     <meta name="description" content="月下誓約・予愛以心 Ver. 8.7+ 更新攻略：星之環、新神之鍵、聖痕、操作循環及舊裝備玩法。">
     <title>月下誓約・予愛以心 Ver. 8.7+ 更新攻略 - Bernie’s Honkai Realm</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="assets/inner-header.css">
+    <script src="site.js" defer></script>
 </head>
-<body class="lunar-guide">
-    <header>
-        <h1>月下誓約・予愛以心</h1>
-        <p>Ver. 8.7+ 星之環更新攻略</p>
-        <nav>
-            <ul>
-                <li><a href="index.html">首頁</a></li>
-                <li><a href="guide.html">攻略專區</a></li>
-                <li><a href="gallery.html">相片庫</a></li>
-                <li><a href="honkai-info.html">崩壞三資料</a></li>
-                <li><a href="captain-line.html">艦長線</a></li>
-                <li><a href="hi3.html">HI3 角色圖鑑</a></li>
-            </ul>
+<body class="inner-page lunar-guide">
+    <header class="site-header" data-header>
+        <a class="site-brand" href="index.html" aria-label="返回首頁">
+            <span class="site-brand__mark">BR</span>
+            <span class="site-brand__copy"><strong>HONKAI REALM</strong><small>LUNAR VOW FILE</small></span>
+        </a>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation" data-menu-toggle>
+            <span></span><span></span><span class="sr-only">開啟導覽選單</span>
+        </button>
+        <nav class="site-nav" id="primary-navigation" aria-label="主要導覽" data-menu>
+            <a href="index.html" data-nav-link><span>01</span>HOME</a>
+            <a href="guide.html" aria-current="page" data-nav-link><span>02</span>GUIDE</a>
+            <a href="gallery.html" data-nav-link><span>03</span>GALLERY</a>
+            <a href="honkai-info.html" data-nav-link><span>04</span>DATA</a>
+            <a href="captain-line.html" data-nav-link><span>05</span>CAPTAIN</a>
+            <a class="site-nav__database" href="hi3.html">DATABASE ↗</a>
         </nav>
+        <div class="site-header__status" aria-hidden="true"><span class="status-light"></span>FILE ONLINE</div>
     </header>
 
+    <section class="page-hero page-hero--lunar">
+        <div class="page-hero__copy">
+            <p class="eyebrow"><span></span>CORE GUIDE // VER. 8.7+ ASTRAL RING</p>
+            <h1>月下誓約</h1>
+            <p class="page-hero__description">予愛以心完整入門：新神之鍵、星之環、操作循環、裝備同配隊方向。</p>
+        </div>
+        <span class="page-hero__code">SUBJECT / LV-001 // CRIMSON LOVE</span>
+    </section>
+
     <main>
-        <section class="guide-hero">
+        <section class="guide-hero" data-reveal>
             <div>
                 <span class="update-tag">最後更新：2026-07-17</span>
                 <h2>老婆正式接入星之環，玩法由舊世代升級到 Part 2</h2>
@@ -33,7 +49,7 @@
             <img src="assets/hi3/characters/lunar-vow-crimson-love.webp" alt="月下誓約・予愛以心角色立繪">
         </section>
 
-        <section>
+        <section data-reveal>
             <h2>1. 角色定位</h2>
             <div class="guide-grid">
                 <article class="guide-card">
@@ -52,7 +68,7 @@
             </div>
         </section>
 
-        <section class="highlight-section">
+        <section class="highlight-section" data-reveal>
             <h2>2. Ver. 8.7 最大更新</h2>
             <ul>
                 <li><strong>新神之鍵：</strong>「共生的契約（Pact of Companionship）」及超限形態「共生的契約・永遠（Pact of Companionship: Evermore）」。</li>
@@ -63,19 +79,17 @@
             </ul>
         </section>
 
-        <section>
+        <section data-reveal>
             <h2>3. 核心機制</h2>
             <h3>啃咬印記（Biting Mark）</h3>
             <p>普攻第四段、QTE 或指定技能可以累積啃咬印記。印記係進入狂化及維持電鋸連斬嘅核心資源。</p>
-
             <h3>狂化狀態（Frenzy）</h3>
             <p>進入狂化後，月下可以連續使用武器按鍵進行高速多段斬擊；印記耗盡時會打出終結攻擊。呢段係主要爆發窗口，最好等隊友增益、易傷同聚怪完成先開。</p>
-
             <h3>流血與雷傷</h3>
             <p>月下同時處理雷元素及流血機制。部分攻擊會施加流血積蓄，而佢亦會對受到流血傷害嘅敵人追加雷傷，所以配裝唔應該只睇單一雷傷面板。</p>
         </section>
 
-        <section>
+        <section data-reveal>
             <h2>4. 裝備選擇</h2>
             <div class="guide-grid">
                 <article class="guide-card recommended">
@@ -94,7 +108,7 @@
             <p class="note"><strong>投資次序：</strong>新版神之鍵／超限武器 → 新聖痕套裝 → 武器協同等級 → 角色階級。只換聖痕但冇新武器，無法解鎖完整星之環玩法。</p>
         </section>
 
-        <section>
+        <section data-reveal>
             <h2>5. 簡化操作循環</h2>
             <h3>新版：裝備「共生的契約」</h3>
             <ol>
@@ -104,7 +118,6 @@
                 <li>狂化期間連按武器鍵打滿電鋸斬擊，完成終結攻擊。</li>
                 <li>星之爆發期間按隊伍配置使用強化攻擊及連攜必殺技，再回到隊友循環。</li>
             </ol>
-
             <h3>舊版：原專武玩法</h3>
             <ol>
                 <li>隊友先鋪雷傷增益、元素易傷及其他輔助效果。</li>
@@ -116,19 +129,17 @@
             <p class="note">以上係入門骨架；深淵天氣、Boss 機制、角色階級同隊友會改變實際出招次序。</p>
         </section>
 
-        <section>
+        <section data-reveal>
             <h2>6. 配隊方向</h2>
             <h3>星之環主 C</h3>
             <p>月下做隊長啟動「天衍之杯」，優先配搭具有相生特性、能快速啟動星之環及提供雷傷／流血增益嘅 Part 2 角色。相生隊友愈完整，月下喺星之爆發期間獲得嘅增益愈齊。</p>
-
             <h3>星之環輔助</h3>
             <p>裝備新神之鍵後，月下亦可進入指定「升變」或「天衍」編隊擔任輔助；新版武器可提供全隊傷害增益及敵方承傷效果。</p>
-
             <h3>傳統 Part 1 雷隊</h3>
             <p>舊裝備仍可使用「月下 + 黃金・璀耀之歌 + 真理之律者」一類雷隊。月下通常做隊長兼主 C，由兩位隊友完成增益後入場爆發。</p>
         </section>
 
-        <section>
+        <section data-reveal>
             <h2>7. 培養結論</h2>
             <ul>
                 <li><strong>有新神之鍵：</strong>月下由舊式雷／流血角色升級為星之環角色，操作更直接，亦重新獲得現代隊伍位置。</li>
@@ -138,12 +149,21 @@
             </ul>
         </section>
 
-        <section class="source-section">
+        <section class="source-section" data-reveal>
             <h2>資料來源</h2>
             <p><a href="https://www.hoyolab.com/article/44060836" target="_blank" rel="noopener noreferrer">《崩壞3rd》Ver. 8.7 更新公告</a></p>
             <p><a href="https://www.hoyolab.com/article/43924096" target="_blank" rel="noopener noreferrer">Ver. 8.7 活動及新神之鍵預覽</a></p>
             <p><a href="https://www.hoyolab.com/article/22558994" target="_blank" rel="noopener noreferrer">Ver. 7.0 月下誓約初登場公告</a></p>
         </section>
     </main>
+
+    <footer class="site-footer">
+        <a class="site-brand site-brand--footer" href="index.html">
+            <span class="site-brand__mark">BR</span>
+            <span class="site-brand__copy"><strong>HONKAI REALM</strong><small>LUNAR VOW FILE</small></span>
+        </a>
+        <p>月下誓約個人攻略檔案；實際數值及機制以遊戲內最新版本為準。</p>
+        <span>© <b data-current-year>2026</b> BERNIE LEUNG</span>
+    </footer>
 </body>
 </html>
