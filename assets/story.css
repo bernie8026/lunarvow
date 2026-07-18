@@ -2,7 +2,7 @@
     width: min(50vw, 760px);
     background:
         linear-gradient(90deg, #090a0b 0%, rgba(9, 10, 11, 0.72) 30%, transparent 70%),
-        url("../assets/hi3/characters/kiana-kaslana.webp") 78% 12% / contain no-repeat;
+        url("../assets/hi3/characters/lunar-vow-crimson-love.webp") 78% 12% / contain no-repeat;
     opacity: 0.5;
     filter: none;
 }
