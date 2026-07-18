@@ -1,0 +1,287 @@
+.story-page .page-hero::after {
+    width: min(50vw, 760px);
+    background:
+        linear-gradient(90deg, #090a0b 0%, rgba(9, 10, 11, 0.72) 30%, transparent 70%),
+        url("../assets/hi3/characters/kiana-kaslana.webp") 78% 12% / contain no-repeat;
+    opacity: 0.5;
+    filter: none;
+}
+
+.story-warning {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 18px;
+    align-items: start;
+    border-color: rgba(255, 61, 104, 0.56) !important;
+    background:
+        linear-gradient(135deg, rgba(255, 61, 104, 0.12), transparent 62%),
+        rgba(18, 22, 24, 0.94) !important;
+}
+
+.story-warning__mark {
+    display: grid;
+    width: 46px;
+    height: 46px;
+    place-items: center;
+    border: 1px solid var(--signal);
+    color: var(--signal);
+    font-family: var(--display);
+    font-size: 1.1rem;
+    font-weight: 950;
+}
+
+.story-warning h2,
+.story-warning p {
+    margin-top: 0;
+}
+
+.story-index {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1px;
+    padding: 1px;
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.story-index a {
+    min-height: 120px;
+    padding: 18px;
+    background: #101416;
+    color: var(--paper);
+    text-decoration: none;
+    transition: background 0.25s ease, color 0.25s ease;
+}
+
+.story-index a:hover,
+.story-index a:focus-visible {
+    background: var(--signal);
+    color: var(--ink);
+}
+
+.story-index small,
+.story-index strong,
+.story-index span {
+    display: block;
+}
+
+.story-index small {
+    color: var(--signal);
+    font-family: monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+}
+
+.story-index a:hover small,
+.story-index a:focus-visible small {
+    color: var(--ink);
+}
+
+.story-index strong {
+    margin-top: 16px;
+    font-family: var(--display);
+    font-size: 1.25rem;
+    line-height: 1;
+}
+
+.story-index span {
+    margin-top: 8px;
+    color: rgba(240, 241, 236, 0.56);
+    font-size: 0.75rem;
+}
+
+.story-index a:hover span,
+.story-index a:focus-visible span {
+    color: rgba(9, 11, 12, 0.7);
+}
+
+.story-arc {
+    overflow: hidden;
+}
+
+.story-arc__head {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 18px;
+    align-items: end;
+    margin-bottom: 30px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.story-arc__number {
+    color: var(--signal);
+    font-family: var(--display);
+    font-size: clamp(3rem, 7vw, 6.8rem);
+    font-weight: 950;
+    letter-spacing: -0.08em;
+    line-height: 0.74;
+}
+
+.story-arc__head h2,
+.story-arc__head p {
+    margin: 0;
+}
+
+.story-arc__head p {
+    color: var(--muted);
+    font-family: monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+}
+
+.story-lead {
+    max-width: 880px;
+    color: rgba(240, 241, 236, 0.84) !important;
+    font-size: clamp(1rem, 1.45vw, 1.18rem);
+}
+
+.story-timeline {
+    position: relative;
+    display: grid;
+    gap: 0;
+    margin-top: 34px;
+    padding-left: 38px;
+}
+
+.story-timeline::before {
+    content: "";
+    position: absolute;
+    top: 8px;
+    bottom: 8px;
+    left: 9px;
+    width: 1px;
+    background: linear-gradient(var(--signal), rgba(255, 61, 104, 0.12));
+}
+
+.story-step {
+    position: relative;
+    padding: 0 0 30px 18px;
+}
+
+.story-step:last-child {
+    padding-bottom: 0;
+}
+
+.story-step::before {
+    content: "";
+    position: absolute;
+    top: 7px;
+    left: -34px;
+    width: 11px;
+    height: 11px;
+    border: 2px solid var(--signal);
+    background: #111416;
+    transform: rotate(45deg);
+}
+
+.story-step h3 {
+    margin: 0 0 8px;
+    color: var(--paper) !important;
+    font-size: clamp(1.1rem, 2vw, 1.45rem);
+}
+
+.story-step p {
+    margin: 0;
+}
+
+.story-theme-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    margin-top: 34px;
+}
+
+.story-theme-card {
+    padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: #0e1213;
+}
+
+.story-theme-card span {
+    color: var(--signal);
+    font-family: monospace;
+    font-size: 0.54rem;
+    letter-spacing: 0.12em;
+}
+
+.story-theme-card h3 {
+    margin: 12px 0 10px;
+    color: var(--paper) !important;
+}
+
+.story-theme-card p {
+    margin: 0;
+    font-size: 0.84rem;
+}
+
+.story-quote {
+    margin: 34px 0 0;
+    padding: 24px 26px;
+    border-left: 4px solid var(--signal);
+    background: rgba(255, 61, 104, 0.065);
+}
+
+.story-quote p {
+    margin: 0;
+    color: var(--paper) !important;
+    font-family: var(--display);
+    font-size: clamp(1.35rem, 3vw, 2.4rem);
+    font-weight: 900;
+    line-height: 1.1;
+}
+
+.story-current {
+    border-color: rgba(255, 61, 104, 0.45) !important;
+}
+
+.story-source-list {
+    display: grid;
+    gap: 10px;
+    padding: 0;
+    list-style: none;
+}
+
+.story-source-list a {
+    color: var(--signal);
+    font-weight: 800;
+}
+
+@media (max-width: 820px) {
+    .story-page .page-hero::after {
+        right: -28%;
+        width: 110vw;
+        opacity: 0.3;
+    }
+
+    .story-index,
+    .story-theme-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .story-arc__head {
+        grid-template-columns: auto 1fr;
+    }
+
+    .story-arc__head > p {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 560px) {
+    .story-index,
+    .story-theme-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .story-warning {
+        grid-template-columns: 1fr;
+    }
+
+    .story-arc__head {
+        grid-template-columns: 1fr;
+    }
+
+    .story-timeline {
+        padding-left: 28px;
+    }
+}
