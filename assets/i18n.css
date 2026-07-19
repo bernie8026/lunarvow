@@ -1,0 +1,178 @@
+/* Three-language interface: 繁體中文 / English / 简体中文 */
+.site-header.has-language-switcher {
+    grid-template-columns: minmax(190px, 1fr) auto auto minmax(130px, 0.65fr) !important;
+    column-gap: clamp(12px, 1.6vw, 26px);
+}
+
+.language-switcher {
+    position: relative;
+    z-index: 1003;
+    display: inline-flex;
+    align-items: stretch;
+    height: 34px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    background: rgba(7, 9, 10, 0.82);
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 7px), calc(100% - 7px) 100%, 0 100%);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.language-switcher button {
+    position: relative;
+    min-width: 76px;
+    min-height: 32px;
+    padding: 0 10px;
+    border: 0;
+    border-right: 1px solid rgba(255, 255, 255, 0.12);
+    background: transparent;
+    color: rgba(240, 241, 236, 0.52);
+    font-family: var(--display);
+    font-size: 0.52rem;
+    font-weight: 900;
+    letter-spacing: 0.06em;
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+
+.language-switcher button:last-child {
+    border-right: 0;
+}
+
+.language-switcher button:hover,
+.language-switcher button:focus-visible {
+    color: var(--paper);
+    background: rgba(255, 61, 104, 0.12);
+}
+
+.language-switcher button.is-active {
+    background: var(--signal);
+    color: var(--ink);
+}
+
+.language-switcher button:active {
+    transform: translateY(1px);
+}
+
+body.is-language-switching main,
+body.is-language-switching .page-hero,
+body.is-language-switching .section-rail,
+body.is-language-switching .site-footer {
+    opacity: 0.72;
+    transition: opacity 0.18s ease;
+}
+
+body[data-language="zh-HK"] {
+    --open-file-label: "開啟檔案 ↗";
+    --archive-watermark: "檔案";
+}
+
+body[data-language="zh-CN"] {
+    --open-file-label: "打开档案 ↗";
+    --archive-watermark: "档案";
+}
+
+body[data-language="en"] {
+    --open-file-label: "OPEN FILE ↗";
+    --archive-watermark: "ARCHIVE";
+}
+
+.card::after {
+    content: var(--open-file-label, "OPEN FILE ↗") !important;
+}
+
+.content-section--archive::before {
+    content: var(--archive-watermark, "ARCHIVE") !important;
+}
+
+.card .name .zh {
+    display: none !important;
+}
+
+body[data-language="en"] .hero-title-zh {
+    letter-spacing: 0.04em;
+}
+
+body[data-language="en"] .page-hero h1,
+body[data-language="en"] .section-heading h2,
+body[data-language="en"] body:not(.home-page) h2 {
+    word-break: normal;
+}
+
+@media (max-width: 1180px) {
+    .site-header.has-language-switcher {
+        grid-template-columns: minmax(185px, 1fr) auto auto !important;
+    }
+
+    .site-header.has-language-switcher .site-header__status {
+        display: none !important;
+    }
+
+    .language-switcher button {
+        min-width: 68px;
+        padding-inline: 8px;
+        font-size: 0.48rem;
+    }
+}
+
+@media (max-width: 930px) and (min-width: 821px) {
+    .site-header.has-language-switcher {
+        grid-template-columns: minmax(165px, 1fr) auto !important;
+    }
+
+    .site-header.has-language-switcher .language-switcher {
+        position: fixed;
+        top: calc(var(--header-height) + 12px);
+        right: 18px;
+        box-shadow: 0 12px 34px rgba(0, 0, 0, 0.35);
+    }
+}
+
+@media (max-width: 820px) {
+    .site-header.has-language-switcher {
+        grid-template-columns: 1fr auto !important;
+    }
+
+    .language-switcher {
+        position: fixed;
+        z-index: 1005;
+        right: 20px;
+        bottom: 20px;
+        left: 20px;
+        height: 46px;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(14px);
+        transition: opacity 0.25s ease, visibility 0.25s ease, transform 0.25s ease;
+    }
+
+    .site-nav.is-open ~ .language-switcher {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    .language-switcher button {
+        flex: 1;
+        min-width: 0;
+        min-height: 44px;
+        font-size: 0.58rem;
+    }
+
+    .site-header.has-language-switcher .site-nav {
+        padding-bottom: 88px !important;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .language-switcher,
+    .language-switcher button,
+    body.is-language-switching main,
+    body.is-language-switching .page-hero,
+    body.is-language-switching .section-rail,
+    body.is-language-switching .site-footer {
+        transition-duration: 0.01ms !important;
+    }
+}
