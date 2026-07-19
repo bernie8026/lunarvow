@@ -11,6 +11,7 @@
     }
 
     const body = document.body;
+    const reduceMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
 
     /* Every inner page uses exactly the same global header as the homepage. */
     const normalizeGlobalHeader = () => {
@@ -55,11 +56,17 @@
     const menuToggle = document.querySelector('[data-menu-toggle]');
     const menu = document.querySelector('[data-menu]');
     const navLinks = document.querySelectorAll('[data-nav-link]');
-    const revealItems = document.querySelectorAll('[data-reveal]');
     const trackedSections = document.querySelectorAll('[data-section]');
     const railLinks = document.querySelectorAll('[data-rail-link]');
     const parallaxItems = document.querySelectorAll('[data-parallax]');
     const yearNodes = document.querySelectorAll('[data-current-year]');
+
+    function closeMenu() {
+        if (!menuToggle || !menu) return;
+        menuToggle.setAttribute('aria-expanded', 'false');
+        menu.classList.remove('is-open');
+        body.classList.remove('menu-open');
+    }
 
     /* Keep the header visible while a one-second scan transition covers the page content. */
     const transitionLayer = document.createElement('div');
@@ -109,10 +116,9 @@
         body.classList.add('is-page-leaving');
         closeMenu();
 
-        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         window.setTimeout(() => {
             window.location.assign(destination.href);
-        }, reduceMotion ? 180 : 960);
+        }, reduceMotionQuery.matches ? 180 : 960);
     });
 
     window.addEventListener('pageshow', () => {
@@ -148,11 +154,10 @@
         image.style.visibility = 'visible';
         image.dataset.imageState = 'revealing';
 
-        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         const isLargeVisual = image.matches('.hero-figure img, .feature-transmission__visual img, .guide-hero img, .lb-img');
         const distance = isLargeVisual ? 88 : 38;
-        const duration = reduceMotion ? 180 : (isLargeVisual ? 920 : 680);
-        const delay = reduceMotion ? 0 : Math.min(state.sequence % 8, 7) * 42;
+        const duration = reduceMotionQuery.matches ? 180 : (isLargeVisual ? 920 : 680);
+        const delay = reduceMotionQuery.matches ? 0 : Math.min(state.sequence % 8, 7) * 42;
 
         if (typeof image.animate !== 'function') {
             image.style.opacity = '1';
@@ -188,6 +193,7 @@
                 image.style.visibility = 'visible';
                 image.style.transform = '';
                 image.style.clipPath = '';
+                image.style.willChange = '';
                 image.dataset.imageState = 'ready';
                 state.animation?.cancel();
                 state.animation = null;
@@ -231,9 +237,208 @@
         root.querySelectorAll?.('img').forEach(prepareCharacterImage);
     };
 
-    scanCharacterImages();
+    /* Site-wide motion system: headings, copy, controls, cards, timelines and footer. */
+    const motionSelector = [
+        '.site-header .site-brand',
+        '.site-header .site-nav > a',
+        '.site-header .site-header__status',
+        '.home-hero .hero-copy > *',
+        '.home-hero .hero-panel',
+        '.home-hero .hero-footer > *',
+        '.page-hero__copy > *',
+        '.page-hero__code',
+        '.section-heading > *',
+        '.feature-transmission__visual',
+        '.feature-transmission__body > *',
+        '.archive-card',
+        '.profile-statement',
+        '.profile-copy > *',
+        '.guide-hero > div > *',
+        '.guide-grid > *',
+        '.story-warning > *',
+        '.story-index > *',
+        '.story-theme-grid > *',
+        '.story-arc__head > *',
+        '.story-timeline > *',
+        '.story-quote',
+        '.photo-grid > *',
+        '.gallery-heading > *',
+        '.controls',
+        '.grid > .card',
+        'main > section:not(.home-hero) > h2',
+        'main > section:not(.home-hero) > h3',
+        'main > section:not(.home-hero) > p',
+        'main > section:not(.home-hero) > ul',
+        'main > section:not(.home-hero) > ol',
+        'main > section:not(.home-hero) > blockquote',
+        'main > section:not(.home-hero) > .featured-guide',
+        '.site-footer > *',
+        'dialog .lb-panel > *'
+    ].join(',');
 
-    const characterImageObserver = new MutationObserver((mutations) => {
+    const motionStates = new WeakMap();
+    const pendingMotionElements = new Set();
+    let motionSequence = 0;
+    let motionCanPlay = !bootScreen;
+
+    const shouldAnimateElement = (element) => {
+        if (!(element instanceof HTMLElement)) return false;
+        if (element.matches('img, script, style, link, meta, .sr-only, .boot-screen, .page-transition, .page-transition *')) return false;
+        if (element.closest('.boot-screen, .page-transition')) return false;
+        if (motionStates.has(element)) return false;
+        return true;
+    };
+
+    const getLocalDelay = (element, sequence) => {
+        if (reduceMotionQuery.matches) return 0;
+
+        const parent = element.parentElement;
+        if (!parent) return Math.min(sequence % 6, 5) * 48;
+
+        const siblings = Array.from(parent.children).filter((child) => child.matches?.(motionSelector));
+        const localIndex = Math.max(0, siblings.indexOf(element));
+        return Math.min(localIndex, 7) * 58;
+    };
+
+    const getMotionFrame = (element, sequence) => {
+        if (reduceMotionQuery.matches) {
+            return { x: 0, y: 8, scale: 1, clipPath: 'inset(0 0 0 0)' };
+        }
+
+        if (element.closest('.site-header')) {
+            return { x: 0, y: -26, scale: 0.99, clipPath: 'inset(0 0 35% 0)' };
+        }
+
+        if (element.matches('.archive-card, .guide-card, .story-step, .story-theme-card, .story-index > *, .photo-entry, .grid > .card')) {
+            const direction = sequence % 2 === 0 ? -1 : 1;
+            return { x: 54 * direction, y: 20, scale: 0.985, clipPath: direction > 0 ? 'inset(0 0 0 16%)' : 'inset(0 16% 0 0)' };
+        }
+
+        if (element.matches('a, button, .controls, .hero-panel, .profile-statement')) {
+            return { x: 0, y: 30, scale: 0.98, clipPath: 'inset(12% 0 0 0)' };
+        }
+
+        if (element.matches('h1, h2, h3, .eyebrow, .update-tag, .page-hero__code')) {
+            return { x: -46, y: 0, scale: 0.99, clipPath: 'inset(0 12% 0 0)' };
+        }
+
+        return { x: -30, y: 22, scale: 0.995, clipPath: 'inset(0 8% 0 0)' };
+    };
+
+    const revealMotionElement = (element) => {
+        const state = motionStates.get(element);
+        if (!state || state.revealed) return;
+
+        if (!motionCanPlay) {
+            pendingMotionElements.add(element);
+            return;
+        }
+
+        state.revealed = true;
+        pendingMotionElements.delete(element);
+        element.classList.add('is-visible');
+        element.dataset.motionState = 'revealing';
+        element.style.visibility = 'visible';
+
+        const frame = getMotionFrame(element, state.sequence);
+        const duration = reduceMotionQuery.matches ? 180 : 720;
+        const delay = getLocalDelay(element, state.sequence);
+
+        if (typeof element.animate !== 'function') {
+            element.style.opacity = '1';
+            element.style.visibility = 'visible';
+            element.dataset.motionState = 'ready';
+            return;
+        }
+
+        state.animation = element.animate([
+            {
+                opacity: 0,
+                transform: `translate3d(${frame.x}px, ${frame.y}px, 0) scale(${frame.scale})`,
+                clipPath: frame.clipPath,
+                filter: reduceMotionQuery.matches ? 'none' : 'blur(3px)'
+            },
+            {
+                opacity: 1,
+                transform: 'translate3d(0, 0, 0) scale(1)',
+                clipPath: 'inset(0 0 0 0)',
+                filter: 'blur(0)'
+            }
+        ], {
+            duration,
+            delay,
+            easing: 'cubic-bezier(.18, .82, .24, 1)',
+            fill: 'both'
+        });
+
+        state.animation.finished
+            .catch(() => undefined)
+            .then(() => {
+                if (motionStates.get(element) !== state) return;
+                element.style.opacity = '1';
+                element.style.visibility = 'visible';
+                element.style.transform = '';
+                element.style.clipPath = '';
+                element.style.filter = '';
+                element.style.willChange = '';
+                element.dataset.motionState = 'ready';
+                state.animation?.cancel();
+                state.animation = null;
+            });
+    };
+
+    const motionObserver = 'IntersectionObserver' in window
+        ? new IntersectionObserver((entries, observer) => {
+            entries.forEach((entry) => {
+                if (!entry.isIntersecting) return;
+                revealMotionElement(entry.target);
+                observer.unobserve(entry.target);
+            });
+        }, {
+            rootMargin: '0px 0px -7% 0px',
+            threshold: 0.06
+        })
+        : null;
+
+    const prepareMotionElement = (element) => {
+        if (!shouldAnimateElement(element)) return;
+
+        const state = {
+            sequence: motionSequence++,
+            revealed: false,
+            animation: null
+        };
+        motionStates.set(element, state);
+        element.dataset.motionState = 'waiting';
+        element.style.opacity = '0';
+        element.style.visibility = 'hidden';
+        element.style.willChange = 'opacity, transform, clip-path, filter';
+
+        if (motionObserver) {
+            motionObserver.observe(element);
+        } else {
+            revealMotionElement(element);
+        }
+    };
+
+    const scanMotionElements = (root = document) => {
+        if (root instanceof HTMLElement && root.matches(motionSelector)) prepareMotionElement(root);
+        root.querySelectorAll?.(motionSelector).forEach(prepareMotionElement);
+    };
+
+    const startQueuedMotion = () => {
+        motionCanPlay = true;
+        const queued = Array.from(pendingMotionElements);
+        queued.forEach((element, index) => {
+            window.setTimeout(() => revealMotionElement(element), reduceMotionQuery.matches ? 0 : index * 22);
+        });
+    };
+
+    scanCharacterImages();
+    scanMotionElements();
+
+    /* Dynamic cards, search results and lightboxes receive the same animation automatically. */
+    const dynamicContentObserver = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {
             if (mutation.type === 'attributes' && mutation.target instanceof HTMLImageElement) {
                 prepareCharacterImage(mutation.target);
@@ -241,12 +446,14 @@
             }
 
             mutation.addedNodes.forEach((node) => {
-                if (node instanceof Element) scanCharacterImages(node);
+                if (!(node instanceof Element)) return;
+                scanCharacterImages(node);
+                scanMotionElements(node);
             });
         });
     });
 
-    characterImageObserver.observe(document.documentElement, {
+    dynamicContentObserver.observe(document.documentElement, {
         childList: true,
         subtree: true,
         attributes: true,
@@ -254,8 +461,15 @@
     });
 
     const hideBootScreen = () => {
-        if (!bootScreen) return;
-        window.setTimeout(() => bootScreen.classList.add('is-hidden'), 500);
+        if (!bootScreen) {
+            startQueuedMotion();
+            return;
+        }
+
+        window.setTimeout(() => {
+            bootScreen.classList.add('is-hidden');
+            startQueuedMotion();
+        }, 500);
         window.setTimeout(() => bootScreen.remove(), 1150);
     };
 
@@ -266,11 +480,8 @@
         window.setTimeout(hideBootScreen, 2200);
     }
 
-    function closeMenu() {
-        if (!menuToggle || !menu) return;
-        menuToggle.setAttribute('aria-expanded', 'false');
-        menu.classList.remove('is-open');
-        body.classList.remove('menu-open');
+    if (!bootScreen) {
+        window.requestAnimationFrame(() => window.requestAnimationFrame(startQueuedMotion));
     }
 
     if (menuToggle && menu) {
@@ -297,19 +508,6 @@
     window.addEventListener('scroll', updateHeader, { passive: true });
 
     if ('IntersectionObserver' in window) {
-        const revealObserver = new IntersectionObserver((entries, observer) => {
-            entries.forEach((entry) => {
-                if (!entry.isIntersecting) return;
-                entry.target.classList.add('is-visible');
-                observer.unobserve(entry.target);
-            });
-        }, {
-            rootMargin: '0px 0px -12% 0px',
-            threshold: 0.12
-        });
-
-        revealItems.forEach((item) => revealObserver.observe(item));
-
         const sectionObserver = new IntersectionObserver((entries) => {
             const visible = entries
                 .filter((entry) => entry.isIntersecting)
@@ -326,12 +524,9 @@
         });
 
         trackedSections.forEach((section) => sectionObserver.observe(section));
-    } else {
-        revealItems.forEach((item) => item.classList.add('is-visible'));
     }
 
-    const canUseParallax = window.matchMedia('(pointer: fine)').matches &&
-        !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const canUseParallax = window.matchMedia('(pointer: fine)').matches && !reduceMotionQuery.matches;
 
     if (canUseParallax && parallaxItems.length) {
         let frameId = null;
