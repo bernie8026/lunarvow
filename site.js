@@ -22,6 +22,130 @@
     const parallaxItems = document.querySelectorAll('[data-parallax]');
     const yearNodes = document.querySelectorAll('[data-current-year]');
 
+    /* Character images stay hidden until their actual file has loaded, then slide in. */
+    const imageMotionStates = new WeakMap();
+    let imageSequence = 0;
+
+    const isCharacterVisual = (image) => {
+        if (!(image instanceof HTMLImageElement)) return false;
+        const source = image.currentSrc || image.src || image.getAttribute('src') || '';
+        return image.matches('.character-visual, .thumb, .hero-figure img, .feature-transmission__visual img, .guide-hero img, .lb-img') ||
+            source.includes('assets/hi3/characters/') ||
+            source.includes('honkaiimpact3.fandom.com') ||
+            source.includes('static.wikia.nocookie.net');
+    };
+
+    const finishCharacterReveal = (image, state) => {
+        if (imageMotionStates.get(image) !== state) return;
+
+        image.style.visibility = 'visible';
+        image.dataset.imageState = 'revealing';
+
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const isLargeVisual = image.matches('.hero-figure img, .feature-transmission__visual img, .guide-hero img, .lb-img');
+        const distance = isLargeVisual ? 88 : 38;
+        const duration = reduceMotion ? 180 : (isLargeVisual ? 920 : 680);
+        const delay = reduceMotion ? 0 : Math.min(state.sequence % 8, 7) * 42;
+
+        if (typeof image.animate !== 'function') {
+            image.style.opacity = '1';
+            image.style.transform = '';
+            image.dataset.imageState = 'ready';
+            return;
+        }
+
+        state.animation?.cancel();
+        state.animation = image.animate([
+            {
+                opacity: 0,
+                transform: `translate3d(${distance}px, 0, 0) scale(0.985)`,
+                clipPath: 'inset(0 0 0 18%)'
+            },
+            {
+                opacity: 1,
+                transform: 'translate3d(0, 0, 0) scale(1)',
+                clipPath: 'inset(0 0 0 0)'
+            }
+        ], {
+            duration,
+            delay,
+            easing: 'cubic-bezier(.18, .82, .24, 1)',
+            fill: 'both'
+        });
+
+        state.animation.finished
+            .catch(() => undefined)
+            .then(() => {
+                if (imageMotionStates.get(image) !== state) return;
+                image.style.opacity = '1';
+                image.style.visibility = 'visible';
+                image.style.transform = '';
+                image.style.clipPath = '';
+                image.dataset.imageState = 'ready';
+                state.animation?.cancel();
+                state.animation = null;
+            });
+    };
+
+    const prepareCharacterImage = (image) => {
+        if (!isCharacterVisual(image)) return;
+
+        const previous = imageMotionStates.get(image);
+        previous?.animation?.cancel();
+        if (previous?.loadHandler) image.removeEventListener('load', previous.loadHandler);
+
+        const state = {
+            sequence: imageSequence++,
+            animation: null,
+            loadHandler: null
+        };
+        imageMotionStates.set(image, state);
+
+        image.dataset.imageState = 'loading';
+        image.style.opacity = '0';
+        image.style.visibility = 'hidden';
+        image.style.willChange = 'opacity, transform, clip-path';
+
+        state.loadHandler = () => {
+            window.requestAnimationFrame(() => {
+                window.requestAnimationFrame(() => finishCharacterReveal(image, state));
+            });
+        };
+
+        image.addEventListener('load', state.loadHandler, { once: true });
+
+        if (image.complete && image.naturalWidth > 0) {
+            state.loadHandler();
+        }
+    };
+
+    const scanCharacterImages = (root = document) => {
+        if (root instanceof HTMLImageElement) prepareCharacterImage(root);
+        root.querySelectorAll?.('img').forEach(prepareCharacterImage);
+    };
+
+    scanCharacterImages();
+
+    const characterImageObserver = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if (mutation.type === 'attributes' && mutation.target instanceof HTMLImageElement) {
+                prepareCharacterImage(mutation.target);
+                return;
+            }
+
+            mutation.addedNodes.forEach((node) => {
+                if (node instanceof Element) scanCharacterImages(node);
+            });
+        });
+    });
+
+    characterImageObserver.observe(document.documentElement, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ['src', 'srcset']
+    });
+
     const hideBootScreen = () => {
         if (!bootScreen) return;
         window.setTimeout(() => bootScreen.classList.add('is-hidden'), 500);
