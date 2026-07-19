@@ -6,6 +6,27 @@
   const JSON_URL = script?.dataset.json || 'data/characters.json';
   const PLACEHOLDER = 'assets/placeholder.png';
 
+  const languageCopy = {
+    'zh-HK': {
+      placeholder: '輸入角色或戰衣名稱…',
+      offline: '資料庫離線 // 無法載入角色資料',
+      empty: '沒有相符檔案 // 搵唔到相符角色'
+    },
+    'zh-CN': {
+      placeholder: '输入角色或战衣名称…',
+      offline: '数据库离线 // 无法加载角色资料',
+      empty: '没有相符档案 // 找不到相符角色'
+    },
+    en: {
+      placeholder: 'Enter a character or battlesuit name…',
+      offline: 'DATABASE OFFLINE // Unable to load character data',
+      empty: 'NO MATCHING FILE // No matching character found'
+    }
+  };
+
+  const currentLanguage = () => window.BHR_I18N?.language || document.body.dataset.language || 'zh-HK';
+  const copy = () => languageCopy[currentLanguage()] || languageCopy['zh-HK'];
+
   const slugToSources = (slug) => ['webp', 'png', 'jpg', 'jpeg', 'avif']
     .map((extension) => `${IMG_BASE}${slug}.${extension}`);
 
@@ -156,31 +177,29 @@
     const resultCount = document.querySelector('#result-count');
     if (!grid || !input) return;
 
-    let list = [];
+    let searchable = [];
+    let visibleItems = [];
 
-    try {
-      const response = await fetch(JSON_URL);
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      list = await response.json();
-    } catch (error) {
-      grid.innerHTML = '<p class="empty-state">DATABASE OFFLINE // 無法載入角色資料</p>';
-      if (resultCount) resultCount.textContent = '00';
-      console.error('Unable to load character database:', error);
-      return;
-    }
+    const applyLanguage = () => {
+      input.placeholder = copy().placeholder;
+      const emptyState = grid.querySelector('.empty-state');
+      if (emptyState) {
+        emptyState.textContent = searchable.length ? copy().empty : copy().offline;
+      }
+    };
 
     const normalize = (value) => (value || '').toLowerCase().replace(/\s+/g, '');
-    const searchable = list.map((character) => ({
-      ...character,
-      _search: normalize(`${character.en}${character.zh || ''}${character.slug || ''}${character.battlesuit || ''}`)
-    }));
 
     const render = (items) => {
+      visibleItems = items;
       grid.replaceChildren();
       if (resultCount) resultCount.textContent = String(items.length).padStart(2, '0');
 
       if (!items.length) {
-        grid.innerHTML = '<p class="empty-state">NO MATCHING FILE // 搵唔到相符角色</p>';
+        const emptyState = document.createElement('p');
+        emptyState.className = 'empty-state';
+        emptyState.textContent = copy().empty;
+        grid.appendChild(emptyState);
         return;
       }
 
@@ -189,11 +208,37 @@
       grid.appendChild(fragment);
     };
 
+    try {
+      const response = await fetch(JSON_URL);
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const list = await response.json();
+      searchable = list.map((character) => ({
+        ...character,
+        _search: normalize(`${character.en}${character.zh || ''}${character.slug || ''}${character.battlesuit || ''}`)
+      }));
+    } catch (error) {
+      const emptyState = document.createElement('p');
+      emptyState.className = 'empty-state';
+      emptyState.textContent = copy().offline;
+      grid.replaceChildren(emptyState);
+      if (resultCount) resultCount.textContent = '00';
+      console.error('Unable to load character database:', error);
+      window.addEventListener('bhr:languagechange', applyLanguage);
+      applyLanguage();
+      return;
+    }
+
     render(searchable);
+    applyLanguage();
 
     input.addEventListener('input', () => {
       const query = normalize(input.value);
       render(searchable.filter((character) => character._search.includes(query)));
+    });
+
+    window.addEventListener('bhr:languagechange', () => {
+      applyLanguage();
+      if (!visibleItems.length && searchable.length) render(visibleItems);
     });
   };
 
