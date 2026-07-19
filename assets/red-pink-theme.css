@@ -157,3 +157,129 @@ body:not(.home-page) button:hover,
 .site-nav__database:hover {
     box-shadow: 0 0 0 1px rgba(255, 61, 104, 0.4), 0 10px 28px rgba(142, 18, 55, 0.28);
 }
+
+/* Keep the global header visible while page content changes underneath it. */
+.page-transition {
+    position: fixed;
+    z-index: 990;
+    inset: var(--header-height, 76px) 0 0;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at 72% 42%, rgba(255, 61, 104, 0.22), transparent 28%),
+        rgba(7, 9, 10, 0.985);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.page-transition::before,
+.page-transition::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.page-transition::before {
+    background: linear-gradient(105deg, transparent 0 38%, rgba(255, 61, 104, 0.95) 46%, rgba(179, 19, 67, 0.88) 52%, transparent 62%);
+    transform: translateX(-120%);
+}
+
+.page-transition::after {
+    background: linear-gradient(transparent 50%, rgba(255, 61, 104, 0.055) 50%);
+    background-size: 100% 4px;
+    opacity: 0.7;
+}
+
+.page-transition__grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+    background-size: 52px 52px;
+}
+
+.page-transition__content {
+    position: relative;
+    z-index: 2;
+    width: min(78vw, 520px);
+    color: #f0f1ec;
+    text-align: left;
+}
+
+.page-transition__code {
+    display: block;
+    margin-bottom: 10px;
+    color: rgba(255, 154, 174, 0.68);
+    font-size: 0.56rem;
+    font-weight: 900;
+    letter-spacing: 0.16em;
+}
+
+.page-transition__content strong {
+    display: block;
+    font-family: var(--display);
+    font-size: clamp(1.25rem, 4vw, 2.4rem);
+    font-weight: 950;
+    letter-spacing: 0.08em;
+}
+
+.page-transition__bar {
+    height: 3px;
+    margin-top: 20px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.page-transition__bar i {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, var(--crimson), var(--signal), var(--rose-soft));
+    transform: scaleX(0);
+    transform-origin: left;
+}
+
+body.is-page-leaving {
+    overflow: hidden;
+}
+
+body.is-page-leaving .page-transition {
+    opacity: 1;
+    visibility: visible;
+}
+
+body.is-page-leaving .page-transition::before {
+    animation: page-scan 0.95s cubic-bezier(.2, .8, .2, 1) both;
+}
+
+body.is-page-leaving .page-transition__bar i {
+    animation: page-progress 0.9s cubic-bezier(.18, .82, .24, 1) both;
+}
+
+@keyframes page-scan {
+    0% { transform: translateX(-120%); }
+    100% { transform: translateX(120%); }
+}
+
+@keyframes page-progress {
+    0% { transform: scaleX(0); }
+    100% { transform: scaleX(1); }
+}
+
+@media (max-width: 820px) {
+    .page-transition {
+        inset: 68px 0 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .page-transition::before,
+    .page-transition__bar i {
+        animation-duration: 0.16s !important;
+    }
+}
