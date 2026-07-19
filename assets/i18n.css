@@ -135,17 +135,44 @@ body[data-language="en"] body:not(.home-page) h2 {
         grid-template-columns: 1fr auto !important;
     }
 
+    /* Extend the hamburger drawer so the language controls form its final menu section. */
+    .site-header.has-language-switcher .site-nav {
+        min-height: 420px;
+        padding-bottom: 118px !important;
+    }
+
     .language-switcher {
-        position: fixed;
+        position: absolute;
         z-index: 1005;
+        top: calc(var(--header-height) + 292px);
         right: 20px;
-        bottom: 20px;
         left: 20px;
-        height: 46px;
+        display: flex;
+        flex-wrap: wrap;
+        height: auto;
+        min-height: 80px;
+        overflow: hidden;
         opacity: 0;
         visibility: hidden;
-        transform: translateY(14px);
+        transform: translateY(-8px);
+        background: rgba(17, 20, 22, 0.98);
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.34);
         transition: opacity 0.25s ease, visibility 0.25s ease, transform 0.25s ease;
+    }
+
+    .language-switcher::before {
+        content: "LANGUAGE / 語言";
+        flex: 0 0 100%;
+        display: flex;
+        align-items: center;
+        height: 34px;
+        padding: 0 12px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+        color: rgba(255, 154, 174, 0.72);
+        font-family: var(--display);
+        font-size: 0.5rem;
+        font-weight: 900;
+        letter-spacing: 0.14em;
     }
 
     .site-nav.is-open ~ .language-switcher {
@@ -155,14 +182,23 @@ body[data-language="en"] body:not(.home-page) h2 {
     }
 
     .language-switcher button {
-        flex: 1;
+        flex: 1 1 33.333%;
         min-width: 0;
-        min-height: 44px;
+        min-height: 46px;
         font-size: 0.58rem;
     }
+}
 
-    .site-header.has-language-switcher .site-nav {
-        padding-bottom: 88px !important;
+@media (max-width: 390px) {
+    .language-switcher {
+        right: 12px;
+        left: 12px;
+    }
+
+    .language-switcher button {
+        padding-inline: 5px;
+        font-size: 0.52rem;
+        letter-spacing: 0.035em;
     }
 }
 
