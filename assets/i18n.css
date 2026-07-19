@@ -135,19 +135,39 @@ body[data-language="en"] body:not(.home-page) h2 {
         grid-template-columns: 1fr auto !important;
     }
 
+    /* The hamburger directory owns the viewport below the fixed header. */
     .site-header.has-language-switcher .site-nav {
-        min-height: 420px;
-        max-height: calc(100svh - var(--header-height));
-        overflow-y: auto;
-        padding-bottom: 118px !important;
+        position: fixed !important;
+        inset: var(--header-height) 0 0 !important;
+        align-content: start;
+        align-items: stretch;
+        min-height: 0 !important;
+        height: auto !important;
+        max-height: none !important;
+        overflow-x: hidden !important;
+        overflow-y: scroll !important;
+        padding: 14px 20px calc(118px + env(safe-area-inset-bottom)) !important;
+        overscroll-behavior-y: contain;
+        touch-action: pan-y;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-gutter: stable;
+    }
+
+    .site-header.has-language-switcher .site-nav.is-open {
+        pointer-events: auto;
+    }
+
+    .site-header.has-language-switcher .site-nav a {
+        flex: 0 0 auto;
     }
 
     /* Hidden completely while the hamburger directory is closed. */
     .language-switcher {
-        position: absolute;
+        position: fixed;
         z-index: 1005;
-        top: calc(var(--header-height) + 292px);
+        top: auto;
         right: 20px;
+        bottom: max(12px, env(safe-area-inset-bottom));
         left: 20px;
         display: none !important;
         flex-wrap: wrap;
@@ -157,9 +177,9 @@ body[data-language="en"] body:not(.home-page) h2 {
         opacity: 0 !important;
         visibility: hidden !important;
         pointer-events: none;
-        transform: translateY(-8px) !important;
+        transform: translateY(8px) !important;
         background: rgba(17, 20, 22, 0.98);
-        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.34);
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.42);
         transition: opacity 0.25s ease, visibility 0.25s ease, transform 0.25s ease;
     }
 
@@ -192,6 +212,63 @@ body[data-language="en"] body:not(.home-page) h2 {
         min-width: 0;
         min-height: 46px;
         font-size: 0.58rem;
+    }
+}
+
+/* Landscape phones and tablets have very little vertical room. */
+@media (max-width: 820px) and (max-height: 560px) and (orientation: landscape) {
+    :root {
+        --header-height: 58px;
+    }
+
+    .site-header {
+        height: var(--header-height) !important;
+        padding-inline: max(14px, env(safe-area-inset-left)) max(14px, env(safe-area-inset-right)) !important;
+    }
+
+    .site-brand__mark {
+        width: 42px;
+        height: 42px;
+    }
+
+    .site-brand__copy small {
+        display: none;
+    }
+
+    .menu-toggle {
+        width: 42px;
+        height: 42px;
+    }
+
+    .site-header.has-language-switcher .site-nav {
+        padding: 6px max(18px, env(safe-area-inset-right)) calc(82px + env(safe-area-inset-bottom)) max(18px, env(safe-area-inset-left)) !important;
+    }
+
+    .site-header.has-language-switcher .site-nav a {
+        min-height: 42px;
+        padding: 9px 4px;
+        font-size: 0.65rem;
+    }
+
+    .site-nav .site-nav__database {
+        margin-top: 7px;
+    }
+
+    .language-switcher {
+        right: max(16px, env(safe-area-inset-right));
+        bottom: max(7px, env(safe-area-inset-bottom));
+        left: max(16px, env(safe-area-inset-left));
+        min-height: 64px;
+    }
+
+    .language-switcher::before {
+        height: 26px;
+        font-size: 0.44rem;
+    }
+
+    .language-switcher button {
+        min-height: 36px;
+        font-size: 0.52rem;
     }
 }
 
