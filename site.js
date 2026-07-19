@@ -51,6 +51,19 @@
 
     normalizeGlobalHeader();
 
+    /* Load the self-contained three-language system only after the shared header exists. */
+    const loadLanguageSystem = () => {
+        if (document.querySelector('script[data-bhr-i18n]')) return;
+        const languageScript = document.createElement('script');
+        languageScript.src = 'assets/i18n.js';
+        languageScript.async = true;
+        languageScript.dataset.bhrI18n = '';
+        languageScript.onerror = () => console.error('Unable to load the language system.');
+        document.head.appendChild(languageScript);
+    };
+
+    loadLanguageSystem();
+
     const bootScreen = document.querySelector('.boot-screen');
     const header = document.querySelector('[data-header]');
     const menuToggle = document.querySelector('[data-menu-toggle]');
@@ -241,6 +254,7 @@
     const motionSelector = [
         '.site-header .site-brand',
         '.site-header .site-nav > a',
+        '.site-header .language-switcher',
         '.site-header .site-header__status',
         '.home-hero .hero-copy > *',
         '.home-hero .hero-panel',
