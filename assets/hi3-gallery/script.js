@@ -39,16 +39,21 @@
     card.setAttribute('aria-label', `開啟 ${character.zh || character.en} 圖片`);
 
     const image = document.createElement('img');
-    image.className = 'thumb';
+    image.className = 'thumb character-visual';
     image.alt = `${character.en}${character.zh ? ` / ${character.zh}` : ''} | Honkai Impact 3rd`;
     image.loading = 'lazy';
     image.decoding = 'async';
     image.referrerPolicy = 'no-referrer';
+    image.style.opacity = '0';
+    image.style.visibility = 'hidden';
 
     const sources = characterSources(character);
     let sourceIndex = 0;
 
     const tryNextSource = () => {
+      image.style.opacity = '0';
+      image.style.visibility = 'hidden';
+
       if (sourceIndex >= sources.length) {
         image.onerror = null;
         image.src = PLACEHOLDER;
@@ -97,7 +102,7 @@
     lightbox.className = 'lightbox';
     lightbox.innerHTML = `
       <div class="lb-shell">
-        <img class="lb-img" alt="">
+        <img class="lb-img character-visual" style="opacity:0;visibility:hidden" alt="">
         <div class="lb-panel">
           <div>
             <span>CHARACTER VISUAL</span>
@@ -128,6 +133,8 @@
     const image = dialog.querySelector('.lb-img');
     const sourceLink = dialog.querySelector('#lb-source');
 
+    image.style.opacity = '0';
+    image.style.visibility = 'hidden';
     image.src = source;
     image.alt = caption;
     dialog.querySelector('#lb-caption').textContent = caption;
