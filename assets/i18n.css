@@ -143,39 +143,56 @@ body[data-language="en"] body:not(.home-page) h2 {
         touch-action: auto;
     }
 
+    /* Full-screen drawer below the fixed header. Absolute positioning avoids
+       iOS treating fixed descendants of a backdrop-filtered header as a tiny box. */
     .site-header.has-language-switcher .site-nav {
-        position: fixed !important;
-        inset: var(--header-height) 0 0 !important;
+        position: absolute !important;
+        top: 100% !important;
+        right: auto !important;
+        bottom: auto !important;
+        left: 50% !important;
+        width: 100vw !important;
+        height: calc(100dvh - var(--header-height)) !important;
+        min-height: calc(100svh - var(--header-height)) !important;
+        max-height: calc(100dvh - var(--header-height)) !important;
         align-content: start;
         align-items: stretch;
-        min-height: 0 !important;
-        height: auto !important;
-        max-height: none !important;
         overflow-x: hidden !important;
-        overflow-y: scroll !important;
-        padding: 14px 20px calc(118px + env(safe-area-inset-bottom)) !important;
+        overflow-y: auto !important;
+        padding: 18px 20px calc(126px + env(safe-area-inset-bottom)) !important;
+        border-bottom: 0 !important;
         background: #090b0c !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+        transform: translate3d(-50%, -16px, 0) !important;
         overscroll-behavior-y: contain;
         touch-action: pan-y;
         -webkit-overflow-scrolling: touch;
-        scrollbar-gutter: stable;
+        transition: opacity 0.22s ease, visibility 0.22s ease, transform 0.22s ease !important;
     }
 
     .site-header.has-language-switcher .site-nav.is-open {
-        pointer-events: auto;
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
+        transform: translate3d(-50%, 0, 0) !important;
     }
 
     .site-header.has-language-switcher .site-nav a {
         flex: 0 0 auto;
     }
 
+    /* The language controls occupy the bottom of the same drawer. */
     .language-switcher {
-        position: fixed;
+        position: absolute;
         z-index: 1005;
-        top: auto;
-        right: 20px;
-        bottom: max(12px, env(safe-area-inset-bottom));
-        left: 20px;
+        top: calc(100dvh - var(--header-height) - 96px);
+        right: auto;
+        bottom: auto;
+        left: 50%;
+        width: calc(100vw - 40px);
+        max-width: 760px;
         display: none !important;
         flex-wrap: wrap;
         height: auto;
@@ -184,10 +201,10 @@ body[data-language="en"] body:not(.home-page) h2 {
         opacity: 0 !important;
         visibility: hidden !important;
         pointer-events: none;
-        transform: translateY(8px) !important;
+        transform: translate3d(-50%, 8px, 0) !important;
         background: rgba(17, 20, 22, 0.99);
         box-shadow: 0 12px 32px rgba(0, 0, 0, 0.42);
-        transition: opacity 0.25s ease, visibility 0.25s ease, transform 0.25s ease;
+        transition: opacity 0.22s ease, visibility 0.22s ease, transform 0.22s ease;
     }
 
     .language-switcher::before {
@@ -210,7 +227,7 @@ body[data-language="en"] body:not(.home-page) h2 {
         opacity: 1 !important;
         visibility: visible !important;
         pointer-events: auto;
-        transform: translateY(0) !important;
+        transform: translate3d(-50%, 0, 0) !important;
     }
 
     .language-switcher button {
@@ -245,21 +262,11 @@ body[data-language="en"] body:not(.home-page) h2 {
         height: 42px;
     }
 
-    /* Keep the drawer mounted so Safari can toggle it reliably. */
     .site-header.has-language-switcher .site-nav {
-        display: grid !important;
-        transform: none !important;
-        opacity: 0 !important;
-        visibility: hidden !important;
-        pointer-events: none !important;
+        height: calc(100dvh - var(--header-height)) !important;
+        max-height: calc(100dvh - var(--header-height)) !important;
+        padding: 6px max(18px, env(safe-area-inset-right)) calc(76px + env(safe-area-inset-bottom)) max(18px, env(safe-area-inset-left)) !important;
         transition: none !important;
-        padding: 6px max(18px, env(safe-area-inset-right)) calc(82px + env(safe-area-inset-bottom)) max(18px, env(safe-area-inset-left)) !important;
-    }
-
-    .site-header.has-language-switcher .site-nav.is-open {
-        opacity: 1 !important;
-        visibility: visible !important;
-        pointer-events: auto !important;
     }
 
     .site-header.has-language-switcher .site-nav a {
@@ -273,10 +280,10 @@ body[data-language="en"] body:not(.home-page) h2 {
     }
 
     .language-switcher {
-        right: max(16px, env(safe-area-inset-right));
-        bottom: max(7px, env(safe-area-inset-bottom));
-        left: max(16px, env(safe-area-inset-left));
-        min-height: 64px;
+        top: calc(100dvh - var(--header-height) - 70px);
+        width: calc(100vw - max(32px, env(safe-area-inset-left) + env(safe-area-inset-right)));
+        min-height: 62px;
+        transition: none !important;
     }
 
     .language-switcher::before {
@@ -292,8 +299,7 @@ body[data-language="en"] body:not(.home-page) h2 {
 
 @media (max-width: 390px) {
     .language-switcher {
-        right: 12px;
-        left: 12px;
+        width: calc(100vw - 24px);
     }
 
     .language-switcher button {
@@ -306,6 +312,7 @@ body[data-language="en"] body:not(.home-page) h2 {
 @media (prefers-reduced-motion: reduce) {
     .language-switcher,
     .language-switcher button,
+    .site-header.has-language-switcher .site-nav,
     body.is-language-switching main,
     body.is-language-switching .page-hero,
     body.is-language-switching .section-rail,
