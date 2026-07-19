@@ -135,6 +135,15 @@ body[data-language="en"] body:not(.home-page) h2 {
         grid-template-columns: 1fr auto !important;
     }
 
+    /* Do not let iOS reset the document scroll position when the drawer opens. */
+    body.menu-open,
+    body.inner-page.menu-open {
+        position: static !important;
+        width: auto !important;
+        overflow: visible !important;
+        touch-action: auto;
+    }
+
     /* The hamburger directory owns the viewport below the fixed header. */
     .site-header.has-language-switcher .site-nav {
         position: fixed !important;
@@ -147,6 +156,7 @@ body[data-language="en"] body:not(.home-page) h2 {
         overflow-x: hidden !important;
         overflow-y: scroll !important;
         padding: 14px 20px calc(118px + env(safe-area-inset-bottom)) !important;
+        background: #090b0c !important;
         overscroll-behavior-y: contain;
         touch-action: pan-y;
         -webkit-overflow-scrolling: touch;
@@ -178,7 +188,7 @@ body[data-language="en"] body:not(.home-page) h2 {
         visibility: hidden !important;
         pointer-events: none;
         transform: translateY(8px) !important;
-        background: rgba(17, 20, 22, 0.98);
+        background: rgba(17, 20, 22, 0.99);
         box-shadow: 0 12px 32px rgba(0, 0, 0, 0.42);
         transition: opacity 0.25s ease, visibility 0.25s ease, transform 0.25s ease;
     }
@@ -240,8 +250,21 @@ body[data-language="en"] body:not(.home-page) h2 {
         height: 42px;
     }
 
+    /* No partial slide state in landscape: the drawer is either closed or fully open. */
     .site-header.has-language-switcher .site-nav {
+        display: none !important;
+        transform: none !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        transition: none !important;
         padding: 6px max(18px, env(safe-area-inset-right)) calc(82px + env(safe-area-inset-bottom)) max(18px, env(safe-area-inset-left)) !important;
+    }
+
+    .site-header.has-language-switcher .site-nav.is-open {
+        display: grid !important;
+        transform: none !important;
+        opacity: 1 !important;
+        visibility: visible !important;
     }
 
     .site-header.has-language-switcher .site-nav a {
