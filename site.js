@@ -11,6 +11,45 @@
     }
 
     const body = document.body;
+
+    /* Every inner page uses exactly the same global header as the homepage. */
+    const normalizeGlobalHeader = () => {
+        if (!body.classList.contains('inner-page')) return;
+
+        const currentHeader = document.querySelector('[data-header]');
+        if (!currentHeader) return;
+
+        currentHeader.classList.add('site-header--global');
+        currentHeader.innerHTML = `
+            <a class="site-brand" href="index.html#home" aria-label="返回首頁">
+                <span class="site-brand__mark">BR</span>
+                <span class="site-brand__copy">
+                    <strong>HONKAI REALM</strong>
+                    <small>PERSONAL ARCHIVE / 2026</small>
+                </span>
+            </a>
+
+            <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation" data-menu-toggle>
+                <span></span><span></span>
+                <span class="sr-only">開啟導覽選單</span>
+            </button>
+
+            <nav class="site-nav" id="primary-navigation" aria-label="主要導覽" data-menu>
+                <a href="index.html#home" data-nav-link><span>01</span>HOME</a>
+                <a href="index.html#latest" data-nav-link><span>02</span>LATEST</a>
+                <a href="index.html#archive" data-nav-link><span>03</span>ARCHIVE</a>
+                <a href="index.html#profile" data-nav-link><span>04</span>PROFILE</a>
+                <a class="site-nav__database" href="hi3.html">DATABASE ↗</a>
+            </nav>
+
+            <div class="site-header__status" aria-hidden="true">
+                <span class="status-light"></span>
+                SYSTEM ONLINE
+            </div>`;
+    };
+
+    normalizeGlobalHeader();
+
     const bootScreen = document.querySelector('.boot-screen');
     const header = document.querySelector('[data-header]');
     const menuToggle = document.querySelector('[data-menu-toggle]');
@@ -21,6 +60,74 @@
     const railLinks = document.querySelectorAll('[data-rail-link]');
     const parallaxItems = document.querySelectorAll('[data-parallax]');
     const yearNodes = document.querySelectorAll('[data-current-year]');
+
+    /* Keep the header visible while a one-second scan transition covers the page content. */
+    const transitionLayer = document.createElement('div');
+    transitionLayer.className = 'page-transition';
+    transitionLayer.setAttribute('aria-hidden', 'true');
+    transitionLayer.innerHTML = `
+        <div class="page-transition__grid"></div>
+        <div class="page-transition__content">
+            <span class="page-transition__code">BHR // SECURE LINK</span>
+            <strong>ACCESSING FILE</strong>
+            <div class="page-transition__bar"><i></i></div>
+        </div>`;
+    body.appendChild(transitionLayer);
+
+    const transitionTitle = transitionLayer.querySelector('strong');
+    let navigationLocked = false;
+
+    const shouldTransition = (link, event) => {
+        if (!(link instanceof HTMLAnchorElement)) return false;
+        if (event.defaultPrevented || event.button !== 0) return false;
+        if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return false;
+        if (link.target && link.target !== '_self') return false;
+        if (link.hasAttribute('download')) return false;
+
+        const rawHref = link.getAttribute('href') || '';
+        if (!rawHref || rawHref.startsWith('#') || rawHref.startsWith('mailto:') || rawHref.startsWith('tel:') || rawHref.startsWith('javascript:')) return false;
+
+        const url = new URL(link.href, window.location.href);
+        if (url.origin !== window.location.origin) return false;
+
+        const sameDocument = url.pathname === window.location.pathname && url.search === window.location.search;
+        if (sameDocument) return false;
+
+        return true;
+    };
+
+    document.addEventListener('click', (event) => {
+        const link = event.target.closest('a[href]');
+        if (!shouldTransition(link, event) || navigationLocked) return;
+
+        event.preventDefault();
+        navigationLocked = true;
+
+        const destination = new URL(link.href, window.location.href);
+        const isDatabase = destination.pathname.endsWith('/hi3.html');
+        transitionTitle.textContent = isDatabase ? 'ACCESSING DATABASE' : 'ACCESSING FILE';
+        body.classList.add('is-page-leaving');
+        closeMenu();
+
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        window.setTimeout(() => {
+            window.location.assign(destination.href);
+        }, reduceMotion ? 180 : 960);
+    });
+
+    window.addEventListener('pageshow', () => {
+        navigationLocked = false;
+        body.classList.remove('is-page-leaving');
+    });
+
+    /* Prefetch the database document so its navigation feels continuous. */
+    if (!window.location.pathname.endsWith('/hi3.html')) {
+        const databasePrefetch = document.createElement('link');
+        databasePrefetch.rel = 'prefetch';
+        databasePrefetch.href = 'hi3.html';
+        databasePrefetch.as = 'document';
+        document.head.appendChild(databasePrefetch);
+    }
 
     /* Character images stay hidden until their actual file has loaded, then slide in. */
     const imageMotionStates = new WeakMap();
@@ -159,12 +266,12 @@
         window.setTimeout(hideBootScreen, 2200);
     }
 
-    const closeMenu = () => {
+    function closeMenu() {
         if (!menuToggle || !menu) return;
         menuToggle.setAttribute('aria-expanded', 'false');
         menu.classList.remove('is-open');
         body.classList.remove('menu-open');
-    };
+    }
 
     if (menuToggle && menu) {
         menuToggle.addEventListener('click', () => {
