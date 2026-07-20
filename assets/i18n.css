@@ -101,6 +101,154 @@ body[data-language="en"] body:not(.home-page) h2 {
     word-break: normal;
 }
 
+/* Desktop inner pages must use the exact same header system as the homepage. */
+@media (min-width: 821px) {
+    body.inner-page > header.site-header.has-language-switcher,
+    body.lunar-guide > header.site-header.has-language-switcher,
+    .site-header.has-language-switcher {
+        display: grid !important;
+        grid-template-columns: minmax(210px, 1fr) auto auto minmax(180px, 1fr) !important;
+        align-items: center !important;
+        height: var(--header-height) !important;
+        min-height: 0 !important;
+        padding: 0 var(--page-gutter) !important;
+        column-gap: clamp(12px, 1.6vw, 26px) !important;
+        overflow: visible !important;
+        background: linear-gradient(180deg, rgba(9, 11, 12, 0.92), rgba(9, 11, 12, 0.38)) !important;
+        backdrop-filter: blur(12px) !important;
+        -webkit-backdrop-filter: blur(12px) !important;
+    }
+
+    body.inner-page > header.site-header.has-language-switcher.is-scrolled,
+    body.lunar-guide > header.site-header.has-language-switcher.is-scrolled,
+    .site-header.has-language-switcher.is-scrolled {
+        height: 66px !important;
+        background: rgba(9, 11, 12, 0.95) !important;
+    }
+
+    /* The hidden mobile button was being restyled as a pink desktop square. */
+    .site-header.has-language-switcher .menu-toggle,
+    body.inner-page .site-header.has-language-switcher .menu-toggle,
+    body.lunar-guide .site-header.has-language-switcher .menu-toggle {
+        display: none !important;
+        background: transparent !important;
+    }
+
+    body.inner-page .site-header.has-language-switcher .site-nav,
+    body.lunar-guide .site-header.has-language-switcher .site-nav,
+    .site-header.has-language-switcher .site-nav {
+        position: static !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: clamp(18px, 3vw, 46px) !important;
+        width: auto !important;
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: visible !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
+        transform: none !important;
+        background: transparent !important;
+    }
+
+    body.inner-page .site-header.has-language-switcher .site-nav a,
+    body.lunar-guide .site-header.has-language-switcher .site-nav a,
+    .site-header.has-language-switcher .site-nav a {
+        min-height: 0 !important;
+        padding: 8px 0 !important;
+        color: rgba(240, 241, 236, 0.72) !important;
+        font-size: 0.68rem !important;
+        letter-spacing: 0.13em !important;
+    }
+
+    body.inner-page .site-header.has-language-switcher .site-nav a span,
+    body.lunar-guide .site-header.has-language-switcher .site-nav a span,
+    .site-header.has-language-switcher .site-nav a span {
+        margin-right: 6px !important;
+        font-size: 0.52rem !important;
+    }
+
+    body.inner-page .site-header.has-language-switcher .site-nav .site-nav__database,
+    body.lunar-guide .site-header.has-language-switcher .site-nav .site-nav__database,
+    .site-header.has-language-switcher .site-nav .site-nav__database {
+        min-height: 0 !important;
+        padding: 10px 14px !important;
+        background: var(--signal) !important;
+        color: var(--ink) !important;
+    }
+
+    .site-header.has-language-switcher .language-switcher {
+        position: relative !important;
+        inset: auto !important;
+        display: inline-flex !important;
+        justify-self: center !important;
+        width: auto !important;
+        max-width: none !important;
+        height: 34px !important;
+        min-height: 0 !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
+        transform: none !important;
+        box-shadow: none !important;
+    }
+
+    /* Inner-page generic button styles must not paint every language option pink. */
+    body:not(.home-page) .language-switcher button,
+    body.inner-page .language-switcher button,
+    body.lunar-guide .language-switcher button {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        min-width: 76px !important;
+        min-height: 32px !important;
+        padding: 0 10px !important;
+        border: 0 !important;
+        border-right: 1px solid rgba(255, 255, 255, 0.12) !important;
+        background: transparent !important;
+        color: rgba(240, 241, 236, 0.52) !important;
+        clip-path: none !important;
+        box-shadow: none !important;
+    }
+
+    body:not(.home-page) .language-switcher button:last-child,
+    body.inner-page .language-switcher button:last-child,
+    body.lunar-guide .language-switcher button:last-child {
+        border-right: 0 !important;
+    }
+
+    body:not(.home-page) .language-switcher button:hover,
+    body:not(.home-page) .language-switcher button:focus-visible,
+    body.inner-page .language-switcher button:hover,
+    body.inner-page .language-switcher button:focus-visible,
+    body.lunar-guide .language-switcher button:hover,
+    body.lunar-guide .language-switcher button:focus-visible {
+        background: rgba(255, 61, 104, 0.12) !important;
+        color: var(--paper) !important;
+    }
+
+    body:not(.home-page) .language-switcher button.is-active,
+    body.inner-page .language-switcher button.is-active,
+    body.lunar-guide .language-switcher button.is-active {
+        background: var(--signal) !important;
+        color: var(--ink) !important;
+    }
+
+    .site-header.has-language-switcher .site-header__status,
+    body.inner-page .site-header.has-language-switcher .site-header__status,
+    body.lunar-guide .site-header.has-language-switcher .site-header__status {
+        position: static !important;
+        display: flex !important;
+        justify-self: end !important;
+        align-self: center !important;
+        margin: 0 !important;
+    }
+}
+
 @media (max-width: 1180px) {
     .site-header.has-language-switcher {
         grid-template-columns: minmax(185px, 1fr) auto auto !important;
@@ -123,10 +271,11 @@ body[data-language="en"] body:not(.home-page) h2 {
     }
 
     .site-header.has-language-switcher .language-switcher {
-        position: fixed;
-        top: calc(var(--header-height) + 12px);
-        right: 18px;
-        box-shadow: 0 12px 34px rgba(0, 0, 0, 0.35);
+        position: fixed !important;
+        top: calc(var(--header-height) + 12px) !important;
+        right: 18px !important;
+        left: auto !important;
+        box-shadow: 0 12px 34px rgba(0, 0, 0, 0.35) !important;
     }
 }
 
