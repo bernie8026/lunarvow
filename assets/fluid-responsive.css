@@ -1,0 +1,248 @@
+/*
+ * Fluid responsive layout safeguards.
+ * Keeps the existing palette and content while preventing translated text
+ * from becoming too narrow, too wide, or overflowing its interface panel.
+ */
+
+:root {
+    --fluid-content-max: 1180px;
+    --fluid-reading-max: 74ch;
+}
+
+html,
+body {
+    max-width: 100%;
+}
+
+body.inner-page {
+    overflow-x: clip;
+}
+
+body.inner-page main,
+body.inner-page main > section,
+body.inner-page .page-hero,
+body.inner-page .page-hero__copy,
+body.inner-page .featured-guide,
+body.inner-page .site-footer,
+body.inner-page .site-footer > * {
+    min-width: 0;
+}
+
+/* Hero panels use their own width as the typography reference. */
+body.inner-page .page-hero {
+    grid-template-columns: minmax(0, 1fr);
+    padding-left: max(var(--page-gutter), env(safe-area-inset-left));
+    padding-right: max(var(--page-gutter), env(safe-area-inset-right));
+}
+
+body.inner-page .page-hero__copy {
+    width: min(100%, 72rem);
+    max-width: 100%;
+    container-type: inline-size;
+}
+
+body.inner-page .page-hero h1 {
+    max-width: 100%;
+    font-size: clamp(2.75rem, 6.2vw, 7rem);
+    line-height: 0.88;
+    letter-spacing: clamp(-0.075em, -0.32vw, -0.035em);
+    text-wrap: balance;
+    overflow-wrap: anywhere;
+}
+
+body.inner-page .page-hero .eyebrow {
+    max-width: 100%;
+    flex-wrap: wrap;
+    font-size: clamp(0.55rem, calc(0.48rem + 0.35vw), 0.68rem);
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+}
+
+body.inner-page .page-hero__description {
+    width: min(100%, var(--fluid-reading-max));
+    max-width: 100%;
+    font-size: clamp(0.82rem, calc(0.78rem + 0.3vw), 1rem);
+    line-height: 1.65;
+    text-wrap: pretty;
+    overflow-wrap: anywhere;
+}
+
+@supports (font-size: 1cqi) {
+    body.inner-page[data-language="en"] .page-hero h1 {
+        font-size: clamp(2.75rem, 9.25cqi, 6.75rem);
+    }
+
+    body.inner-page:not([data-language="en"]) .page-hero h1 {
+        font-size: clamp(3rem, 12cqi, 7rem);
+    }
+}
+
+/* Keep content comfortably readable on both narrow and ultrawide displays. */
+body.inner-page > main {
+    width: min(var(--fluid-content-max), calc(100% - clamp(32px, 8vw, 128px)));
+}
+
+body.inner-page > main > section {
+    container-type: inline-size;
+    width: 100%;
+    max-width: 100%;
+    padding: clamp(20px, 3.5vw, 44px);
+}
+
+body.inner-page > main > section > h2,
+body.inner-page > main > section > h3 {
+    max-width: 100%;
+    line-height: 1.02;
+    text-wrap: balance;
+    overflow-wrap: anywhere;
+}
+
+body.inner-page > main > section > h2 {
+    font-size: clamp(1.9rem, 4vw, 3.4rem);
+    letter-spacing: clamp(-0.045em, -0.18vw, -0.02em);
+}
+
+@supports (font-size: 1cqi) {
+    body.inner-page > main > section > h2 {
+        font-size: clamp(1.9rem, 6.2cqi, 3.4rem);
+    }
+}
+
+body.inner-page > main > section > p,
+body.inner-page > main > section > ul,
+body.inner-page > main > section > ol {
+    width: min(100%, var(--fluid-reading-max));
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    text-wrap: pretty;
+}
+
+body.inner-page > main > section li,
+body.inner-page .primary-link,
+body.inner-page .text-link,
+body.inner-page .update-tag {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+}
+
+body.inner-page .primary-link,
+body.inner-page .text-link {
+    white-space: normal;
+    text-align: left;
+}
+
+body.inner-page[data-language="en"] .page-hero h1,
+body.inner-page[data-language="en"] main h2,
+body.inner-page[data-language="en"] main h3,
+body.inner-page[data-language="en"] main p,
+body.inner-page[data-language="en"] main li {
+    word-break: normal;
+    overflow-wrap: anywhere;
+    hyphens: auto;
+}
+
+/* Remove fixed grid pressure before panels become visibly cramped. */
+@media (max-width: 1100px) {
+    body.inner-page .profile-layout,
+    body.inner-page .guide-hero,
+    body.inner-page .feature-transmission {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    body.inner-page .profile-layout {
+        gap: clamp(24px, 5vw, 52px);
+    }
+
+    body.inner-page .page-hero__copy {
+        width: min(100%, 62rem);
+    }
+}
+
+@media (max-width: 900px) {
+    body.inner-page > main {
+        width: min(calc(100% - 32px), var(--fluid-content-max));
+    }
+
+    body.inner-page .archive-grid,
+    body.inner-page .guide-grid,
+    body.inner-page .photo-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    body.inner-page .archive-card,
+    body.inner-page .guide-card,
+    body.inner-page .photo-entry,
+    body.inner-page .featured-guide {
+        min-width: 0;
+    }
+}
+
+@media (max-width: 820px) {
+    body.inner-page .page-hero {
+        min-height: clamp(260px, 60vw, 340px);
+        padding: 64px 20px 38px;
+    }
+
+    body.inner-page .page-hero__copy {
+        width: 100%;
+        padding: clamp(20px, 5vw, 32px);
+    }
+
+    body.inner-page .page-hero h1 {
+        font-size: clamp(2.7rem, 13vw, 5.25rem);
+        line-height: 0.92;
+    }
+
+    body.inner-page .page-hero__description {
+        max-width: 100%;
+    }
+
+    body.inner-page > main > section {
+        padding: clamp(20px, 6vw, 32px);
+    }
+}
+
+@media (max-width: 560px) {
+    body.inner-page > main {
+        width: calc(100% - 24px);
+    }
+
+    body.inner-page .page-hero {
+        padding-right: 12px;
+        padding-left: 12px;
+    }
+
+    body.inner-page .page-hero h1 {
+        font-size: clamp(2.35rem, 14vw, 4.1rem);
+        letter-spacing: -0.045em;
+    }
+
+    body.inner-page .page-hero .eyebrow {
+        letter-spacing: 0.11em;
+    }
+
+    body.inner-page > main > section > h2 {
+        font-size: clamp(1.75rem, 10vw, 2.7rem);
+    }
+
+    body.inner-page .update-tag {
+        font-size: 0.52rem;
+        letter-spacing: 0.08em;
+    }
+}
+
+@media (min-width: 1700px) {
+    body.inner-page .page-hero__copy {
+        width: min(100%, 76rem);
+    }
+
+    body.inner-page > main {
+        width: min(var(--fluid-content-max), calc(100% - 160px));
+    }
+
+    body.inner-page > main > section > p,
+    body.inner-page > main > section > ul,
+    body.inner-page > main > section > ol {
+        font-size: 1.02rem;
+    }
+}
