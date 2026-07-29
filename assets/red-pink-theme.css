@@ -331,3 +331,10 @@ main > section > blockquote[data-motion-state],
         animation-duration: 0.16s !important;
     }
 }
+
+/* Keep the featured archive module readable on the dark Endfield-style panel. */
+.archive-card--featured,
+.archive-card--featured:hover,
+.archive-card--featured:focus-visible {
+    color: var(--paper);
+}
