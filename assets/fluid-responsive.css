@@ -53,7 +53,7 @@ body.inner-page .page-hero h1 {
 body.inner-page .page-hero .eyebrow {
     max-width: 100%;
     flex-wrap: wrap;
-    font-size: clamp(0.55rem, 0.35vw + 0.48rem, 0.68rem);
+    font-size: clamp(0.55rem, calc(0.48rem + 0.35vw), 0.68rem);
     line-height: 1.45;
     overflow-wrap: anywhere;
 }
@@ -61,7 +61,7 @@ body.inner-page .page-hero .eyebrow {
 body.inner-page .page-hero__description {
     width: min(100%, var(--fluid-reading-max));
     max-width: 100%;
-    font-size: clamp(0.82rem, 0.3vw + 0.78rem, 1rem);
+    font-size: clamp(0.82rem, calc(0.78rem + 0.3vw), 1rem);
     line-height: 1.65;
     text-wrap: pretty;
     overflow-wrap: anywhere;
@@ -79,7 +79,7 @@ body.inner-page .page-hero__description {
 
 /* Keep content comfortably readable on both narrow and ultrawide displays. */
 body.inner-page > main {
-    width: min(var(--fluid-content-max), calc(100% - 2 * clamp(16px, 4vw, 64px)));
+    width: min(var(--fluid-content-max), calc(100% - clamp(32px, 8vw, 128px)));
 }
 
 body.inner-page > main > section {
@@ -160,7 +160,7 @@ body.inner-page[data-language="en"] main li {
 
 @media (max-width: 900px) {
     body.inner-page > main {
-        width: min(100% - 32px, var(--fluid-content-max));
+        width: min(calc(100% - 32px), var(--fluid-content-max));
     }
 
     body.inner-page .archive-grid,
