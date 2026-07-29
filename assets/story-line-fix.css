@@ -1,0 +1,42 @@
+/* Keep timeline decoration inside the left rail and away from story text. */
+.story-page .story-timeline {
+    isolation: isolate;
+}
+
+.story-page .story-step {
+    position: relative;
+    min-width: 0;
+}
+
+.story-page .story-step::before {
+    content: "" !important;
+    position: absolute !important;
+    z-index: 2 !important;
+    top: 0.45rem !important;
+    left: -2.15rem !important;
+    width: 0.7rem !important;
+    height: 0.7rem !important;
+    border: 2px solid var(--signal) !important;
+    background: #111416 !important;
+    transform: none !important;
+    clip-path: none !important;
+    box-shadow: none !important;
+    pointer-events: none !important;
+}
+
+.story-page .story-step::after {
+    display: none !important;
+}
+
+.story-page .story-step > * {
+    position: relative;
+    z-index: 3;
+}
+
+@media (max-width: 560px) {
+    .story-page .story-step::before {
+        left: -1.55rem !important;
+        width: 0.58rem !important;
+        height: 0.58rem !important;
+    }
+}
