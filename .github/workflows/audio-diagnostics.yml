@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - agent/audio-asset-diagnostics
+  pull_request:
+    branches:
+      - main
 
 jobs:
   inspect-audio:
