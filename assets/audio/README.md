@@ -1,7 +1,7 @@
 # Lunar Vow background music
 
-Place the licensed audio file at:
+The live music player uses:
 
-`assets/audio/lunar-vow-theme.mp3`
+`assets/audio/lunar-vow-theme.webm`
 
-The site player is configured to loop this file. Use an audio file that you own or have permission to publish. The repository intentionally does not include copied game or soundtrack audio.
+The file contains WebM/Opus audio and is configured to loop. The former `.mp3` alias was removed because its file contents were WebM rather than MP3, which caused browser decoding failures.
