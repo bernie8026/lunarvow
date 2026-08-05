@@ -1,0 +1,165 @@
+/* Lunar Vow background-music console. Uses the existing site palette. */
+.music-console {
+    position: fixed;
+    z-index: 1400;
+    bottom: max(18px, env(safe-area-inset-bottom));
+    left: max(18px, env(safe-area-inset-left));
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 74px;
+    align-items: stretch;
+    width: min(310px, calc(100vw - 36px));
+    min-height: 54px;
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    background: rgba(7, 9, 10, 0.92);
+    color: var(--paper, #f0f1ec);
+    clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+    box-shadow: 0 16px 42px rgba(0, 0, 0, 0.34);
+    backdrop-filter: blur(14px) saturate(1.15);
+    -webkit-backdrop-filter: blur(14px) saturate(1.15);
+}
+
+.music-console::before {
+    content: "BGM / LV-001";
+    position: absolute;
+    top: -14px;
+    left: 12px;
+    color: rgba(240, 241, 236, 0.46);
+    font-family: monospace;
+    font-size: 0.46rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+}
+
+.music-console::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 10px;
+    width: 52px;
+    height: 3px;
+    background: var(--signal, #ff3d68);
+    pointer-events: none;
+}
+
+.music-console__toggle {
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr);
+    gap: 10px;
+    align-items: center;
+    min-width: 0;
+    padding: 9px 10px;
+    border: 0;
+    border-right: 1px solid rgba(255, 255, 255, 0.14);
+    background: transparent;
+    color: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.music-console__toggle:hover,
+.music-console__toggle:focus-visible {
+    background: rgba(255, 255, 255, 0.06);
+    outline: none;
+}
+
+.music-console__icon {
+    display: grid;
+    width: 34px;
+    height: 34px;
+    place-items: center;
+    border: 1px solid var(--signal, #ff3d68);
+    color: var(--signal, #ff3d68);
+    font-size: 0.76rem;
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 7px), calc(100% - 7px) 100%, 0 100%);
+}
+
+.music-console__copy {
+    display: block;
+    min-width: 0;
+    line-height: 1.1;
+}
+
+.music-console__copy b,
+.music-console__copy small {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.music-console__copy b {
+    font-family: var(--display, sans-serif);
+    font-size: 0.64rem;
+    font-weight: 950;
+    letter-spacing: 0.08em;
+}
+
+.music-console__copy small {
+    margin-top: 5px;
+    color: rgba(240, 241, 236, 0.48);
+    font-family: monospace;
+    font-size: 0.48rem;
+    letter-spacing: 0.08em;
+}
+
+.music-console__volume {
+    display: grid;
+    place-items: center;
+    padding: 0 10px;
+}
+
+.music-console__volume input {
+    width: 100%;
+    min-width: 0;
+    accent-color: var(--signal, #ff3d68);
+    cursor: pointer;
+}
+
+.music-console.is-playing .music-console__icon {
+    background: var(--signal, #ff3d68);
+    color: var(--ink, #090b0c);
+    box-shadow: 0 0 18px rgba(255, 61, 104, 0.32);
+}
+
+.music-console.is-unavailable {
+    opacity: 0.58;
+}
+
+.music-console.is-unavailable .music-console__toggle,
+.music-console.is-unavailable .music-console__volume input {
+    cursor: not-allowed;
+}
+
+@media (max-width: 820px) {
+    .music-console {
+        bottom: calc(86px + env(safe-area-inset-bottom));
+        left: max(12px, env(safe-area-inset-left));
+        grid-template-columns: minmax(0, 1fr) 58px;
+        width: min(260px, calc(100vw - 24px));
+    }
+
+    .music-console__volume {
+        padding-inline: 8px;
+    }
+}
+
+@media (max-width: 420px) {
+    .music-console {
+        width: min(228px, calc(100vw - 24px));
+    }
+
+    .music-console__copy b {
+        font-size: 0.58rem;
+    }
+
+    .music-console__copy small {
+        font-size: 0.44rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .music-console,
+    .music-console * {
+        transition: none !important;
+    }
+}
