@@ -59,6 +59,7 @@
     const consolePanel = document.createElement('div');
     consolePanel.className = 'music-console';
     consolePanel.dataset.bhrMusicPlayer = '';
+    consolePanel.hidden = true;
     consolePanel.innerHTML = `
         <button class="music-console__toggle" type="button">
             <span class="music-console__icon" aria-hidden="true">▶</span>
@@ -157,6 +158,7 @@
     });
 
     audio.addEventListener('loadedmetadata', () => {
+        consolePanel.hidden = false;
         const savedTime = readNumber(STORAGE.time, 0);
         if (Number.isFinite(audio.duration) && savedTime > 0 && savedTime < audio.duration) {
             audio.currentTime = savedTime;
@@ -179,6 +181,7 @@
     audio.addEventListener('pause', updateInterface);
     audio.addEventListener('error', () => {
         unavailable = true;
+        consolePanel.hidden = true;
         localStorage.setItem(STORAGE.enabled, 'false');
         updateInterface();
     });
