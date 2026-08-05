@@ -6,19 +6,29 @@ on:
       - agent/replace-truncated-audio
     paths:
       - '.audio-parts/**'
+      - '.github/workflows/rebuild-lunar-audio.yml'
 
 permissions:
   contents: write
 
 jobs:
   rebuild:
-    if: ${{ hashFiles('.audio-parts/part00.b64') != '' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           ref: agent/replace-truncated-audio
+      - name: Check for upload parts
+        id: parts
+        shell: bash
+        run: |
+          if [[ -f .audio-parts/part00.b64 ]]; then
+            echo 'present=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'present=false' >> "$GITHUB_OUTPUT"
+          fi
       - name: Rebuild and verify binary audio
+        if: steps.parts.outputs.present == 'true'
         shell: bash
         run: |
           set -euxo pipefail
@@ -28,6 +38,7 @@ jobs:
           echo '7e1f43428ad61f5a6598ac6ea79d8b90546316dc022a2df00514d9af5c6dd929  assets/audio/lunar-vow-theme-loop.webm' | sha256sum -c -
           file assets/audio/lunar-vow-theme-loop.webm
       - name: Commit verified audio asset
+        if: steps.parts.outputs.present == 'true'
         shell: bash
         run: |
           git config user.name 'github-actions[bot]'
