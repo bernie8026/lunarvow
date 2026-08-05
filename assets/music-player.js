@@ -3,7 +3,7 @@
 
     if (document.querySelector('[data-bhr-music-player]')) return;
 
-    const AUDIO_SOURCE = 'assets/audio/lunar-vow-theme.mp3';
+    const AUDIO_SOURCE = 'assets/audio/lunar-vow-theme.webm?v=2';
     const STORAGE = {
         enabled: 'bhr-lunar-music-enabled',
         volume: 'bhr-lunar-music-volume',
