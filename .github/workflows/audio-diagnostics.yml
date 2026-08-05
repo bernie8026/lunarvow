@@ -1,0 +1,27 @@
+name: Audio asset diagnostics
+
+on:
+  push:
+    branches:
+      - agent/audio-asset-diagnostics
+
+jobs:
+  inspect-audio:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Inspect file and decode audio
+        shell: bash
+        run: |
+          set -euxo pipefail
+          AUDIO="assets/audio/lunar-vow-theme.webm"
+          stat "$AUDIO"
+          sha256sum "$AUDIO"
+          file "$AUDIO"
+          command -v ffprobe
+          ffprobe -v error \
+            -show_entries format=format_name,duration,size,bit_rate \
+            -show_entries stream=index,codec_name,codec_type,sample_rate,channels,duration \
+            -of default=noprint_wrappers=1 "$AUDIO"
+          ffmpeg -v error -i "$AUDIO" -map 0:a:0 -f null -
+          ffmpeg -hide_banner -i "$AUDIO" -map 0:a:0 -af volumedetect -f null - 2>&1 | tail -n 20
