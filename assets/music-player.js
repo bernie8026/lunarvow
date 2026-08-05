@@ -3,13 +3,14 @@
 
     if (document.querySelector('[data-bhr-music-player]')) return;
 
-    const SOURCE_PATH = 'Honkai Impact 7.0 PV BGM, Re_ Promise to Luna (1).mp3';
-    const SOURCE_VERSION = '6';
+    const SCRIPT_URL = document.currentScript?.src || new URL('assets/music-player.js', document.baseURI).href;
+    const SOURCE_FILE = 'Honkai Impact 7.0 PV BGM, Re_ Promise to Luna (1).mp3';
+    const SOURCE_VERSION = '7';
     const DEFAULT_VOLUME = 0.65;
     const STORAGE = {
-        enabled: 'bhr-lunar-music-enabled-v6',
-        volume: 'bhr-lunar-music-volume-v6',
-        time: 'bhr-lunar-music-time-v6'
+        enabled: 'bhr-lunar-music-enabled-v7',
+        volume: 'bhr-lunar-music-volume-v7',
+        time: 'bhr-lunar-music-time-v7'
     };
 
     const COPY = {
@@ -20,7 +21,7 @@
             ready: 'CLICK TO PLAY',
             loading: 'LOADING AUDIO',
             playing: 'PLAYING',
-            blocked: 'CLICK TO RESUME',
+            blocked: 'CLICK PAGE TO START',
             error: 'AUDIO ERROR / RETRY',
             volume: '背景音樂音量'
         },
@@ -31,7 +32,7 @@
             ready: 'CLICK TO PLAY',
             loading: 'LOADING AUDIO',
             playing: 'PLAYING',
-            blocked: 'CLICK TO RESUME',
+            blocked: 'CLICK PAGE TO START',
             error: 'AUDIO ERROR / RETRY',
             volume: 'Background music volume'
         },
@@ -42,7 +43,7 @@
             ready: 'CLICK TO PLAY',
             loading: 'LOADING AUDIO',
             playing: 'PLAYING',
-            blocked: 'CLICK TO RESUME',
+            blocked: 'CLICK PAGE TO START',
             error: 'AUDIO ERROR / RETRY',
             volume: '背景音乐音量'
         }
@@ -66,7 +67,7 @@
         return COPY[value] ? value : 'zh-HK';
     };
     const sourceUrl = (retry = false) => {
-        const url = new URL(SOURCE_PATH, document.baseURI);
+        const url = new URL(`../${SOURCE_FILE}`, SCRIPT_URL);
         url.searchParams.set('v', SOURCE_VERSION);
         if (retry) url.searchParams.set('retry', String(Date.now()));
         return url.href;
@@ -74,6 +75,7 @@
 
     const savedVolume = readNumber(STORAGE.volume, DEFAULT_VOLUME);
     const audio = new Audio(sourceUrl());
+    audio.autoplay = true;
     audio.loop = true;
     audio.preload = 'auto';
     audio.playsInline = true;
@@ -108,6 +110,8 @@
     let state = 'loading';
     let progressCheck = 0;
     let lastStoredSecond = -1;
+    let userPaused = false;
+    let unlockArmed = false;
 
     const persistTime = () => {
         if (Number.isFinite(audio.currentTime)) {
@@ -150,6 +154,26 @@
         }
     };
 
+    const removeUnlockListeners = () => {
+        if (!unlockArmed) return;
+        unlockArmed = false;
+        document.removeEventListener('pointerdown', unlockOnInteraction, true);
+        document.removeEventListener('keydown', unlockOnInteraction, true);
+    };
+
+    const unlockOnInteraction = async (event) => {
+        if (panel.contains(event.target)) return;
+        userPaused = false;
+        await start();
+    };
+
+    const armUnlockListeners = () => {
+        if (unlockArmed || userPaused) return;
+        unlockArmed = true;
+        document.addEventListener('pointerdown', unlockOnInteraction, true);
+        document.addEventListener('keydown', unlockOnInteraction, true);
+    };
+
     const verifyProgress = (startTime) => {
         window.clearTimeout(progressCheck);
         progressCheck = window.setTimeout(() => {
@@ -164,6 +188,8 @@
     };
 
     const start = async () => {
+        if (!audio.paused && state === 'playing') return true;
+
         audio.muted = false;
         if (audio.volume < 0.08) {
             audio.volume = DEFAULT_VOLUME;
@@ -174,18 +200,25 @@
             const startTime = audio.currentTime;
             await audio.play();
             state = 'playing';
+            userPaused = false;
             localStorage.setItem(STORAGE.enabled, 'true');
+            removeUnlockListeners();
             update();
             verifyProgress(startTime);
+            return true;
         } catch (_) {
             state = 'blocked';
             localStorage.setItem(STORAGE.enabled, 'false');
+            armUnlockListeners();
             update();
+            return false;
         }
     };
 
     const stop = () => {
         window.clearTimeout(progressCheck);
+        userPaused = true;
+        removeUnlockListeners();
         audio.pause();
         state = 'ready';
         localStorage.setItem(STORAGE.enabled, 'false');
@@ -195,6 +228,7 @@
 
     const retry = () => {
         window.clearTimeout(progressCheck);
+        userPaused = false;
         state = 'loading';
         update();
         audio.pause();
@@ -207,8 +241,12 @@
             retry();
             return;
         }
-        if (audio.paused) await start();
-        else stop();
+        if (audio.paused) {
+            userPaused = false;
+            await start();
+        } else {
+            stop();
+        }
     });
 
     volumeInput.addEventListener('input', () => {
@@ -222,7 +260,7 @@
     audio.addEventListener('canplay', async () => {
         state = 'ready';
         update();
-        if (localStorage.getItem(STORAGE.enabled) === 'true') await start();
+        if (!userPaused) await start();
     });
     audio.addEventListener('timeupdate', () => {
         if (!audio.paused) state = 'playing';
