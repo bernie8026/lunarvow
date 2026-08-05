@@ -3,13 +3,13 @@
 
     if (document.querySelector('[data-bhr-music-player]')) return;
 
-    const AUDIO_PATH = 'assets/audio/lunar-vow-theme.webm';
-    const PLAYER_VERSION = '4';
+    const SOURCE_PATH = 'assets/audio/lunar-vow-theme-loop.webm';
+    const SOURCE_VERSION = '5';
     const DEFAULT_VOLUME = 0.65;
     const STORAGE = {
-        enabled: 'bhr-lunar-music-enabled-v4',
-        volume: 'bhr-lunar-music-volume-v4',
-        time: 'bhr-lunar-music-time-v4'
+        enabled: 'bhr-lunar-music-enabled-v5',
+        volume: 'bhr-lunar-music-volume-v5',
+        time: 'bhr-lunar-music-time-v5'
     };
 
     const COPY = {
@@ -21,7 +21,6 @@
             loading: 'LOADING AUDIO',
             playing: 'PLAYING',
             blocked: 'CLICK TO RESUME',
-            stalled: 'SOURCE STALLED / RETRY',
             error: 'AUDIO ERROR / RETRY',
             volume: '背景音樂音量'
         },
@@ -33,7 +32,6 @@
             loading: 'LOADING AUDIO',
             playing: 'PLAYING',
             blocked: 'CLICK TO RESUME',
-            stalled: 'SOURCE STALLED / RETRY',
             error: 'AUDIO ERROR / RETRY',
             volume: 'Background music volume'
         },
@@ -45,7 +43,6 @@
             loading: 'LOADING AUDIO',
             playing: 'PLAYING',
             blocked: 'CLICK TO RESUME',
-            stalled: 'SOURCE STALLED / RETRY',
             error: 'AUDIO ERROR / RETRY',
             volume: '背景音乐音量'
         }
@@ -61,35 +58,32 @@
         const whole = Math.floor(seconds);
         return `${Math.floor(whole / 60)}:${String(whole % 60).padStart(2, '0')}`;
     };
+    const language = () => {
+        const value = window.BHR_I18N?.language
+            || document.body.dataset.language
+            || document.documentElement.lang
+            || 'zh-HK';
+        return COPY[value] ? value : 'zh-HK';
+    };
+    const sourceUrl = (retry = false) => {
+        const url = new URL(SOURCE_PATH, document.baseURI);
+        url.searchParams.set('v', SOURCE_VERSION);
+        if (retry) url.searchParams.set('retry', String(Date.now()));
+        return url.href;
+    };
 
-    const audio = new Audio();
+    const savedVolume = readNumber(STORAGE.volume, DEFAULT_VOLUME);
+    const audio = new Audio(sourceUrl());
     audio.loop = true;
     audio.preload = 'auto';
     audio.playsInline = true;
     audio.muted = false;
-
-    const savedVolume = readNumber(STORAGE.volume, DEFAULT_VOLUME);
     audio.volume = savedVolume < 0.08 ? DEFAULT_VOLUME : clamp(savedVolume, 0, 1);
 
-    const buildSource = (attempt = 0) => {
-        const url = new URL(AUDIO_PATH, document.baseURI);
-        url.searchParams.set('player', PLAYER_VERSION);
-        url.searchParams.set('attempt', String(attempt));
-        if (attempt > 0) url.searchParams.set('cache', String(Date.now()));
-        return url.href;
-    };
-
-    let sourceAttempt = 0;
-    let state = 'loading';
-    let lastStoredSecond = -1;
-    let progressTimer = 0;
-    let playRequest = 0;
-
-    const consolePanel = document.createElement('div');
-    consolePanel.className = 'music-console';
-    consolePanel.dataset.bhrMusicPlayer = '';
-    consolePanel.hidden = false;
-    consolePanel.innerHTML = `
+    const panel = document.createElement('div');
+    panel.className = 'music-console';
+    panel.dataset.bhrMusicPlayer = '';
+    panel.innerHTML = `
         <button class="music-console__toggle" type="button">
             <span class="music-console__icon" aria-hidden="true">▶</span>
             <span class="music-console__copy">
@@ -101,23 +95,19 @@
             <span class="sr-only">Background music volume</span>
             <input type="range" min="0" max="1" step="0.05" value="${audio.volume}">
         </label>`;
-    document.body.appendChild(consolePanel);
+    document.body.appendChild(panel);
 
-    const toggle = consolePanel.querySelector('.music-console__toggle');
-    const icon = consolePanel.querySelector('.music-console__icon');
-    const title = consolePanel.querySelector('.music-console__copy b');
-    const status = consolePanel.querySelector('.music-console__copy small');
-    const volumeLabel = consolePanel.querySelector('.music-console__volume');
-    const volumeInput = consolePanel.querySelector('.music-console__volume input');
-    const volumeText = consolePanel.querySelector('.music-console__volume .sr-only');
+    const toggle = panel.querySelector('.music-console__toggle');
+    const icon = panel.querySelector('.music-console__icon');
+    const title = panel.querySelector('.music-console__copy b');
+    const status = panel.querySelector('.music-console__copy small');
+    const volumeLabel = panel.querySelector('.music-console__volume');
+    const volumeInput = panel.querySelector('.music-console__volume input');
+    const volumeText = panel.querySelector('.music-console__volume .sr-only');
 
-    const getLanguage = () => {
-        const candidate = window.BHR_I18N?.language
-            || document.body.dataset.language
-            || document.documentElement.lang
-            || 'zh-HK';
-        return COPY[candidate] ? candidate : 'zh-HK';
-    };
+    let state = 'loading';
+    let progressCheck = 0;
+    let lastStoredSecond = -1;
 
     const persistTime = () => {
         if (Number.isFinite(audio.currentTime)) {
@@ -125,158 +115,136 @@
         }
     };
 
-    const statusText = (text) => {
-        const volumePercent = Math.round(audio.volume * 100);
-        if (!audio.paused && state === 'playing') {
-            return `${text.playing} ${formatTime(audio.currentTime)} / ${formatTime(audio.duration)} · VOL ${volumePercent}%`;
-        }
-        if (state === 'loading') return text.loading;
-        if (state === 'blocked') return text.blocked;
-        if (state === 'stalled') return text.stalled;
-        if (state === 'error') return text.error;
-        return `${text.ready} · VOL ${volumePercent}%`;
-    };
+    const update = () => {
+        const text = COPY[language()];
+        const playing = !audio.paused && !audio.ended && state === 'playing';
+        const volume = Math.round(audio.volume * 100);
 
-    const updateInterface = () => {
-        const text = COPY[getLanguage()];
-        const playing = !audio.paused && state === 'playing';
         title.textContent = text.title;
         icon.textContent = playing ? 'Ⅱ' : '▶';
-        status.textContent = statusText(text);
-        consolePanel.classList.toggle('is-playing', playing);
-        consolePanel.classList.toggle('is-unavailable', state === 'error');
+        panel.classList.toggle('is-playing', playing);
+        panel.classList.toggle('is-unavailable', state === 'error');
         toggle.disabled = state === 'loading';
         toggle.setAttribute('aria-label', playing ? text.pause : text.play);
         volumeLabel.setAttribute('aria-label', text.volume);
         volumeText.textContent = text.volume;
         volumeInput.value = String(audio.volume);
+
+        if (playing) {
+            status.textContent = `${text.playing} ${formatTime(audio.currentTime)} / ${formatTime(audio.duration)} · VOL ${volume}%`;
+        } else if (state === 'loading') {
+            status.textContent = text.loading;
+        } else if (state === 'blocked') {
+            status.textContent = text.blocked;
+        } else if (state === 'error') {
+            status.textContent = text.error;
+        } else {
+            status.textContent = `${text.ready} · VOL ${volume}%`;
+        }
     };
 
-    const ensureAudibleVolume = () => {
+    const restorePosition = () => {
+        const savedTime = readNumber(STORAGE.time, 0);
+        if (Number.isFinite(audio.duration) && savedTime > 0 && savedTime < audio.duration) {
+            try { audio.currentTime = savedTime; } catch (_) { /* ignored */ }
+        }
+    };
+
+    const verifyProgress = (startTime) => {
+        window.clearTimeout(progressCheck);
+        progressCheck = window.setTimeout(() => {
+            if (audio.paused) return;
+            if (!Number.isFinite(audio.currentTime) || audio.currentTime <= startTime + 0.1) {
+                audio.pause();
+                state = 'error';
+                localStorage.setItem(STORAGE.enabled, 'false');
+                update();
+            }
+        }, 2500);
+    };
+
+    const start = async () => {
         audio.muted = false;
         if (audio.volume < 0.08) {
             audio.volume = DEFAULT_VOLUME;
-            volumeInput.value = String(DEFAULT_VOLUME);
             localStorage.setItem(STORAGE.volume, String(DEFAULT_VOLUME));
         }
-    };
 
-    const monitorProgress = (requestId) => {
-        window.clearTimeout(progressTimer);
-        const startTime = audio.currentTime;
-        progressTimer = window.setTimeout(() => {
-            if (requestId !== playRequest || audio.paused) return;
-            if (!Number.isFinite(audio.currentTime) || audio.currentTime <= startTime + 0.05) {
-                state = 'stalled';
-                audio.pause();
-                updateInterface();
-            }
-        }, 1800);
-    };
-
-    const loadSource = (resumeAfterLoad = false) => {
-        state = 'loading';
-        updateInterface();
-        audio.pause();
-        audio.src = buildSource(sourceAttempt);
-        audio.load();
-
-        const onReady = async () => {
-            audio.removeEventListener('canplay', onReady);
-            state = 'ready';
-            const savedTime = readNumber(STORAGE.time, 0);
-            if (Number.isFinite(audio.duration) && savedTime > 0 && savedTime < audio.duration) {
-                try { audio.currentTime = savedTime; } catch (_) { /* ignored */ }
-            }
-            updateInterface();
-            if (resumeAfterLoad || localStorage.getItem(STORAGE.enabled) === 'true') {
-                await startPlayback();
-            }
-        };
-
-        audio.addEventListener('canplay', onReady, { once: true });
-    };
-
-    const retrySource = async () => {
-        sourceAttempt += 1;
-        loadSource(true);
-    };
-
-    const startPlayback = async () => {
-        ensureAudibleVolume();
-        const requestId = ++playRequest;
-        state = 'ready';
-        updateInterface();
         try {
+            const startTime = audio.currentTime;
             await audio.play();
-            if (requestId !== playRequest) return;
             state = 'playing';
             localStorage.setItem(STORAGE.enabled, 'true');
-            updateInterface();
-            monitorProgress(requestId);
+            update();
+            verifyProgress(startTime);
         } catch (_) {
-            if (requestId !== playRequest) return;
             state = 'blocked';
             localStorage.setItem(STORAGE.enabled, 'false');
-            updateInterface();
+            update();
         }
     };
 
-    const stopPlayback = () => {
-        ++playRequest;
-        window.clearTimeout(progressTimer);
+    const stop = () => {
+        window.clearTimeout(progressCheck);
         audio.pause();
         state = 'ready';
         localStorage.setItem(STORAGE.enabled, 'false');
         persistTime();
-        updateInterface();
+        update();
+    };
+
+    const retry = () => {
+        window.clearTimeout(progressCheck);
+        state = 'loading';
+        update();
+        audio.pause();
+        audio.src = sourceUrl(true);
+        audio.load();
     };
 
     toggle.addEventListener('click', async () => {
-        if (state === 'error' || state === 'stalled') {
-            await retrySource();
+        if (state === 'error') {
+            retry();
             return;
         }
-        if (audio.paused) {
-            await startPlayback();
-        } else {
-            stopPlayback();
-        }
+        if (audio.paused) await start();
+        else stop();
     });
 
     volumeInput.addEventListener('input', () => {
         audio.muted = false;
         audio.volume = clamp(Number.parseFloat(volumeInput.value), 0, 1);
         localStorage.setItem(STORAGE.volume, String(audio.volume));
-        updateInterface();
+        update();
     });
 
+    audio.addEventListener('loadedmetadata', restorePosition);
+    audio.addEventListener('canplay', async () => {
+        state = 'ready';
+        update();
+        if (localStorage.getItem(STORAGE.enabled) === 'true') await start();
+    });
     audio.addEventListener('timeupdate', () => {
-        if (!audio.paused && state !== 'playing') state = 'playing';
+        if (!audio.paused) state = 'playing';
         const second = Math.floor(audio.currentTime);
         if (second !== lastStoredSecond && second % 5 === 0) {
             lastStoredSecond = second;
             persistTime();
         }
-        updateInterface();
+        update();
     });
-
-    audio.addEventListener('play', () => {
-        state = 'playing';
-        updateInterface();
-    });
-    audio.addEventListener('pause', updateInterface);
-    audio.addEventListener('volumechange', updateInterface);
+    audio.addEventListener('pause', update);
+    audio.addEventListener('volumechange', update);
     audio.addEventListener('error', () => {
         state = 'error';
         localStorage.setItem(STORAGE.enabled, 'false');
-        updateInterface();
+        update();
     });
 
     window.addEventListener('pagehide', persistTime);
     window.addEventListener('beforeunload', persistTime);
-    window.addEventListener('bhr:languagechange', updateInterface);
+    window.addEventListener('bhr:languagechange', update);
 
-    updateInterface();
-    loadSource(false);
+    update();
+    audio.load();
 })();
