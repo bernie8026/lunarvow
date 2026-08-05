@@ -3,13 +3,13 @@
 
     if (document.querySelector('[data-bhr-music-player]')) return;
 
-    const SOURCE_PATH = 'assets/audio/lunar-vow-theme-loop.webm';
-    const SOURCE_VERSION = '5';
+    const SOURCE_PATH = 'Honkai Impact 7.0 PV BGM, Re_ Promise to Luna (1).mp3';
+    const SOURCE_VERSION = '6';
     const DEFAULT_VOLUME = 0.65;
     const STORAGE = {
-        enabled: 'bhr-lunar-music-enabled-v5',
-        volume: 'bhr-lunar-music-volume-v5',
-        time: 'bhr-lunar-music-time-v5'
+        enabled: 'bhr-lunar-music-enabled-v6',
+        volume: 'bhr-lunar-music-volume-v6',
+        time: 'bhr-lunar-music-time-v6'
     };
 
     const COPY = {
