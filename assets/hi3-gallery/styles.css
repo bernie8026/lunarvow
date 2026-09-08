@@ -104,7 +104,50 @@
 }
 
 .input::placeholder {
-    color: rgba(240, 241, 236, 0.32);
+    color: #8c9694;
+}
+
+.search-panel:focus-within {
+    border-color: var(--signal, #d8ff2f);
+    box-shadow: 0 0 0 2px var(--signal, #d8ff2f);
+}
+
+.search-feedback {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    max-width: 720px;
+    min-height: 52px;
+    margin-top: 10px;
+}
+
+.search-status {
+    margin: 0;
+    color: #a5aeac;
+    font-size: 0.74rem;
+}
+
+#hi3-gallery [hidden],
+.lightbox [hidden] {
+    display: none !important;
+}
+
+.card:focus-visible,
+.lightbox a:focus-visible {
+    outline: 3px solid var(--signal, #d8ff2f);
+    outline-offset: -4px;
+}
+
+.lightbox button:focus-visible,
+#hi3-gallery button:focus-visible {
+    outline: 3px solid #f0f1ec;
+    outline-offset: -5px;
+}
+
+.gallery-dialog-open {
+    overflow: hidden;
 }
 
 .grid {
@@ -240,7 +283,10 @@
 }
 
 dialog.lightbox {
+    width: fit-content;
     max-width: none;
+    max-height: calc(100dvh - 32px);
+    overflow: auto;
     padding: 0;
     border: 1px solid rgba(216, 255, 47, 0.56);
     background: #090b0c;
@@ -257,10 +303,31 @@ dialog.lightbox {
     display: grid;
     grid-template-columns: minmax(0, auto) 220px;
     max-width: min(92vw, 1100px);
-    max-height: 90vh;
+    min-height: 220px;
+}
+
+.lb-visual {
+    position: relative;
+    display: grid;
+    place-items: center;
+    min-width: 0;
+    min-height: 180px;
+}
+
+.lb-image-error {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    margin: 0;
+    background: #050607;
+    color: #a5aeac;
+    text-align: center;
 }
 
 .lb-img {
+    display: block;
     max-width: min(70vw, 780px);
     max-height: 88vh;
     object-fit: contain;
@@ -333,11 +400,21 @@ dialog.lightbox {
 
     .lb-img {
         max-width: 90vw;
-        max-height: 70vh;
+        max-height: 52dvh;
     }
 
     .lb-panel {
+        gap: 20px;
         border-top: 1px solid rgba(255, 255, 255, 0.16);
         border-left: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .card,
+    .card::before,
+    .card::after,
+    .card .thumb {
+        transition: none;
     }
 }
