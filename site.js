@@ -74,14 +74,32 @@
     const parallaxItems = document.querySelectorAll('[data-parallax]');
     const yearNodes = document.querySelectorAll('[data-current-year]');
 
-    function closeMenu() {
+    const mobileMenuQuery = window.matchMedia('(max-width: 820px)');
+    const menuLabels = {
+        'zh-HK': ['開啟導覽選單', '關閉導覽選單'],
+        'zh-CN': ['打开导航菜单', '关闭导航菜单'],
+        en: ['Open navigation menu', 'Close navigation menu']
+    };
+    const updateMenuLabel = () => {
+        if (!menuToggle) return;
+        const labels = menuLabels[document.documentElement.lang] || menuLabels['zh-HK'];
+        const label = menuToggle.querySelector('.sr-only');
+        if (label) {
+            label.setAttribute('data-i18n-ignore', '');
+            label.textContent = labels[menuToggle.getAttribute('aria-expanded') === 'true' ? 1 : 0];
+        }
+    };
+
+    function closeMenu(restoreFocus = false) {
         if (!menuToggle || !menu) return;
         menuToggle.setAttribute('aria-expanded', 'false');
         menu.classList.remove('is-open');
         body.classList.remove('menu-open');
+        updateMenuLabel();
+        if (restoreFocus) menuToggle.focus();
     }
 
-    /* Keep the header visible while a one-second scan transition covers the page content. */
+    /* A brief transition acknowledges navigation without adding a one-second wait. */
     const transitionLayer = document.createElement('div');
     transitionLayer.className = 'page-transition';
     transitionLayer.setAttribute('aria-hidden', 'true');
@@ -118,9 +136,10 @@
 
     document.addEventListener('click', (event) => {
         const link = event.target.closest('a[href]');
-        if (!shouldTransition(link, event) || navigationLocked) return;
+        if (!shouldTransition(link, event) || reduceMotionQuery.matches) return;
 
         event.preventDefault();
+        if (navigationLocked) return;
         navigationLocked = true;
 
         const destination = new URL(link.href, window.location.href);
@@ -131,7 +150,7 @@
 
         window.setTimeout(() => {
             window.location.assign(destination.href);
-        }, reduceMotionQuery.matches ? 180 : 960);
+        }, 160);
     });
 
     window.addEventListener('pageshow', () => {
@@ -219,11 +238,21 @@
         const previous = imageMotionStates.get(image);
         previous?.animation?.cancel();
         if (previous?.loadHandler) image.removeEventListener('load', previous.loadHandler);
+        if (previous?.errorHandler) image.removeEventListener('error', previous.errorHandler);
+
+        if (reduceMotionQuery.matches) {
+            image.style.opacity = '1';
+            image.style.visibility = 'visible';
+            image.style.willChange = '';
+            image.dataset.imageState = 'ready';
+            return;
+        }
 
         const state = {
             sequence: imageSequence++,
             animation: null,
-            loadHandler: null
+            loadHandler: null,
+            errorHandler: null
         };
         imageMotionStates.set(image, state);
 
@@ -239,9 +268,19 @@
         };
 
         image.addEventListener('load', state.loadHandler, { once: true });
+        state.errorHandler = () => {
+            if (imageMotionStates.get(image) !== state) return;
+            image.style.opacity = '1';
+            image.style.visibility = 'visible';
+            image.style.willChange = '';
+            image.dataset.imageState = 'error';
+        };
+        image.addEventListener('error', state.errorHandler, { once: true });
 
         if (image.complete && image.naturalWidth > 0) {
             state.loadHandler();
+        } else if (image.complete) {
+            state.errorHandler();
         }
     };
 
@@ -300,6 +339,7 @@
         if (element.matches('img, script, style, link, meta, .sr-only, .boot-screen, .page-transition, .page-transition *')) return false;
         if (element.closest('.boot-screen, .page-transition')) return false;
         if (motionStates.has(element)) return false;
+        if (reduceMotionQuery.matches || element.closest('.site-header')) return false;
         return true;
     };
 
@@ -425,7 +465,8 @@
         motionStates.set(element, state);
         element.dataset.motionState = 'waiting';
         element.style.opacity = '0';
-        element.style.visibility = 'hidden';
+        // Keep off-screen content focusable; keyboard focus reveals it immediately.
+        element.style.visibility = 'visible';
         element.style.willChange = 'opacity, transform, clip-path, filter';
 
         if (motionObserver) {
@@ -499,19 +540,67 @@
     }
 
     if (menuToggle && menu) {
+        document.documentElement.classList.add('has-site-js');
+        updateMenuLabel();
+        window.addEventListener('bhr:languagechange', updateMenuLabel);
         menuToggle.addEventListener('click', () => {
             const expanded = menuToggle.getAttribute('aria-expanded') === 'true';
             menuToggle.setAttribute('aria-expanded', String(!expanded));
             menu.classList.toggle('is-open', !expanded);
             body.classList.toggle('menu-open', !expanded);
+            updateMenuLabel();
         });
 
-        navLinks.forEach((link) => link.addEventListener('click', closeMenu));
+        menu.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => closeMenu()));
+
+        document.addEventListener('keydown', (event) => {
+            if (!mobileMenuQuery.matches || menuToggle.getAttribute('aria-expanded') !== 'true') return;
+            if (event.key === 'Escape') {
+                event.preventDefault();
+                closeMenu(true);
+            } else if (event.key === 'Tab') {
+                const controls = Array.from(header.querySelectorAll('a[href], button:not([disabled])'))
+                    .filter((control) => control.getClientRects().length && getComputedStyle(control).visibility !== 'hidden');
+                const first = controls[0];
+                const last = controls[controls.length - 1];
+                if (event.shiftKey && document.activeElement === first) {
+                    event.preventDefault();
+                    last?.focus();
+                } else if (!event.shiftKey && document.activeElement === last) {
+                    event.preventDefault();
+                    first?.focus();
+                }
+            }
+        });
+
+        document.addEventListener('click', (event) => {
+            if (!header.contains(event.target)) closeMenu();
+        });
 
         window.addEventListener('resize', () => {
-            if (window.innerWidth > 820) closeMenu();
+            if (!mobileMenuQuery.matches) closeMenu();
         });
     }
+
+    document.addEventListener('focusin', (event) => {
+        let element = event.target;
+        while (element instanceof HTMLElement) {
+            const state = motionStates.get(element);
+            if (state) {
+                state.animation?.cancel();
+                state.revealed = true;
+                pendingMotionElements.delete(element);
+                motionObserver?.unobserve(element);
+                element.style.opacity = '1';
+                element.style.visibility = 'visible';
+                element.style.transform = '';
+                element.style.clipPath = '';
+                element.style.filter = '';
+                element.dataset.motionState = 'ready';
+            }
+            element = element.parentElement;
+        }
+    });
 
     const updateHeader = () => {
         if (!header) return;
@@ -530,7 +619,14 @@
             if (!visible) return;
             const sectionName = visible.target.dataset.section;
             railLinks.forEach((link) => {
-                link.classList.toggle('is-active', link.dataset.railLink === sectionName);
+                const active = link.dataset.railLink === sectionName;
+                link.classList.toggle('is-active', active);
+                if (active) link.setAttribute('aria-current', 'location');
+                else link.removeAttribute('aria-current');
+            });
+            navLinks.forEach((link) => {
+                if (link.getAttribute('href') === `#${sectionName}`) link.setAttribute('aria-current', 'location');
+                else link.removeAttribute('aria-current');
             });
         }, {
             rootMargin: '-28% 0px -55% 0px',
@@ -548,6 +644,11 @@
         let pointerY = 0;
 
         const renderParallax = () => {
+            if (reduceMotionQuery.matches) {
+                parallaxItems.forEach((item) => { item.style.transform = ''; });
+                frameId = null;
+                return;
+            }
             const normalizedX = (pointerX / window.innerWidth) - 0.5;
             const normalizedY = (pointerY / window.innerHeight) - 0.5;
 

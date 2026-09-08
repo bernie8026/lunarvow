@@ -11,12 +11,14 @@
     <link rel="stylesheet" href="assets/hi3-gallery/styles.css">
     <link rel="stylesheet" href="assets/hi3-gallery/source.css">
     <link rel="stylesheet" href="assets/music-player.css">
+    <link id="crimson-rose-theme" rel="stylesheet" href="assets/red-pink-theme.css">
     <script src="site.js" defer></script>
     <script src="assets/music-player.js" defer></script>
     <script src="assets/hi3-gallery/script.js" data-img-base="assets/hi3/characters/" data-json="data/characters.json" defer></script>
     <script src="assets/hi3-gallery/name-corrections.js" defer></script>
 </head>
 <body class="inner-page database-page">
+    <a class="skip-link" href="#main-content">跳至主要內容</a>
     <header class="site-header" data-header>
         <a class="site-brand" href="index.html" aria-label="返回首頁">
             <span class="site-brand__mark">BR</span>
@@ -45,7 +47,7 @@
         <span class="page-hero__code">FILE / A-02 // DATABASE</span>
     </section>
 
-    <main>
+    <main id="main-content" tabindex="-1">
         <section id="hi3-gallery" data-reveal>
             <div class="gallery-heading">
                 <div>
@@ -53,7 +55,7 @@
                     <h2>女武神檔案</h2>
                     <p>已為現有角色清單補上代表戰衣肖像。輸入角色英文名、中文名、slug 或戰衣名即可篩選；按角色圖片可以開啟大圖及查看來源。</p>
                 </div>
-                <div class="gallery-counter">
+                <div class="gallery-counter" aria-hidden="true">
                     <span>DISPLAYING</span>
                     <strong id="result-count">00</strong>
                     <small>FILES</small>
@@ -63,12 +65,17 @@
             <div class="controls">
                 <label class="search-panel" for="search">
                     <span>SEARCH QUERY</span>
-                    <input class="input" id="search" type="search" placeholder="輸入角色或戰衣名稱…" autocomplete="off">
+                    <input class="input" id="search" type="search" placeholder="輸入角色或戰衣名稱…" aria-label="搜尋角色或戰衣" aria-controls="grid" aria-describedby="search-status" autocomplete="off" data-i18n-ignore>
                     <b aria-hidden="true">⌕</b>
                 </label>
+                <div class="search-feedback" data-i18n-ignore>
+                    <p id="search-status" class="search-status" role="status" aria-atomic="true">正在載入角色檔案…</p>
+                    <button id="clear-search" type="button" hidden>清除搜尋</button>
+                </div>
             </div>
 
-            <div class="grid" id="grid" aria-live="polite"></div>
+            <div class="grid" id="grid" aria-busy="true"></div>
+            <noscript><p class="empty-state">請啟用 JavaScript 以瀏覽及搜尋角色圖鑑。</p></noscript>
         </section>
     </main>
 

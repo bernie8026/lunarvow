@@ -144,7 +144,9 @@
 
     const EN = {
         '返回首頁': 'Return to home',
+        '跳至主要內容': 'Skip to main content',
         '開啟導覽選單': 'Open navigation menu',
+        '關閉導覽選單': 'Close navigation menu',
         '主要導覽': 'Primary navigation',
         '頁面區段': 'Page sections',
         '月下誓約・予愛以心': 'Lunar Vow: Crimson Love',
@@ -496,10 +498,29 @@
     const textSources = new WeakMap();
     const renderedText = new WeakMap();
     const attributeSources = new WeakMap();
+    const renderedAttributes = new WeakMap();
     let currentLanguage = DEFAULT_LANGUAGE;
-    let mutationLock = false;
+    let languageRevision = 0;
+    let switchingTimer = null;
     let openCCPromise = null;
     let openCCConverter = null;
+    let simplificationMap = null;
+
+    const readStoredLanguage = () => {
+        try {
+            return window.localStorage.getItem(STORAGE_KEY);
+        } catch {
+            return null;
+        }
+    };
+
+    const storeLanguage = (language) => {
+        try {
+            window.localStorage.setItem(STORAGE_KEY, language);
+        } catch {
+            // The interface still works when browser storage is unavailable.
+        }
+    };
 
     const getPageName = () => {
         const name = window.location.pathname.split('/').filter(Boolean).pop() || 'index.html';
@@ -526,8 +547,12 @@
     const fallbackSimplify = (value) => {
         const traditional = '萬與專業東絲丟兩嚴喪個豐臨為麗舉麼義烏樂喬習鄉書買亂爭於亞產畝親億僅從侖倉儀們價眾優會傘偉傳傷倫偽體餘來俠侶僥偵側僑僕僞儘兌兒黨關興養獸內岡冊寫軍農馮沖決況凍淨準涼減湊幾鳳憑凱劃劇劉劍劑勁動務勝勞勢勳匯區醫華協單賣盧衛卻廠歷厲壓厭縣參雙發變敘葉號歎嚇嗎聽啟吳員喚問啞喬單喲喪喫噴嚮嚴囉團園圍國圖圓聖場壞塊堅壇壓壘壯聲處備複夠夢夥奧奪奮婦媽嬰學寧寶實審寫寬對尋導將專屬層嶺嶽峽崗島嶄巖帥帳帶幫幣幹庫廢廣廳彈強歸錄彥後徑從復德徵徹恆愛慘慣態慾憂憑懷總戀戰戲戶拋挾損換據掙揀揮搶攝攜擺搖撐撲擴擔擬擁攔攙擊數斂斃斷時晉晝曆曉暫術樸機權條來楊極構標樣樹橋檔檢欄歐歡歲歷歸殘殺殼毀氣漢湯溝滅滿濱災為烏無煉煙煩燒營爐爭愛爾牆獎獨獲獸現環產畫當疊痕發盡監盤盧眾著睏矚礎禮禍離種穀積稱穩窮竄競筆範築簡簽籌類糧緊糾紀約紅紋納純紙級紛紡終組結絕統經綠維網羅罰職聯聖聞聰聲聳膽臉臨舉舊艦艷藝節範莊華萬葉著葯蘇處虛號蝕衝補裝裡製複見規視覺覽觀觸譯議護豐貝貞負財責賢敗賬貨質貪貫貴費賀賴贊贏趕趙跡踐躍車軌輪輯輸轉輕辦邊遼達遷過運還這進遠違連週適選遺郵鄉鄧鄭醞釋醫醜釐鐘鐵鑒長門閉開閃間關隊階險隨隱難靈靜韓響頁頂項順預領頭顯風飛飯飲餘館馬駛駭鬥魚鳥麗麥黃點齊龍龜';
         const simplified = '万与专业东丝丢两严丧个丰临为丽举么义乌乐乔习乡书买乱争于亚产亩亲亿仅从仑仓仪们价众优会伞伟传伤伦伪体余来侠侣侥侦侧侨仆伪尽兑儿党关兴养兽内冈册写军农冯冲决况冻净准凉减凑几凤凭凯划剧刘剑剂劲动务胜劳势勋汇区医华协单卖卢卫却厂历厉压厌县参双发变叙叶号叹吓吗听启吴员唤问哑乔单哟丧吃喷向严啰团园围国图圆圣场坏块坚坛压垒壮声处备复够梦伙奥夺奋妇妈婴学宁宝实审写宽对寻导将专属层岭岳峡岗岛崭岩帅帐带帮币干库废广厅弹强归录彦后径从复德征彻恒爱惨惯态欲忧凭怀总恋战戏户抛挟损换据挣拣挥抢摄携摆摇撑扑扩担拟拥拦搀击数敛毙断时晋昼历晓暂术朴机权条来杨极构标样树桥档检栏欧欢岁历归残杀壳毁气汉汤沟灭满滨灾为乌无炼烟烦烧营炉争爱尔墙奖独获兽现环产画当叠痕发尽监盘卢众着困瞩础礼祸离种谷积称稳穷窜竞笔范筑简签筹类粮紧纠纪约红纹纳纯纸级纷纺终组结绝统经绿维网罗罚职联圣闻聪声耸胆脸临举旧舰艳艺节范庄华万叶着药苏处虚号蚀冲补装里制复见规视觉览观触译议护丰贝贞负财责贤败账货质贪贯贵费贺赖赞赢赶赵迹践跃车轨轮辑输转轻办边辽达迁过运还这进远违连周适选遗邮乡邓郑酝释医丑厘钟铁鉴长门闭开闪间关队阶险随隐难灵静韩响页顶项顺预领头显风飞饭饮余馆马驶骇斗鱼鸟丽麦黄点齐龙龟';
-        const map = new Map([...traditional].map((char, index) => [char, simplified[index] || char]));
-        return [...value].map((char) => map.get(char) || char).join('');
+        if (!simplificationMap) {
+            simplificationMap = new Map([...traditional].map((char, index) => [char, simplified[index] || char]));
+            Object.entries({ '鑑': '鉴', '電': '电', '蘭': '兰', '婭': '娅', '謝': '谢', '櫻': '樱', '蘿': '萝' })
+                .forEach(([traditionalChar, simplifiedChar]) => simplificationMap.set(traditionalChar, simplifiedChar));
+        }
+        return [...value].map((char) => simplificationMap.get(char) || char).join('');
     };
 
     const loadOpenCC = () => {
@@ -536,22 +561,35 @@
 
         openCCPromise = new Promise((resolve) => {
             if (window.OpenCC?.Converter) {
-                openCCConverter = window.OpenCC.Converter({ from: 'hk', to: 'cn' });
+                try {
+                    openCCConverter = window.OpenCC.Converter({ from: 'hk', to: 'cn' });
+                } catch {
+                    openCCConverter = null;
+                }
                 resolve(openCCConverter);
                 return;
             }
 
             const script = document.createElement('script');
+            const timeout = window.setTimeout(() => resolve(null), 5000);
             script.src = 'https://cdn.jsdelivr.net/npm/opencc-js@1.0.5/dist/umd/t2cn.js';
             script.async = true;
             script.crossOrigin = 'anonymous';
             script.onload = () => {
-                if (window.OpenCC?.Converter) {
-                    openCCConverter = window.OpenCC.Converter({ from: 'hk', to: 'cn' });
+                window.clearTimeout(timeout);
+                try {
+                    if (window.OpenCC?.Converter) {
+                        openCCConverter = window.OpenCC.Converter({ from: 'hk', to: 'cn' });
+                    }
+                } catch {
+                    openCCConverter = null;
                 }
                 resolve(openCCConverter);
             };
-            script.onerror = () => resolve(null);
+            script.onerror = () => {
+                window.clearTimeout(timeout);
+                resolve(null);
+            };
             document.head.appendChild(script);
         });
 
@@ -576,7 +614,7 @@
     const shouldSkipNode = (node) => {
         const parent = node.parentElement;
         if (!parent) return true;
-        return Boolean(parent.closest('script, style, noscript, code, pre, .language-switcher, .page-transition__grid'));
+        return Boolean(parent.closest('script, style, noscript, code, pre, textarea, [contenteditable="true"], [translate="no"], [data-i18n-ignore], .language-switcher, .language-announcer, .page-transition__grid'));
     };
 
     const applyTextNode = (node) => {
@@ -584,7 +622,9 @@
         const current = node.nodeValue || '';
         if (!current.trim()) return;
 
-        if (!textSources.has(node)) textSources.set(node, current);
+        if (!textSources.has(node) || (renderedText.has(node) && renderedText.get(node) !== current)) {
+            textSources.set(node, current);
+        }
         const source = textSources.get(node);
         const core = source.trim();
         const translated = translateCore(core, currentLanguage);
@@ -597,47 +637,54 @@
     const translatableAttributes = ['aria-label', 'placeholder', 'alt', 'title'];
 
     const applyAttributes = (element) => {
-        if (!(element instanceof Element) || element.closest('.language-switcher')) return;
+        if (!(element instanceof Element) || element.closest('.language-switcher, .language-announcer, [translate="no"], [data-i18n-ignore]')) return;
         let sources = attributeSources.get(element);
+        let rendered = renderedAttributes.get(element);
         if (!sources) {
             sources = new Map();
             attributeSources.set(element, sources);
+            rendered = new Map();
+            renderedAttributes.set(element, rendered);
         }
 
         translatableAttributes.forEach((attribute) => {
-            if (!element.hasAttribute(attribute)) return;
-            if (!sources.has(attribute)) sources.set(attribute, element.getAttribute(attribute) || '');
+            if (!element.hasAttribute(attribute)) {
+                sources.delete(attribute);
+                rendered.delete(attribute);
+                return;
+            }
+            const current = element.getAttribute(attribute) || '';
+            // MutationObserver also sees our own writes. Preserve their original
+            // source, while accepting new labels supplied by other components.
+            if (!sources.has(attribute) || (rendered.has(attribute) && rendered.get(attribute) !== current)) {
+                sources.set(attribute, current);
+            }
             const source = sources.get(attribute);
-            if (!source) return;
             const translated = translateCore(source, currentLanguage);
-            if (element.getAttribute(attribute) !== translated) element.setAttribute(attribute, translated);
+            if (current !== translated) element.setAttribute(attribute, translated);
+            rendered.set(attribute, translated);
         });
     };
 
     const scan = (root = document) => {
-        mutationLock = true;
-        try {
-            if (root instanceof Text) applyTextNode(root);
-            if (root instanceof Element) applyAttributes(root);
+        if (root instanceof Text) applyTextNode(root);
+        if (root instanceof Element) applyAttributes(root);
 
-            const walker = document.createTreeWalker(
-                root instanceof Document ? root.documentElement : root,
-                NodeFilter.SHOW_TEXT,
-                {
-                    acceptNode(node) {
-                        return shouldSkipNode(node) || !(node.nodeValue || '').trim()
-                            ? NodeFilter.FILTER_REJECT
-                            : NodeFilter.FILTER_ACCEPT;
-                    }
+        const walker = document.createTreeWalker(
+            root instanceof Document ? root.documentElement : root,
+            NodeFilter.SHOW_TEXT,
+            {
+                acceptNode(node) {
+                    return shouldSkipNode(node) || !(node.nodeValue || '').trim()
+                        ? NodeFilter.FILTER_REJECT
+                        : NodeFilter.FILTER_ACCEPT;
                 }
-            );
+            }
+        );
 
-            let node;
-            while ((node = walker.nextNode())) applyTextNode(node);
-            root.querySelectorAll?.('[aria-label], [placeholder], [alt], [title]').forEach(applyAttributes);
-        } finally {
-            mutationLock = false;
-        }
+        let node;
+        while ((node = walker.nextNode())) applyTextNode(node);
+        root.querySelectorAll?.('[aria-label], [placeholder], [alt], [title]').forEach(applyAttributes);
     };
 
     const updatePageMetadata = () => {
@@ -681,9 +728,9 @@
         switcher.setAttribute('role', 'group');
         switcher.setAttribute('aria-label', 'Language / 語言');
         switcher.innerHTML = `
-            <button type="button" data-language="zh-HK" aria-pressed="false">繁體中文</button>
-            <button type="button" data-language="en" aria-pressed="false">English</button>
-            <button type="button" data-language="zh-CN" aria-pressed="false">简体中文</button>`;
+            <button type="button" data-language="zh-HK" lang="zh-HK" aria-pressed="false">繁體中文</button>
+            <button type="button" data-language="en" lang="en" aria-pressed="false">English</button>
+            <button type="button" data-language="zh-CN" lang="zh-CN" aria-pressed="false">简体中文</button>`;
 
         const status = header.querySelector('.site-header__status');
         header.insertBefore(switcher, status || null);
@@ -696,15 +743,21 @@
         });
     };
 
-    const announceLanguage = () => {
+    const getLanguageAnnouncer = () => {
         let live = document.querySelector('.language-announcer');
         if (!live) {
             live = document.createElement('div');
             live.className = 'language-announcer sr-only';
             live.setAttribute('aria-live', 'polite');
+            live.setAttribute('aria-atomic', 'true');
             document.body.appendChild(live);
         }
+        return live;
+    };
 
+    const announceLanguage = () => {
+        const live = getLanguageAnnouncer();
+        live.lang = currentLanguage;
         live.textContent = currentLanguage === 'en'
             ? 'Language changed to English.'
             : currentLanguage === 'zh-CN'
@@ -714,25 +767,37 @@
 
     async function setLanguage(language, announce = false) {
         if (!SUPPORTED.includes(language)) language = DEFAULT_LANGUAGE;
+        const revision = ++languageRevision;
         currentLanguage = language;
-        localStorage.setItem(STORAGE_KEY, language);
+        storeLanguage(language);
         document.documentElement.lang = language;
         document.body.dataset.language = language;
         document.body.classList.add('is-language-switching');
 
-        if (language === 'zh-CN') await loadOpenCC();
-
+        // Apply the bundled conversion immediately, even if the CDN is offline.
         scan(document);
         updatePageMetadata();
         updateSwitcher();
         updateDatabaseNameLayout();
 
-        window.setTimeout(() => document.body.classList.remove('is-language-switching'), 260);
+        window.clearTimeout(switchingTimer);
+        switchingTimer = window.setTimeout(() => document.body.classList.remove('is-language-switching'), 260);
         if (announce) announceLanguage();
 
         window.dispatchEvent(new CustomEvent('bhr:languagechange', {
             detail: { language }
         }));
+
+        if (language === 'zh-CN') {
+            const converter = await loadOpenCC();
+            if (converter && revision === languageRevision) {
+                scan(document);
+                updatePageMetadata();
+                window.dispatchEvent(new CustomEvent('bhr:translationsready', {
+                    detail: { language }
+                }));
+            }
+        }
     }
 
     const injectStyles = () => {
@@ -746,32 +811,24 @@
 
     injectStyles();
     createSwitcher();
+    getLanguageAnnouncer();
 
-    const storedLanguage = localStorage.getItem(STORAGE_KEY);
+    const storedLanguage = readStoredLanguage();
     const initialLanguage = SUPPORTED.includes(storedLanguage) ? storedLanguage : DEFAULT_LANGUAGE;
 
     const observer = new MutationObserver((mutations) => {
-        if (mutationLock) return;
         mutations.forEach((mutation) => {
             if (mutation.type === 'characterData') {
-                const node = mutation.target;
-                const rendered = renderedText.get(node);
-                if (rendered !== node.nodeValue) textSources.set(node, node.nodeValue || '');
-                applyTextNode(node);
+                applyTextNode(mutation.target);
                 return;
             }
 
             mutation.addedNodes.forEach((node) => {
-                if (node instanceof Text || node instanceof Element) scan(node);
+                if (node.isConnected && (node instanceof Text || node instanceof Element)) scan(node);
             });
 
             if (mutation.type === 'attributes') {
-                const element = mutation.target;
-                const sources = attributeSources.get(element);
-                if (sources && mutation.attributeName) {
-                    sources.set(mutation.attributeName, element.getAttribute(mutation.attributeName) || '');
-                }
-                applyAttributes(element);
+                applyAttributes(mutation.target);
             }
         });
         updateDatabaseNameLayout();

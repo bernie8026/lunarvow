@@ -8,7 +8,6 @@
     const SOURCE_VERSION = '7';
     const DEFAULT_VOLUME = 0.65;
     const STORAGE = {
-        enabled: 'bhr-lunar-music-enabled-v7',
         volume: 'bhr-lunar-music-volume-v7',
         time: 'bhr-lunar-music-time-v7'
     };
@@ -18,41 +17,48 @@
             title: '月下主題曲',
             play: '播放背景音樂',
             pause: '暫停背景音樂',
-            ready: 'CLICK TO PLAY',
-            loading: 'LOADING AUDIO',
-            playing: 'PLAYING',
-            blocked: 'CLICK PAGE TO START',
-            error: 'AUDIO ERROR / RETRY',
+            ready: '按此播放',
+            loading: '正在載入音樂',
+            playing: '播放中',
+            blocked: '請按播放重試',
+            error: '載入失敗 · 按此重試',
             volume: '背景音樂音量'
         },
         en: {
             title: 'LUNAR VOW THEME',
             play: 'Play background music',
             pause: 'Pause background music',
-            ready: 'CLICK TO PLAY',
+            ready: 'PRESS TO PLAY',
             loading: 'LOADING AUDIO',
             playing: 'PLAYING',
-            blocked: 'CLICK PAGE TO START',
-            error: 'AUDIO ERROR / RETRY',
+            blocked: 'PRESS PLAY TO RETRY',
+            error: 'AUDIO ERROR · RETRY',
             volume: 'Background music volume'
         },
         'zh-CN': {
             title: '月下主题曲',
             play: '播放背景音乐',
             pause: '暂停背景音乐',
-            ready: 'CLICK TO PLAY',
-            loading: 'LOADING AUDIO',
-            playing: 'PLAYING',
-            blocked: 'CLICK PAGE TO START',
-            error: 'AUDIO ERROR / RETRY',
+            ready: '按此播放',
+            loading: '正在加载音乐',
+            playing: '播放中',
+            blocked: '请按播放重试',
+            error: '加载失败 · 按此重试',
             volume: '背景音乐音量'
         }
     };
 
     const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
     const readNumber = (key, fallback) => {
-        const value = Number.parseFloat(localStorage.getItem(key));
-        return Number.isFinite(value) ? value : fallback;
+        try {
+            const value = Number.parseFloat(localStorage.getItem(key));
+            return Number.isFinite(value) ? value : fallback;
+        } catch (_) {
+            return fallback;
+        }
+    };
+    const store = (key, value) => {
+        try { localStorage.setItem(key, String(value)); } catch (_) { /* Playback also works without storage. */ }
     };
     const formatTime = (seconds) => {
         if (!Number.isFinite(seconds) || seconds < 0) return '0:00';
@@ -73,216 +79,178 @@
         return url.href;
     };
 
-    const savedVolume = readNumber(STORAGE.volume, DEFAULT_VOLUME);
-    const audio = new Audio(sourceUrl());
-    audio.autoplay = true;
+    const audio = new Audio();
+    audio.autoplay = false;
     audio.loop = true;
-    audio.preload = 'auto';
+    audio.preload = 'none';
     audio.playsInline = true;
-    audio.muted = false;
-    audio.volume = savedVolume < 0.08 ? DEFAULT_VOLUME : clamp(savedVolume, 0, 1);
+    audio.volume = clamp(readNumber(STORAGE.volume, DEFAULT_VOLUME), 0, 1);
+    audio.src = sourceUrl();
 
     const panel = document.createElement('div');
     panel.className = 'music-console';
     panel.dataset.bhrMusicPlayer = '';
+    panel.dataset.i18nIgnore = '';
+    panel.setAttribute('translate', 'no');
     panel.innerHTML = `
         <button class="music-console__toggle" type="button">
             <span class="music-console__icon" aria-hidden="true">▶</span>
-            <span class="music-console__copy">
+            <span class="music-console__copy" aria-hidden="true">
                 <b>LUNAR VOW THEME</b>
-                <small>LOADING AUDIO</small>
+                <small>PRESS TO PLAY</small>
             </span>
         </button>
         <label class="music-console__volume">
             <span class="sr-only">Background music volume</span>
             <input type="range" min="0" max="1" step="0.05" value="${audio.volume}">
-        </label>`;
+        </label>
+        <span class="music-console__announcement sr-only" role="status" aria-live="polite" aria-atomic="true"></span>`;
     document.body.appendChild(panel);
 
     const toggle = panel.querySelector('.music-console__toggle');
     const icon = panel.querySelector('.music-console__icon');
     const title = panel.querySelector('.music-console__copy b');
     const status = panel.querySelector('.music-console__copy small');
-    const volumeLabel = panel.querySelector('.music-console__volume');
     const volumeInput = panel.querySelector('.music-console__volume input');
     const volumeText = panel.querySelector('.music-console__volume .sr-only');
+    const announcement = panel.querySelector('.music-console__announcement');
 
-    let state = 'loading';
-    let progressCheck = 0;
+    let state = 'ready';
+    let playbackRequested = false;
+    let playRequest = 0;
     let lastStoredSecond = -1;
-    let userPaused = false;
-    let unlockArmed = false;
+    let lastAnnouncement = '';
 
     const persistTime = () => {
-        if (Number.isFinite(audio.currentTime)) {
-            localStorage.setItem(STORAGE.time, String(audio.currentTime));
+        // Avoid overwriting the last position when leaving without playing.
+        if (audio.readyState > 0 && Number.isFinite(audio.currentTime)) {
+            store(STORAGE.time, audio.currentTime);
         }
     };
 
     const update = () => {
         const text = COPY[language()];
-        const playing = !audio.paused && !audio.ended && state === 'playing';
+        const playing = playbackRequested && !audio.paused && state === 'playing';
         const volume = Math.round(audio.volume * 100);
 
         title.textContent = text.title;
-        icon.textContent = playing ? 'Ⅱ' : '▶';
+        icon.textContent = playbackRequested ? 'Ⅱ' : '▶';
         panel.classList.toggle('is-playing', playing);
         panel.classList.toggle('is-unavailable', state === 'error');
-        toggle.disabled = state === 'loading';
-        toggle.setAttribute('aria-label', playing ? text.pause : text.play);
-        volumeLabel.setAttribute('aria-label', text.volume);
+        toggle.setAttribute('aria-label', playbackRequested ? text.pause : text.play);
+        toggle.title = playbackRequested ? text.pause : text.play;
         volumeText.textContent = text.volume;
+        volumeInput.setAttribute('aria-label', text.volume);
+        volumeInput.setAttribute('aria-valuetext', `${volume}%`);
         volumeInput.value = String(audio.volume);
 
-        if (playing) {
-            status.textContent = `${text.playing} ${formatTime(audio.currentTime)} / ${formatTime(audio.duration)} · VOL ${volume}%`;
-        } else if (state === 'loading') {
-            status.textContent = text.loading;
-        } else if (state === 'blocked') {
-            status.textContent = text.blocked;
-        } else if (state === 'error') {
-            status.textContent = text.error;
-        } else {
-            status.textContent = `${text.ready} · VOL ${volume}%`;
+        status.textContent = playing
+            ? `${text.playing} ${formatTime(audio.currentTime)} / ${formatTime(audio.duration)}`
+            : text[state];
+
+        // Announce state changes without reading the playback clock every second.
+        const message = text[state];
+        if (message !== lastAnnouncement) {
+            lastAnnouncement = message;
+            announcement.textContent = message;
         }
     };
 
     const restorePosition = () => {
         const savedTime = readNumber(STORAGE.time, 0);
         if (Number.isFinite(audio.duration) && savedTime > 0 && savedTime < audio.duration) {
-            try { audio.currentTime = savedTime; } catch (_) { /* ignored */ }
+            try { audio.currentTime = savedTime; } catch (_) { /* Seeking may be unavailable. */ }
         }
-    };
-
-    const removeUnlockListeners = () => {
-        if (!unlockArmed) return;
-        unlockArmed = false;
-        document.removeEventListener('pointerdown', unlockOnInteraction, true);
-        document.removeEventListener('keydown', unlockOnInteraction, true);
-    };
-
-    const unlockOnInteraction = async (event) => {
-        if (panel.contains(event.target)) return;
-        userPaused = false;
-        await start();
-    };
-
-    const armUnlockListeners = () => {
-        if (unlockArmed || userPaused) return;
-        unlockArmed = true;
-        document.addEventListener('pointerdown', unlockOnInteraction, true);
-        document.addEventListener('keydown', unlockOnInteraction, true);
-    };
-
-    const verifyProgress = (startTime) => {
-        window.clearTimeout(progressCheck);
-        progressCheck = window.setTimeout(() => {
-            if (audio.paused) return;
-            if (!Number.isFinite(audio.currentTime) || audio.currentTime <= startTime + 0.1) {
-                audio.pause();
-                state = 'error';
-                localStorage.setItem(STORAGE.enabled, 'false');
-                update();
-            }
-        }, 2500);
     };
 
     const start = async () => {
-        if (!audio.paused && state === 'playing') return true;
-
-        audio.muted = false;
-        if (audio.volume < 0.08) {
-            audio.volume = DEFAULT_VOLUME;
-            localStorage.setItem(STORAGE.volume, String(DEFAULT_VOLUME));
+        if (playbackRequested) return;
+        if (state === 'error') {
+            audio.src = sourceUrl(true);
+            audio.load();
         }
 
+        const request = ++playRequest;
+        playbackRequested = true;
+        state = 'loading';
+        update();
+
         try {
-            const startTime = audio.currentTime;
+            // Keep play() in the button's gesture, including error retries.
             await audio.play();
+            if (request !== playRequest || !playbackRequested) return;
             state = 'playing';
-            userPaused = false;
-            localStorage.setItem(STORAGE.enabled, 'true');
-            removeUnlockListeners();
             update();
-            verifyProgress(startTime);
-            return true;
-        } catch (_) {
-            state = 'blocked';
-            localStorage.setItem(STORAGE.enabled, 'false');
-            armUnlockListeners();
+        } catch (error) {
+            if (request !== playRequest) return;
+            playbackRequested = false;
+            state = error?.name === 'NotAllowedError' ? 'blocked' : 'error';
             update();
-            return false;
         }
     };
 
     const stop = () => {
-        window.clearTimeout(progressCheck);
-        userPaused = true;
-        removeUnlockListeners();
+        ++playRequest;
+        playbackRequested = false;
         audio.pause();
         state = 'ready';
-        localStorage.setItem(STORAGE.enabled, 'false');
         persistTime();
         update();
     };
 
-    const retry = () => {
-        window.clearTimeout(progressCheck);
-        userPaused = false;
-        state = 'loading';
-        update();
-        audio.pause();
-        audio.src = sourceUrl(true);
-        audio.load();
-    };
-
-    toggle.addEventListener('click', async () => {
-        if (state === 'error') {
-            retry();
-            return;
-        }
-        if (audio.paused) {
-            userPaused = false;
-            await start();
-        } else {
-            stop();
-        }
+    toggle.addEventListener('click', () => {
+        if (playbackRequested) stop();
+        else start();
     });
 
     volumeInput.addEventListener('input', () => {
-        audio.muted = false;
         audio.volume = clamp(Number.parseFloat(volumeInput.value), 0, 1);
-        localStorage.setItem(STORAGE.volume, String(audio.volume));
+        store(STORAGE.volume, audio.volume);
         update();
     });
 
     audio.addEventListener('loadedmetadata', restorePosition);
-    audio.addEventListener('canplay', async () => {
-        state = 'ready';
+    audio.addEventListener('playing', () => {
+        if (!playbackRequested) {
+            audio.pause();
+            return;
+        }
+        state = 'playing';
         update();
-        if (!userPaused) await start();
+    });
+    audio.addEventListener('waiting', () => {
+        if (playbackRequested) state = 'loading';
+        update();
     });
     audio.addEventListener('timeupdate', () => {
-        if (!audio.paused) state = 'playing';
         const second = Math.floor(audio.currentTime);
-        if (second !== lastStoredSecond && second % 5 === 0) {
+        if (playbackRequested && second !== lastStoredSecond && second % 5 === 0) {
             lastStoredSecond = second;
             persistTime();
         }
         update();
     });
-    audio.addEventListener('pause', update);
+    audio.addEventListener('pause', () => {
+        if (audio.paused && playbackRequested) {
+            ++playRequest;
+            playbackRequested = false;
+            state = 'ready';
+        }
+        update();
+    });
     audio.addEventListener('volumechange', update);
     audio.addEventListener('error', () => {
+        ++playRequest;
+        playbackRequested = false;
         state = 'error';
-        localStorage.setItem(STORAGE.enabled, 'false');
         update();
     });
 
-    window.addEventListener('pagehide', persistTime);
-    window.addEventListener('beforeunload', persistTime);
+    window.addEventListener('pagehide', () => {
+        if (playbackRequested) stop();
+        else persistTime();
+    });
     window.addEventListener('bhr:languagechange', update);
 
     update();
-    audio.load();
 })();

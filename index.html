@@ -8,17 +8,12 @@
     <title>Bernie’s Honkai Realm // Lunar Vow Archive</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="assets/music-player.css">
+    <link id="crimson-rose-theme" rel="stylesheet" href="assets/red-pink-theme.css">
     <script src="site.js" defer></script>
     <script src="assets/music-player.js" defer></script>
 </head>
 <body class="home-page">
-    <div class="boot-screen" aria-hidden="true">
-        <div class="boot-screen__mark">BHR</div>
-        <p>BERNIE'S HONKAI REALM</p>
-        <div class="boot-screen__bar"><span></span></div>
-        <small>ARCHIVE SYSTEM // INITIALISING</small>
-    </div>
-
+    <a class="skip-link" href="#main-content">跳至主要內容</a>
     <header class="site-header" data-header>
         <a class="site-brand" href="#home" aria-label="返回首頁">
             <span class="site-brand__mark">BR</span>
@@ -55,7 +50,7 @@
         <a href="#profile" data-rail-link="profile">04</a>
     </aside>
 
-    <main class="home-main">
+    <main class="home-main" id="main-content" tabindex="-1">
         <section class="home-hero tracked-section" id="home" data-section="home">
             <div class="hero-grid" aria-hidden="true"></div>
             <div class="hero-code" aria-hidden="true">
@@ -84,7 +79,7 @@
             <div class="hero-figure" data-parallax="0.28" aria-hidden="true">
                 <div class="hero-figure__halo"></div>
                 <div class="hero-figure__designation">THERESA // LUNAR VOW</div>
-                <img src="assets/hi3/characters/lunar-vow-crimson-love.webp" alt="">
+                <img src="assets/hi3/characters/lunar-vow-crimson-love.webp" alt="" width="960" height="660" fetchpriority="high" decoding="async">
             </div>
 
             <div class="hero-panel" data-parallax="-0.12">
@@ -138,7 +133,7 @@
             <article class="feature-transmission" data-reveal>
                 <a class="feature-transmission__visual" href="story.html" aria-label="開啟崩壞3rd完整劇情整理">
                     <span class="feature-transmission__stamp">NEW STORY</span>
-                    <img src="assets/hi3/characters/lunar-vow-crimson-love.webp" alt="月下誓約・予愛以心">
+                    <img src="assets/hi3/characters/lunar-vow-crimson-love.webp" alt="月下誓約・予愛以心" width="960" height="660" loading="lazy" decoding="async">
                     <span class="feature-transmission__code">FILE // STORY-00</span>
                 </a>
                 <div class="feature-transmission__body">

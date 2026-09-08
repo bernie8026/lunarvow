@@ -1307,8 +1307,8 @@ a {
 
 /* Reveal animation */
 [data-reveal] {
-    opacity: 0;
-    transform: translateY(34px);
+    opacity: 1;
+    transform: none;
     transition: opacity 0.8s ease, transform 0.8s cubic-bezier(.18, .75, .24, 1);
 }
 
