@@ -64,7 +64,29 @@
 
     loadLanguageSystem();
 
-    const bootScreen = document.querySelector('.boot-screen');
+    // Create the original intro only with JavaScript, so it cannot cover the no-JS page.
+    const createBootScreen = () => {
+        const navigation = performance.getEntriesByType('navigation')[0];
+        if (!body.classList.contains('home-page') || reduceMotionQuery.matches ||
+            window.location.hash || navigation?.type === 'back_forward') return null;
+
+        const screen = document.createElement('div');
+        screen.className = 'boot-screen';
+        screen.hidden = true;
+        screen.setAttribute('role', 'dialog');
+        screen.setAttribute('aria-modal', 'true');
+        screen.setAttribute('aria-label', 'Honkai Realm — 載入檔案');
+        screen.setAttribute('data-i18n-ignore', '');
+        screen.innerHTML = `
+            <div class="boot-screen__mark" aria-hidden="true">BHR</div>
+            <p>BERNIE'S HONKAI REALM</p>
+            <div class="boot-screen__bar" aria-hidden="true"><span></span></div>
+            <small>ARCHIVE SYSTEM // INITIALISING</small>
+            <button class="boot-screen__skip" type="button">SKIP / 跳過動畫 ↗</button>`;
+        body.appendChild(screen);
+        return screen;
+    };
+    const bootScreen = createBootScreen();
     const header = document.querySelector('[data-header]');
     const menuToggle = document.querySelector('[data-menu-toggle]');
     const menu = document.querySelector('[data-menu]');
@@ -169,6 +191,7 @@
 
     /* Character images stay hidden until their actual file has loaded, then slide in. */
     const imageMotionStates = new WeakMap();
+    const pendingCharacterReveals = new Map();
     let imageSequence = 0;
 
     const isCharacterVisual = (image) => {
@@ -182,6 +205,11 @@
 
     const finishCharacterReveal = (image, state) => {
         if (imageMotionStates.get(image) !== state) return;
+        if (!motionCanPlay) {
+            pendingCharacterReveals.set(image, state);
+            return;
+        }
+        pendingCharacterReveals.delete(image);
 
         image.style.visibility = 'visible';
         image.dataset.imageState = 'revealing';
@@ -483,6 +511,8 @@
 
     const startQueuedMotion = () => {
         motionCanPlay = true;
+        pendingCharacterReveals.forEach((state, image) => finishCharacterReveal(image, state));
+        pendingCharacterReveals.clear();
         const queued = Array.from(pendingMotionElements);
         queued.forEach((element, index) => {
             window.setTimeout(() => revealMotionElement(element), reduceMotionQuery.matches ? 0 : index * 22);
@@ -515,27 +545,63 @@
         attributeFilter: ['src', 'srcset']
     });
 
-    const hideBootScreen = () => {
-        if (!bootScreen) {
-            startQueuedMotion();
-            return;
-        }
+    if (bootScreen) {
+        const started = performance.now();
+        const skip = bootScreen.querySelector('button');
+        const background = Array.from(body.children).filter(element => element !== bootScreen && element.tagName !== 'SCRIPT');
+        const previousInert = background.map(element => element.inert);
+        let finished = false;
+        let leaving = false;
+        let readyTimer;
+        let exitTimer;
 
-        window.setTimeout(() => {
+        const finishBootScreen = () => {
+            if (finished) return;
+            finished = true;
+            window.clearTimeout(deadline);
+            window.clearTimeout(readyTimer);
+            window.clearTimeout(exitTimer);
+            window.removeEventListener('load', onLoaded);
+            window.removeEventListener('pageshow', onRestore);
+            document.removeEventListener('keydown', onBootKey);
+            reduceMotionQuery.removeEventListener('change', onMotionChange);
+            const restoreFocus = bootScreen.contains(document.activeElement);
+            bootScreen.remove();
+            body.classList.remove('is-booting');
+            background.forEach((element, index) => { element.inert = previousInert[index]; });
+            startQueuedMotion();
+            if (restoreFocus) document.getElementById('main-content')?.focus({ preventScroll: true });
+        };
+        const leaveBootScreen = () => {
+            if (finished || leaving) return;
+            leaving = true;
             bootScreen.classList.add('is-hidden');
-            startQueuedMotion();
-        }, 500);
-        window.setTimeout(() => bootScreen.remove(), 1150);
-    };
-
-    if (document.readyState === 'complete') {
-        hideBootScreen();
+            exitTimer = window.setTimeout(finishBootScreen, 550);
+        };
+        const onLoaded = () => {
+            if (finished || leaving) return;
+            window.clearTimeout(readyTimer);
+            readyTimer = window.setTimeout(leaveBootScreen, Math.max(0, 1000 - (performance.now() - started)));
+        };
+        const onRestore = (event) => { if (event.persisted) finishBootScreen(); };
+        const onMotionChange = (event) => { if (event.matches) finishBootScreen(); };
+        const onBootKey = (event) => {
+            if (event.key === 'Escape') { event.preventDefault(); finishBootScreen(); }
+            if (event.key === 'Tab') { event.preventDefault(); skip.focus(); }
+        };
+        // A stalled request must never leave the archive behind a loading screen.
+        const deadline = window.setTimeout(finishBootScreen, 3200);
+        skip.addEventListener('click', finishBootScreen);
+        document.addEventListener('keydown', onBootKey);
+        window.addEventListener('pageshow', onRestore);
+        reduceMotionQuery.addEventListener('change', onMotionChange);
+        window.addEventListener('load', onLoaded, { once: true });
+        background.forEach(element => { element.inert = true; });
+        body.classList.add('is-booting');
+        bootScreen.hidden = false;
+        skip.focus({ preventScroll: true });
+        if (document.readyState === 'complete') onLoaded();
     } else {
-        window.addEventListener('load', hideBootScreen, { once: true });
-        window.setTimeout(hideBootScreen, 2200);
-    }
-
-    if (!bootScreen) {
         window.requestAnimationFrame(() => window.requestAnimationFrame(startQueuedMotion));
     }
 
