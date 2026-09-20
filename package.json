@@ -2,7 +2,9 @@
   "name": "lunarvow-site-checks",
   "private": true,
   "scripts": {
-    "test": "node tests/run.cjs"
+    "test": "node tests/run.cjs",
+    "build:preload": "node scripts/build-preload-manifest.cjs",
+    "check:preload": "node scripts/build-preload-manifest.cjs --check"
   },
   "devDependencies": {
     "playwright": "1.62.1"

@@ -3,12 +3,14 @@ const fs = require('node:fs');
 module.exports = async (browser, baseURL) => {
  const errors = [];
  const page = await browser.newPage({ reducedMotion: 'reduce' });
+ await require('./preload-fixture.cjs').configure(page);
  page.on('pageerror', e => errors.push(e.message));
  const pages = fs.readdirSync(require('node:path').join(__dirname, '..')).filter(x => x.endsWith('.html'));
  for (const width of [320,390,768,1440]) {
   await page.setViewportSize({width,height:900});
   for (const file of pages) {
    await page.goto(baseURL+'/'+file);
+   await page.locator('.boot-screen').waitFor({state:'hidden'});
    await page.waitForFunction(()=>window.BHR_I18N);
    await page.waitForFunction(()=>[...document.styleSheets].some(sheet=>sheet.href?.endsWith('/i18n.css')));
    await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
@@ -37,6 +39,7 @@ module.exports = async (browser, baseURL) => {
  }
  await page.setViewportSize({width:1440,height:1000});
  await page.goto(baseURL);
+   await page.locator('.boot-screen').waitFor({state:'hidden'});
  await page.waitForFunction(()=>window.BHR_I18N);
  for (const lang of ['en','zh-CN','zh-HK','en','zh-HK']) {
   await page.evaluate(lang=>window.BHR_I18N.setLanguage(lang),lang);
@@ -53,8 +56,10 @@ module.exports = async (browser, baseURL) => {
  console.log('PASS JavaScript-disabled navigation and archive');
  const blocked=await browser.newPage({reducedMotion:'reduce'});
  await blocked.addInitScript(()=>{Object.defineProperty(window,'localStorage',{get(){throw new DOMException('blocked','SecurityError')}})});
+ await require('./preload-fixture.cjs').configure(blocked);
  blocked.on('pageerror',e=>errors.push(e.message));
  await blocked.goto(baseURL);
+   await blocked.locator('.boot-screen').waitFor({state:'hidden'});
  await blocked.waitForFunction(()=>window.BHR_I18N);
  await blocked.evaluate(()=>window.BHR_I18N.setLanguage('en'));
  assert.equal(await blocked.locator('html').getAttribute('lang'),'en');
