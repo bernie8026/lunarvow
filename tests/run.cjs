@@ -7,6 +7,7 @@ const root = path.resolve(__dirname, '..');
 const types = {'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8','.js':'text/javascript; charset=utf-8','.json':'application/json','.webp':'image/webp','.png':'image/png','.jpeg':'image/jpeg','.mp3':'audio/mpeg','.webm':'audio/webm'};
 
 (async () => {
+  execFileSync(process.execPath, [path.join(__dirname, 'boot.cjs')], { stdio: 'inherit' });
   execFileSync(process.execPath, [path.join(__dirname, 'music.cjs')], { stdio: 'inherit' });
   const server = http.createServer((req, res) => {
     const pathname = decodeURIComponent(new URL(req.url, 'http://localhost').pathname);

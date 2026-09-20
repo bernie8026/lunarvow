@@ -74,6 +74,9 @@ a {
 }
 
 /* Boot screen */
+.boot-screen[hidden] { display: none; }
+body.is-booting { overflow: hidden; }
+
 .boot-screen {
     position: fixed;
     inset: 0;
@@ -110,7 +113,23 @@ a {
 .boot-screen.is-hidden {
     opacity: 0;
     visibility: hidden;
+    pointer-events: none;
 }
+
+.boot-screen__skip {
+    position: relative;
+    z-index: 1;
+    justify-self: center;
+    margin-top: 16px;
+    padding: 12px 18px;
+    border: 1px solid var(--signal);
+    background: transparent;
+    color: var(--paper);
+    font: 700 0.7rem var(--display);
+    letter-spacing: 0.08em;
+    cursor: pointer;
+}
+.boot-screen__skip:hover { background: rgba(255, 255, 255, 0.08); }
 
 .boot-screen__mark {
     position: relative;
