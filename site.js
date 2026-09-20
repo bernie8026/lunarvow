@@ -64,12 +64,8 @@
 
     loadLanguageSystem();
 
-    // Create the original intro only with JavaScript, so it cannot cover the no-JS page.
+    // Every direct entry preloads the complete site; no-JS pages stay unobstructed.
     const createBootScreen = () => {
-        const navigation = performance.getEntriesByType('navigation')[0];
-        if (!body.classList.contains('home-page') || reduceMotionQuery.matches ||
-            window.location.hash || navigation?.type === 'back_forward') return null;
-
         const screen = document.createElement('div');
         screen.className = 'boot-screen';
         screen.hidden = true;
@@ -80,9 +76,13 @@
         screen.innerHTML = `
             <div class="boot-screen__mark" aria-hidden="true">BHR</div>
             <p>BERNIE'S HONKAI REALM</p>
-            <div class="boot-screen__bar" aria-hidden="true"><span></span></div>
-            <small>ARCHIVE SYSTEM // INITIALISING</small>
-            <button class="boot-screen__skip" type="button">SKIP / 跳過動畫 ↗</button>`;
+            <div class="boot-screen__bar" role="progressbar" aria-label="全站資源" aria-valuemin="0" aria-valuemax="100"><span></span></div>
+            <small class="boot-screen__status" role="status" aria-live="polite">正在讀取全站資源清單…</small>
+            <ul class="boot-screen__errors" hidden></ul>
+            <div class="boot-screen__actions">
+                <button class="boot-screen__retry" type="button" hidden>重試未完成項目</button>
+                <button class="boot-screen__skip" type="button">略過預載，直接進入 ↗</button>
+            </div>`;
         body.appendChild(screen);
         return screen;
     };
@@ -546,25 +546,59 @@
     });
 
     if (bootScreen) {
-        const started = performance.now();
-        const skip = bootScreen.querySelector('button');
+        const skip = bootScreen.querySelector('.boot-screen__skip');
+        const retry = bootScreen.querySelector('.boot-screen__retry');
+        const status = bootScreen.querySelector('.boot-screen__status');
+        const errors = bootScreen.querySelector('.boot-screen__errors');
+        const bar = bootScreen.querySelector('.boot-screen__bar');
         const background = Array.from(body.children).filter(element => element !== bootScreen && element.tagName !== 'SCRIPT');
         const previousInert = background.map(element => element.inert);
         let finished = false;
         let leaving = false;
-        let readyTimer;
         let exitTimer;
-
+        let pageReady = false;
+        let preloadReady = false;
+        let pageError = false;
+        let progress = { loaded: 0, total: 0, failed: [], running: true };
+        const labels = {
+            'zh-HK': { title: '全站資源載入', preparing: '正在讀取全站資源清單…', loading: '正在預載全站', ready: '全站資源載入完成', page: '正在準備目前頁面…', failed: '項資源未能載入', retry: '重試未完成項目', skip: '略過預載，直接進入 ↗' },
+            'zh-CN': { title: '全站资源加载', preparing: '正在读取全站资源清单…', loading: '正在预载全站', ready: '全站资源加载完成', page: '正在准备当前页面…', failed: '项资源未能加载', retry: '重试未完成项目', skip: '略过预载，直接进入 ↗' },
+            en: { title: 'Loading all site resources', preparing: 'Reading the site resource list…', loading: 'Loading the entire site', ready: 'All site resources loaded', page: 'Preparing the current page…', failed: 'resources could not load', retry: 'Retry unfinished items', skip: 'Skip preload and enter ↗' }
+        };
+        const renderProgress = () => {
+            if (finished) return;
+            let language = document.documentElement.lang;
+            try { language = localStorage.getItem('bhr-language') || language; } catch { /* Storage may be unavailable. */ }
+            const text = labels[language] || labels['zh-HK'];
+            const failed = [...progress.failed, ...(pageError ? ['Current page / fonts'] : [])];
+            const ready = preloadReady && pageReady;
+            const percent = ready ? 100 : progress.total ? Math.min(99, Math.floor(progress.loaded / progress.total * 100)) : 0;
+            bootScreen.setAttribute('aria-label', text.title);
+            bar.setAttribute('aria-label', text.title);
+            bar.setAttribute('aria-valuenow', String(percent));
+            bar.firstElementChild.style.transform = `scaleX(${percent / 100})`;
+            status.textContent = ready ? text.ready : failed.length && !progress.running ? `${failed.length} ${text.failed}` :
+                progress.total ? `${text.loading}: ${progress.loaded} / ${progress.total} (${percent}%)${preloadReady ? ` — ${text.page}` : ''}` : text.preparing;
+            skip.textContent = text.skip;
+            retry.textContent = text.retry;
+            retry.hidden = progress.running || !failed.length;
+            errors.hidden = !failed.length;
+            errors.replaceChildren(...failed.map(url => {
+                const item = document.createElement('li');
+                item.textContent = url;
+                return item;
+            }));
+        };
+        const task = window.BHR_PRELOADER?.create(value => { progress = value; renderProgress(); });
         const finishBootScreen = () => {
             if (finished) return;
             finished = true;
-            window.clearTimeout(deadline);
-            window.clearTimeout(readyTimer);
+            task?.cancel();
             window.clearTimeout(exitTimer);
             window.removeEventListener('load', onLoaded);
             window.removeEventListener('pageshow', onRestore);
+            window.removeEventListener('bhr:languagechange', renderProgress);
             document.removeEventListener('keydown', onBootKey);
-            reduceMotionQuery.removeEventListener('change', onMotionChange);
             const restoreFocus = bootScreen.contains(document.activeElement);
             bootScreen.remove();
             body.classList.remove('is-booting');
@@ -572,35 +606,58 @@
             startQueuedMotion();
             if (restoreFocus) document.getElementById('main-content')?.focus({ preventScroll: true });
         };
-        const leaveBootScreen = () => {
-            if (finished || leaving) return;
+        const maybeLeave = () => {
+            if (finished || leaving || !pageReady || !preloadReady) return;
             leaving = true;
+            renderProgress();
             bootScreen.classList.add('is-hidden');
-            exitTimer = window.setTimeout(finishBootScreen, 550);
+            // Only the exit transition is timed; network completion never is.
+            exitTimer = window.setTimeout(finishBootScreen, reduceMotionQuery.matches ? 0 : 550);
         };
-        const onLoaded = () => {
-            if (finished || leaving) return;
-            window.clearTimeout(readyTimer);
-            readyTimer = window.setTimeout(leaveBootScreen, Math.max(0, 1000 - (performance.now() - started)));
+        const onLoaded = async () => {
+            try {
+                if (document.fonts) await document.fonts.ready;
+                pageReady = true;
+                pageError = false;
+            } catch { pageError = true; }
+            renderProgress();
+            maybeLeave();
         };
-        const onRestore = (event) => { if (event.persisted) finishBootScreen(); };
-        const onMotionChange = (event) => { if (event.matches) finishBootScreen(); };
-        const onBootKey = (event) => {
+        const run = async () => {
+            if (finished) return;
+            if (!task) {
+                progress = { loaded: 0, total: 0, failed: ['assets/preloader.js'], running: false };
+                renderProgress();
+                return;
+            }
+            preloadReady = await task.run();
+            if (pageError) await onLoaded();
+            renderProgress();
+            maybeLeave();
+        };
+        const onRestore = event => { if (event.persisted) finishBootScreen(); };
+        const onBootKey = event => {
             if (event.key === 'Escape') { event.preventDefault(); finishBootScreen(); }
-            if (event.key === 'Tab') { event.preventDefault(); skip.focus(); }
+            if (event.key === 'Tab') {
+                const buttons = retry.hidden ? [skip] : [retry, skip];
+                const index = buttons.indexOf(document.activeElement);
+                event.preventDefault();
+                buttons[(index + (event.shiftKey ? -1 : 1) + buttons.length) % buttons.length].focus();
+            }
         };
-        // A stalled request must never leave the archive behind a loading screen.
-        const deadline = window.setTimeout(finishBootScreen, 3200);
         skip.addEventListener('click', finishBootScreen);
+        retry.addEventListener('click', () => task ? run() : window.location.reload());
         document.addEventListener('keydown', onBootKey);
         window.addEventListener('pageshow', onRestore);
-        reduceMotionQuery.addEventListener('change', onMotionChange);
+        window.addEventListener('bhr:languagechange', renderProgress);
         window.addEventListener('load', onLoaded, { once: true });
         background.forEach(element => { element.inert = true; });
         body.classList.add('is-booting');
         bootScreen.hidden = false;
         skip.focus({ preventScroll: true });
+        renderProgress();
         if (document.readyState === 'complete') onLoaded();
+        run();
     } else {
         window.requestAnimationFrame(() => window.requestAnimationFrame(startQueuedMotion));
     }

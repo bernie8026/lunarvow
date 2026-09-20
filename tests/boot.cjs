@@ -9,10 +9,11 @@ const extract = (start, end) => {
   return source.slice(a, b);
 };
 const creation = extract('    const createBootScreen =', '    const header =');
+const flush = async () => { for (let i = 0; i < 12; i++) await Promise.resolve(); };
 const lifecycle = extract('    if (bootScreen) {', '    if (menuToggle && menu) {');
 
 function setup(options = {}) {
-  let now = 0, id = 0, releases = 0;
+  let now = 0, id = 0, releases = 0, cancels = 0, report, resolveRun;
   const timers = new Map();
   class Target {
     constructor() { this.listeners = new Map(); }
@@ -22,15 +23,16 @@ function setup(options = {}) {
   }
   class Element extends Target {
     constructor(tag = 'DIV') {
-      super(); this.tagName = tag; this.inert = false; this.hidden = false; this.children = []; this.attributes = {};
+      super(); this.tagName = tag; this.inert = false; this.hidden = false; this.children = []; this.attributes = {}; this.style = {}; this.nodes = new Map(); this.firstElementChild = {style:{}};
       const classes = new Set();
       this.classList = { add: x => classes.add(x), remove: x => classes.delete(x), contains: x => classes.has(x) };
     }
     setAttribute(name, value) { this.attributes[name] = value; }
     appendChild(child) { this.children.push(child); child.parent = this; }
-    querySelector() { return this.button ??= new Element('BUTTON'); }
+    querySelector(selector) { if (!this.nodes.has(selector)) this.nodes.set(selector,new Element(selector.includes('skip') || selector.includes('retry') ? 'BUTTON' : 'DIV')); return this.nodes.get(selector); }
+    replaceChildren(...nodes) { this.children = nodes; }
     focus() { document.activeElement = this; }
-    contains(element) { return element === this.button; }
+    contains(element) { return [...this.nodes.values()].includes(element); }
     remove() { this.removed = true; this.parent.children = this.parent.children.filter(x => x !== this); }
   }
   const body = new Element('BODY'), header = new Element('HEADER'), main = new Element('MAIN');
@@ -38,18 +40,19 @@ function setup(options = {}) {
   if (!options.inner) body.classList.add('home-page');
   body.appendChild(header); body.appendChild(main);
   const document = Object.assign(new Target(), {
-    body, readyState: options.complete ? 'complete' : 'loading',
+    body, documentElement: {lang:'en'}, fonts: {ready:options.fonts || Promise.resolve()}, readyState: options.complete ? 'complete' : 'loading',
     createElement: tag => new Element(tag.toUpperCase()),
     getElementById: () => main
   });
   const window = Object.assign(new Target(), {
+    BHR_PRELOADER: {create(callback) { report = callback; return {run:()=>new Promise(resolve=>{resolveRun=resolve;report({loaded:0,total:2,failed:[],running:true});}), cancel(){cancels++;}};}},
     location: { hash: options.hash || '' },
     setTimeout(fn, delay) { const key = ++id; timers.set(key, { fn, at: now + delay }); return key; },
     clearTimeout(key) { timers.delete(key); },
     requestAnimationFrame(fn) { return window.setTimeout(fn, 16); }
   });
   const reduceMotionQuery = Object.assign(new Target(), { matches: !!options.reduced });
-  const context = vm.createContext({ body, document, window, reduceMotionQuery,
+  const context = vm.createContext({ body, document, window, reduceMotionQuery, localStorage:{getItem:()=>null},
     performance: { now: () => now, getEntriesByType: () => [{type:options.history ? 'back_forward' : 'navigate'}] },
     startQueuedMotion: () => releases++
   });
@@ -71,39 +74,53 @@ function setup(options = {}) {
     assert.equal(header.inert, !!options.preexistingInert);
     assert.equal(releases, 1);
   }
-  return {screen, body, document, window, main, reduceMotionQuery, advance, usable, timers, get releases(){return releases;} };
+  return {screen, body, document, window, main, reduceMotionQuery, advance, usable, timers, get releases(){return releases;}, get cancels(){return cancels;}, result(ok){report({loaded:ok?2:1,total:2,failed:ok?[]:['bad.png'],running:false});resolveRun(ok);} };
 }
 
 const tests = {
-  'normal loading waits for exit before releasing homepage motion': () => {
-    const t = setup(); assert.equal(t.screen.hidden, false); assert.equal(t.main.inert, true);
-    t.window.emit('load'); t.advance(999); assert.equal(t.releases, 0);
-    t.advance(1); assert.equal(t.screen.classList.contains('is-hidden'), true); assert.equal(t.releases, 0);
-    t.advance(550); t.usable(); assert.equal(t.document.activeElement, t.main);
-    t.window.emit('load'); t.advance(4000); assert.equal(t.releases, 1); assert.equal(t.timers.size, 0);
+  'font readiness delays completion after the document and resources': async () => {
+    let ready;
+    const fonts = new Promise(resolve => { ready = resolve; });
+    const t = setup({complete:true,fonts});
+    t.result(true); await flush(); t.advance(10000); assert.equal(t.releases,0);
+    ready(); await flush(); t.advance(550); t.usable();
   },
-  'cached document still presents the intro': () => { const t = setup({complete:true}); t.advance(1550); t.usable(); },
-  'stalled network releases content at the hard deadline': () => {
-    const t = setup(); t.advance(3199); assert.equal(t.releases, 0); t.advance(1); t.usable();
-    t.window.emit('load'); t.advance(4000); assert.equal(t.releases, 1);
+  'slow full-site downloads never finish at the old deadline': async () => {
+    const t=setup();t.window.emit('load');await flush();t.advance(600000);assert.equal(t.releases,0);
+    assert.equal(t.main.inert,true);t.result(true);await flush();t.advance(549);assert.equal(t.releases,0);
+    t.advance(1);t.usable();assert.equal(t.cancels,1);assert.equal(t.document.activeElement,t.main);
   },
-  'skip preserves existing inert state and clears timers': () => {
-    const t = setup({preexistingInert:true}); t.screen.querySelector().emit('click'); t.usable(); assert.equal(t.timers.size, 0);
+  'resource completion also waits for the current document': async () => {
+    const t=setup();t.result(true);await flush();t.advance(10000);assert.equal(t.releases,0);
+    assert.equal(t.screen.querySelector('.boot-screen__bar').attributes['aria-valuenow'],'99');
+    t.window.emit('load');await flush();t.advance(550);t.usable();
   },
-  'keyboard skip and focus containment': () => {
-    const t = setup(); let prevented = false;
-    t.document.emit('keydown', {key:'Tab', preventDefault(){prevented = true;}});
-    assert.ok(prevented); assert.equal(t.document.activeElement, t.screen.querySelector());
-    t.document.emit('keydown', {key:'Escape', preventDefault(){}}); t.usable();
+  'failure remains visible and retry waits for success': async () => {
+    const t=setup({complete:true});t.result(false);await flush();t.advance(600000);assert.equal(t.releases,0);
+    const retry=t.screen.querySelector('.boot-screen__retry');assert.equal(retry.hidden,false);
+    assert.equal(t.screen.querySelector('.boot-screen__bar').attributes['aria-valuenow'],'50');
+    retry.emit('click');t.result(true);await flush();t.advance(550);t.usable();
   },
-  'reduced motion, inner pages, anchors and history skip the overlay': () => {
-    for (const options of [{reduced:true},{inner:true},{hash:'#archive'},{history:true}]) {
-      const t = setup(options); assert.equal(t.screen, null); t.advance(32); t.usable();
+  'skip cancels requests and restores existing inert state exactly once': async () => {
+    const t=setup({preexistingInert:true});t.screen.querySelector('.boot-screen__skip').emit('click');t.usable();
+    t.result(true);await flush();t.advance(10000);assert.equal(t.releases,1);assert.equal(t.timers.size,0);
+  },
+  'keyboard focus cycles through retry and skip': async () => {
+    const t=setup();t.result(false);await flush();let prevented=false;
+    t.document.emit('keydown',{key:'Tab',preventDefault(){prevented=true;}});
+    assert.ok(prevented);assert.equal(t.document.activeElement,t.screen.querySelector('.boot-screen__retry'));
+    t.document.emit('keydown',{key:'Escape',preventDefault(){}});t.usable();
+  },
+  'reduced motion, inner pages, anchors and history still wait for resources': async () => {
+    for(const options of [{reduced:true},{inner:true},{hash:'#archive'},{history:true}]) {
+      const t=setup({...options,complete:true});assert.ok(t.screen);await flush();t.advance(10000);assert.equal(t.releases,0);
+      t.result(true);await flush();t.advance(options.reduced?0:550);t.usable();
     }
   },
-  'restored pages and a motion preference change cannot retain the overlay': () => {
-    const a = setup(); a.window.emit('pageshow',{persisted:true}); a.usable();
-    const b = setup(); b.reduceMotionQuery.emit('change',{matches:true}); b.usable();
+  'BFCache restore cleans up; reduced motion does not bypass downloads': async () => {
+    const a=setup();a.window.emit('pageshow',{persisted:true});a.usable();
+    const b=setup();b.reduceMotionQuery.emit('change',{matches:true});assert.equal(b.releases,0);
+    b.screen.querySelector('.boot-screen__skip').emit('click');b.usable();
   },
   'cached character reveals wait for boot completion': () => {
     const image = {style:{},dataset:{},matches:()=>true}; const state = {};
@@ -122,4 +139,4 @@ const tests = {
     assert.match(html, /id="main-content" tabindex="-1"/);
   }
 };
-for (const [name, test] of Object.entries(tests)) { test(); console.log('PASS boot:', name); }
+(async()=>{for (const [name, test] of Object.entries(tests)) { await test(); console.log('PASS boot:', name); }})().catch(error=>{console.error(error);process.exitCode=1;});

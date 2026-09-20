@@ -87,6 +87,8 @@ body.is-booting { overflow: hidden; }
     background: var(--ink);
     color: var(--paper);
     text-align: center;
+    padding: 24px;
+    overflow-y: auto;
     transition: opacity 0.55s ease, visibility 0.55s ease;
 }
 
@@ -116,7 +118,8 @@ body.is-booting { overflow: hidden; }
     pointer-events: none;
 }
 
-.boot-screen__skip {
+.boot-screen__skip,
+.boot-screen__retry {
     position: relative;
     z-index: 1;
     justify-self: center;
@@ -128,8 +131,27 @@ body.is-booting { overflow: hidden; }
     font: 700 0.7rem var(--display);
     letter-spacing: 0.08em;
     cursor: pointer;
+    line-height: 1.6;
+    letter-spacing: 0.04em;
 }
 .boot-screen__skip:hover { background: rgba(255, 255, 255, 0.08); }
+.boot-screen__retry[hidden], .boot-screen__errors[hidden] { display: none; }
+.boot-screen__actions { position: relative; z-index: 1; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+.boot-screen__actions button:focus-visible { outline: 2px solid var(--signal); outline-offset: 4px; }
+.boot-screen__errors {
+    position: relative;
+    z-index: 1;
+    width: min(480px, 82vw);
+    max-height: 22vh;
+    overflow-y: auto;
+    overflow-wrap: anywhere;
+    text-align: left;
+    margin: 0 auto;
+    padding: 8px 8px 8px 24px;
+    font-size: 0.7rem;
+    line-height: 1.7;
+}
+.boot-screen .boot-screen__status { max-width: min(480px, 82vw); margin: 0 auto; line-height: 1.8; letter-spacing: 0.03em; font-size: 0.75rem; }
 
 .boot-screen__mark {
     position: relative;
@@ -165,19 +187,20 @@ body.is-booting { overflow: hidden; }
     height: 2px;
     overflow: hidden;
     background: rgba(255, 255, 255, 0.14);
+    justify-self: center;
 }
 
 .boot-screen__bar span {
     display: block;
-    width: 48%;
+    width: 100%;
     height: 100%;
     background: var(--signal);
-    animation: boot-progress 1.05s cubic-bezier(.76, 0, .24, 1) infinite;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.2s ease;
 }
-
-@keyframes boot-progress {
-    from { transform: translateX(-110%); }
-    to { transform: translateX(220%); }
+@media (prefers-reduced-motion: reduce) {
+    .boot-screen, .boot-screen__bar span { transition: none; }
 }
 
 /* Shared brand */

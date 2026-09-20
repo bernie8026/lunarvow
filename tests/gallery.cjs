@@ -16,10 +16,12 @@ module.exports = async function testGallery(browser, baseURL) {
       if (route.request().resourceType() === 'image') return route.fulfill({ contentType: 'image/webp', body: portrait });
       return route.abort();
     });
+    await require('./preload-fixture.cjs').configure(context);
     const page = await context.newPage();
     const errors = [];
     page.on('pageerror', error => errors.push(error.message));
     await page.goto(new URL('hi3.html', baseURL).href);
+   await page.locator('.boot-screen').waitFor({state:'hidden'});
     await page.waitForFunction(() => document.querySelector('#grid').getAttribute('aria-busy') === 'false' && window.BHR_I18N);
     assert.equal(await page.locator('.card:visible').count(), total);
     assert.equal(await page.locator('#clear-search').isVisible(), false);
@@ -73,6 +75,7 @@ module.exports = async function testGallery(browser, baseURL) {
       return route.fulfill({ status: attempts === 1 ? 503 : 200, contentType: 'application/json', body: database });
     });
     await retryPage.goto(new URL('hi3.html', baseURL).href);
+   await retryPage.locator('.boot-screen').waitFor({state:'hidden'});
     await retryPage.locator('.empty-state button').waitFor();
     assert.equal(await retryPage.locator('#search').isDisabled(), true);
     await retryPage.locator('.empty-state button').click();
@@ -84,6 +87,7 @@ module.exports = async function testGallery(browser, baseURL) {
     const emptyPage = await context.newPage();
     await emptyPage.route('**/data/characters.json', route => route.fulfill({ contentType: 'application/json', body: '[]' }));
     await emptyPage.goto(new URL('hi3.html', baseURL).href);
+   await emptyPage.locator('.boot-screen').waitFor({state:'hidden'});
     await emptyPage.waitForFunction(() => document.querySelector('#grid').getAttribute('aria-busy') === 'false');
     assert.match(await emptyPage.locator('.empty-state').innerText(), /暫時未有角色檔案/);
     assert.equal(await emptyPage.locator('#search').isEnabled(), true);

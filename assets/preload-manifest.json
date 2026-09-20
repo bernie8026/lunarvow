@@ -1,0 +1,268 @@
+{
+  "resources": [
+    {
+      "url": "37F3ABEF-68FA-4C1F-8DE2-DB172D4C28F1.jpeg",
+      "type": "image"
+    },
+    {
+      "url": "Honkai Impact 7.0 PV BGM, Re_ Promise to Luna (1).mp3",
+      "type": "fetch"
+    },
+    {
+      "url": "Honkai Impact 7.0 PV BGM, Re_ Promise to Luna (1).mp3?v=7",
+      "type": "fetch"
+    },
+    {
+      "url": "assets/audio/lunar-vow-theme-loop.webm",
+      "type": "fetch"
+    },
+    {
+      "url": "assets/endfield-ui.css",
+      "type": "fetch"
+    },
+    {
+      "url": "assets/fluid-responsive.css",
+      "type": "fetch"
+    },
+    {
+      "url": "assets/hi3-gallery/name-corrections.js",
+      "type": "fetch"
+    },
+    {
+      "url": "assets/hi3-gallery/script.js",
+      "type": "fetch"
+    },
+    {
+      "url": "assets/hi3-gallery/source.css",
+      "type": "fetch"
+    },
+    {
+      "url": "assets/hi3-gallery/styles.css",
+      "type": "fetch"
+    },
+    {
+      "url": "assets/hi3/characters/bronya-zaychik.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/characters/elysia.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/characters/fu-hua.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/characters/kallen-kaslana.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/characters/kiana-kaslana.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/characters/liliya-olenyeva.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/characters/lunar-vow-crimson-love.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/characters/murata-himeko.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/characters/raiden-mei.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/characters/rita-rossweisse.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/characters/seele-vollerei.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/characters/theresa-apocalypse.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/characters/yae-sakura.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/i18n.css",
+      "type": "fetch"
+    },
+    {
+      "url": "assets/i18n.js",
+      "type": "fetch"
+    },
+    {
+      "url": "assets/inner-header.css",
+      "type": "fetch"
+    },
+    {
+      "url": "assets/lunar-guide-title-i18n.js",
+      "type": "fetch"
+    },
+    {
+      "url": "assets/music-player.css",
+      "type": "fetch"
+    },
+    {
+      "url": "assets/music-player.js",
+      "type": "fetch"
+    },
+    {
+      "url": "assets/placeholder.png",
+      "type": "image"
+    },
+    {
+      "url": "assets/preloader.js",
+      "type": "fetch"
+    },
+    {
+      "url": "assets/red-pink-theme.css",
+      "type": "fetch"
+    },
+    {
+      "url": "assets/story.css",
+      "type": "fetch"
+    },
+    {
+      "url": "captain-line.html",
+      "type": "fetch"
+    },
+    {
+      "url": "data/characters.json",
+      "type": "fetch"
+    },
+    {
+      "url": "gallery.html",
+      "type": "fetch"
+    },
+    {
+      "url": "guide.html",
+      "type": "fetch"
+    },
+    {
+      "url": "hi3.html",
+      "type": "fetch"
+    },
+    {
+      "url": "honkai-info.html",
+      "type": "fetch"
+    },
+    {
+      "url": "https://cdn.jsdelivr.net/npm/opencc-js@1.0.5/dist/umd/t2cn.js",
+      "type": "fetch"
+    },
+    {
+      "url": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Celestial%20Hymn%20%28Portrait%29.png",
+      "type": "image"
+    },
+    {
+      "url": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Disciplinary%20Perdition%20%28Portrait%29.png",
+      "type": "image"
+    },
+    {
+      "url": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Flame%20Sakitama%20%28Portrait%29.png",
+      "type": "image"
+    },
+    {
+      "url": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Golden%20Diva%20%28Portrait%29.png",
+      "type": "image"
+    },
+    {
+      "url": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Helical%20Contraption%20%28Portrait%29.png",
+      "type": "image"
+    },
+    {
+      "url": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Herrscher%20of%20Finality%20%28Portrait%29.png",
+      "type": "image"
+    },
+    {
+      "url": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Herrscher%20of%20Origin%20%28Portrait%29.png",
+      "type": "image"
+    },
+    {
+      "url": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Herrscher%20of%20Truth%20%28Portrait%29.png",
+      "type": "image"
+    },
+    {
+      "url": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Infinite%20Ouroboros%20%28Portrait%29.png",
+      "type": "image"
+    },
+    {
+      "url": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Jade%20Knight%20%28Portrait%29.png",
+      "type": "image"
+    },
+    {
+      "url": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Lunar%20Vow%20-%20Crimson%20Love%20%28Portrait%29.png",
+      "type": "image"
+    },
+    {
+      "url": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Mad%20Pleasure%20-%20Shadowbringer%20%28Portrait%29.png",
+      "type": "image"
+    },
+    {
+      "url": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Miracle%20%E2%98%86%20Magical%20Girl%20%28Portrait%29.png",
+      "type": "image"
+    },
+    {
+      "url": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Miss%20Pink%20Elf%E2%99%AA%20%28Portrait%29.png",
+      "type": "image"
+    },
+    {
+      "url": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Prinzessin%20der%20Verurteilung%21%20%28Portrait%29.png",
+      "type": "image"
+    },
+    {
+      "url": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Reverist%20Calico%20%28Portrait%29.png",
+      "type": "image"
+    },
+    {
+      "url": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Starry%20Impression%20%28Portrait%29.png",
+      "type": "image"
+    },
+    {
+      "url": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Sweet%20%27n%27%20Spicy%20%28Portrait%29.png",
+      "type": "image"
+    },
+    {
+      "url": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Terminal%20Aide%200017%20%28Portrait%29.png",
+      "type": "image"
+    },
+    {
+      "url": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Valkyrie%20Quicksand%20%28Portrait%29.png",
+      "type": "image"
+    },
+    {
+      "url": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Vermilion%20Knight%20-%20Eclipse%20%28Portrait%29.png",
+      "type": "image"
+    },
+    {
+      "url": "index.html",
+      "type": "fetch"
+    },
+    {
+      "url": "lunar-vow-guide.html",
+      "type": "fetch"
+    },
+    {
+      "url": "site.js",
+      "type": "fetch"
+    },
+    {
+      "url": "story.html",
+      "type": "fetch"
+    },
+    {
+      "url": "style.css",
+      "type": "fetch"
+    }
+  ]
+}
