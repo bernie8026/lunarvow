@@ -32,7 +32,7 @@ function setup(options = {}) {
     querySelector(selector) { if (!this.nodes.has(selector)) this.nodes.set(selector,new Element(selector.includes('skip') || selector.includes('retry') ? 'BUTTON' : 'DIV')); return this.nodes.get(selector); }
     replaceChildren(...nodes) { this.children = nodes; }
     focus() { document.activeElement = this; }
-    contains(element) { return [...this.nodes.values()].includes(element); }
+    contains(element) { return element === this || [...this.nodes.values()].includes(element); }
     remove() { this.removed = true; this.parent.children = this.parent.children.filter(x => x !== this); }
   }
   const body = new Element('BODY'), header = new Element('HEADER'), main = new Element('MAIN');
@@ -85,38 +85,40 @@ const tests = {
     t.result(true); await flush(); t.advance(1000); assert.equal(t.releases,0);
     ready(); await flush(); t.advance(550); t.usable();
   },
-  'slow downloads release the page after four seconds': async () => {
-    const t=setup();t.window.emit('load');await flush();t.advance(3999);assert.equal(t.releases,0);
-    assert.equal(t.main.inert,true);t.advance(1);t.usable();
+  'slow downloads never bypass the complete preload requirement': async () => {
+    const t=setup();t.window.emit('load');await flush();t.advance(600000);assert.equal(t.releases,0);
+    assert.equal(t.main.inert,true);assert.equal(t.cancels,0);
+    t.result(true);await flush();t.advance(550);t.usable();
     assert.equal(t.cancels,1);assert.equal(t.document.activeElement,t.main);
-    t.result(true);await flush();t.advance(10000);assert.equal(t.releases,1);
   },
   'resource completion also waits for the current document': async () => {
     const t=setup();t.result(true);await flush();t.advance(1000);assert.equal(t.releases,0);
     assert.equal(t.screen.querySelector('.boot-screen__bar').attributes['aria-valuenow'],'99');
     t.window.emit('load');await flush();t.advance(550);t.usable();
   },
-  'failure offers retry during the loading window': async () => {
+  'failure offers retry until every resource succeeds': async () => {
     const t=setup({complete:true});t.result(false);await flush();t.advance(1000);assert.equal(t.releases,0);
     const retry=t.screen.querySelector('.boot-screen__retry');assert.equal(retry.hidden,false);
     assert.equal(t.screen.querySelector('.boot-screen__bar').attributes['aria-valuenow'],'50');
     retry.emit('click');t.result(true);await flush();t.advance(550);t.usable();
   },
-  'skip cancels requests and restores existing inert state exactly once': async () => {
-    const t=setup({preexistingInert:true});t.screen.querySelector('.boot-screen__skip').emit('click');t.usable();
-    t.result(true);await flush();t.advance(10000);assert.equal(t.releases,1);assert.equal(t.timers.size,0);
+  'completion restores existing inert state exactly once': async () => {
+    const t=setup({preexistingInert:true,complete:true});t.result(true);await flush();t.advance(550);t.usable();
+    t.advance(10000);assert.equal(t.releases,1);assert.equal(t.timers.size,0);
   },
-  'failed downloads and fonts cannot keep the page inert forever': async () => {
+  'failed downloads and pending fonts prevent early entry': async () => {
     for (const options of [{complete:true}, {complete:true, fonts:new Promise(()=>{})}]) {
       const t=setup(options);t.result(false);await flush();
-      t.advance(4000);t.usable();assert.equal(t.timers.size,0);
+      t.advance(600000);assert.equal(t.releases,0);assert.equal(t.main.inert,true);
+      assert.equal(t.screen.querySelector('.boot-screen__retry').hidden,false);
     }
   },
-  'keyboard focus cycles through retry and skip': async () => {
+  'keyboard focus stays on retry and Escape does not bypass loading': async () => {
     const t=setup();t.result(false);await flush();let prevented=false;
     t.document.emit('keydown',{key:'Tab',preventDefault(){prevented=true;}});
     assert.ok(prevented);assert.equal(t.document.activeElement,t.screen.querySelector('.boot-screen__retry'));
-    t.document.emit('keydown',{key:'Escape',preventDefault(){}});t.usable();
+    t.document.emit('keydown',{key:'Escape',preventDefault(){}});assert.equal(t.releases,0);
+    t.screen.querySelector('.boot-screen__retry').emit('click');t.result(true);t.window.emit('load');await flush();t.advance(550);t.usable();
   },
   'fast preloads still work on reduced motion, inner pages, anchors and history': async () => {
     for(const options of [{reduced:true},{inner:true},{hash:'#archive'},{history:true}]) {
@@ -124,10 +126,10 @@ const tests = {
       t.result(true);await flush();t.advance(options.reduced?0:550);t.usable();
     }
   },
-  'BFCache restore cleans up and reduced motion preserves the bounded loading window': async () => {
+  'BFCache restore cleans up and reduced motion still waits for completion': async () => {
     const a=setup();a.window.emit('pageshow',{persisted:true});a.usable();
     const b=setup();b.reduceMotionQuery.emit('change',{matches:true});assert.equal(b.releases,0);
-    b.screen.querySelector('.boot-screen__skip').emit('click');b.usable();
+    b.result(true);b.window.emit('load');await flush();b.advance(550);b.usable();
   },
   'cached character reveals wait for boot completion': () => {
     const image = {style:{},dataset:{},matches:()=>true}; const state = {};

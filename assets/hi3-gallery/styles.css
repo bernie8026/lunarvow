@@ -216,9 +216,9 @@
 
 .card .thumb {
     width: 100%;
-    aspect-ratio: 3 / 4;
-    object-fit: cover;
-    object-position: center top;
+    aspect-ratio: 6 / 5;
+    object-fit: contain;
+    object-position: center;
     background:
         linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px),

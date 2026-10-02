@@ -1,5 +1,6 @@
 (() => {
     'use strict';
+    const languageRoot = new URL('./', document.currentScript.src);
 
     const STORAGE_KEY = 'bhr-language';
     const SUPPORTED = ['zh-HK', 'en', 'zh-CN'];
@@ -232,11 +233,11 @@
         '迷城駭兔': 'Haxxor Bunny',
         '艦長線其他世界泡角色': 'Other Captainverse bubble-universe characters',
         '艦長線資料會按活動內容逐步補充，暫時以索引形式展示。': 'Captainverse information will be expanded with event content; it is currently presented as an index.',
-        '角色、戰衣肖像、中文名同英文名全部集中喺可搜尋資料庫。': 'Characters, battlesuit portraits, and names are collected in a searchable database.',
+        '角色、戰衣頭像、中文名同英文名全部集中喺可搜尋資料庫。': 'Characters, battlesuit avatars, and names are collected in a searchable database.',
         '女武神檔案': 'Valkyrie Files',
-        '已為現有角色清單補上代表戰衣肖像。輸入角色英文名、中文名、slug 或戰衣名即可篩選；按角色圖片可以開啟大圖及查看來源。': 'Representative battlesuit portraits have been added for the current character list. Search by character name, slug, or battlesuit, then select an image to open the full view and source.',
+        '現有角色清單附有代表戰衣頭像。輸入角色英文名、中文名、slug 或戰衣名即可篩選；按角色圖片可以開啟圖片及查看來源。': 'The character list includes representative battlesuit avatars. Search by character name, slug, or battlesuit, then select an image to open it and view its source.',
         '輸入角色或戰衣名稱…': 'Enter a character or battlesuit name…',
-        '角色肖像來源：Official Honkai Impact 3 Wiki；角色圖像、名稱及遊戲素材權利屬於其原權利持有人。本頁為非官方、非商業個人收藏資料庫。': 'Character portraits are sourced from the Official Honkai Impact 3 Wiki. Character images, names, and game assets belong to their respective owners. This is an unofficial, non-commercial personal collection database.',
+        '角色戰衣頭像附有來源連結；角色圖像、名稱及遊戲素材權利屬於其原權利持有人。本頁為非官方、非商業個人收藏資料庫。': 'Battlesuit avatars include source links. Character images, names, and game assets belong to their respective owners. This is an unofficial, non-commercial personal collection database.',
         '無法載入角色資料': 'Unable to load character data',
         '搵唔到相符角色': 'No matching character found',
         '開啟': 'Open',
@@ -572,9 +573,8 @@
 
             const script = document.createElement('script');
             const timeout = window.setTimeout(() => resolve(null), 5000);
-            script.src = 'https://cdn.jsdelivr.net/npm/opencc-js@1.0.5/dist/umd/t2cn.js';
+            script.src = new URL('vendor/opencc/hk2cn.js', languageRoot).href;
             script.async = true;
-            script.crossOrigin = 'anonymous';
             script.onload = () => {
                 window.clearTimeout(timeout);
                 try {

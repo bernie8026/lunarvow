@@ -93,6 +93,90 @@
       "type": "image"
     },
     {
+      "url": "assets/hi3/portraits/aponia.png",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/portraits/bronya-zaychik.png",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/portraits/carole-pepper.png",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/portraits/eden.png",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/portraits/elysia.png",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/portraits/fischl.png",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/portraits/griseo.png",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/portraits/himeko-murata.png",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/portraits/kiana-kaslana.png",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/portraits/li-sushang.png",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/portraits/lunar-vow-crimson-love.png",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/portraits/mobius.png",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/portraits/pardofelis.png",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/portraits/prometheus.png",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/portraits/raiden-mei.png",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/portraits/sirin.png",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/portraits/susannah.png",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/portraits/thelema-nutriscu.png",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/portraits/theresa-apocalypse.png",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/portraits/vill-v.png",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/portraits/yae-sakura.png",
+      "type": "image"
+    },
+    {
       "url": "assets/i18n.css",
       "type": "fetch"
     },
@@ -133,6 +217,10 @@
       "type": "fetch"
     },
     {
+      "url": "assets/vendor/opencc/hk2cn.js",
+      "type": "fetch"
+    },
+    {
       "url": "captain-line.html",
       "type": "fetch"
     },
@@ -155,94 +243,6 @@
     {
       "url": "honkai-info.html",
       "type": "fetch"
-    },
-    {
-      "url": "https://cdn.jsdelivr.net/npm/opencc-js@1.0.5/dist/umd/t2cn.js",
-      "type": "fetch"
-    },
-    {
-      "url": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Celestial%20Hymn%20%28Portrait%29.png",
-      "type": "image"
-    },
-    {
-      "url": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Disciplinary%20Perdition%20%28Portrait%29.png",
-      "type": "image"
-    },
-    {
-      "url": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Flame%20Sakitama%20%28Portrait%29.png",
-      "type": "image"
-    },
-    {
-      "url": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Golden%20Diva%20%28Portrait%29.png",
-      "type": "image"
-    },
-    {
-      "url": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Helical%20Contraption%20%28Portrait%29.png",
-      "type": "image"
-    },
-    {
-      "url": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Herrscher%20of%20Finality%20%28Portrait%29.png",
-      "type": "image"
-    },
-    {
-      "url": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Herrscher%20of%20Origin%20%28Portrait%29.png",
-      "type": "image"
-    },
-    {
-      "url": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Herrscher%20of%20Truth%20%28Portrait%29.png",
-      "type": "image"
-    },
-    {
-      "url": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Infinite%20Ouroboros%20%28Portrait%29.png",
-      "type": "image"
-    },
-    {
-      "url": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Jade%20Knight%20%28Portrait%29.png",
-      "type": "image"
-    },
-    {
-      "url": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Lunar%20Vow%20-%20Crimson%20Love%20%28Portrait%29.png",
-      "type": "image"
-    },
-    {
-      "url": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Mad%20Pleasure%20-%20Shadowbringer%20%28Portrait%29.png",
-      "type": "image"
-    },
-    {
-      "url": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Miracle%20%E2%98%86%20Magical%20Girl%20%28Portrait%29.png",
-      "type": "image"
-    },
-    {
-      "url": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Miss%20Pink%20Elf%E2%99%AA%20%28Portrait%29.png",
-      "type": "image"
-    },
-    {
-      "url": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Prinzessin%20der%20Verurteilung%21%20%28Portrait%29.png",
-      "type": "image"
-    },
-    {
-      "url": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Reverist%20Calico%20%28Portrait%29.png",
-      "type": "image"
-    },
-    {
-      "url": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Starry%20Impression%20%28Portrait%29.png",
-      "type": "image"
-    },
-    {
-      "url": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Sweet%20%27n%27%20Spicy%20%28Portrait%29.png",
-      "type": "image"
-    },
-    {
-      "url": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Terminal%20Aide%200017%20%28Portrait%29.png",
-      "type": "image"
-    },
-    {
-      "url": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Valkyrie%20Quicksand%20%28Portrait%29.png",
-      "type": "image"
-    },
-    {
-      "url": "https://honkaiimpact3.fandom.com/wiki/Special:Redirect/file/Vermilion%20Knight%20-%20Eclipse%20%28Portrait%29.png",
-      "type": "image"
     },
     {
       "url": "index.html",

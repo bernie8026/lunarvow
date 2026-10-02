@@ -64,7 +64,7 @@
 
     loadLanguageSystem();
 
-    // Preloading is best-effort; a slow resource must never lock visitors out.
+    // Enter only after every resource and the current page are ready.
     const createBootScreen = () => {
         const screen = document.createElement('div');
         screen.className = 'boot-screen';
@@ -73,6 +73,7 @@
         screen.setAttribute('aria-modal', 'true');
         screen.setAttribute('aria-label', 'Honkai Realm — 載入檔案');
         screen.setAttribute('data-i18n-ignore', '');
+        screen.setAttribute('tabindex', '-1');
         screen.innerHTML = `
             <div class="boot-screen__mark" aria-hidden="true">BHR</div>
             <p>BERNIE'S HONKAI REALM</p>
@@ -81,7 +82,6 @@
             <ul class="boot-screen__errors" hidden></ul>
             <div class="boot-screen__actions">
                 <button class="boot-screen__retry" type="button" hidden>重試未完成項目</button>
-                <button class="boot-screen__skip" type="button">略過預載，直接進入 ↗</button>
             </div>`;
         body.appendChild(screen);
         return screen;
@@ -546,7 +546,6 @@
     });
 
     if (bootScreen) {
-        const skip = bootScreen.querySelector('.boot-screen__skip');
         const retry = bootScreen.querySelector('.boot-screen__retry');
         const status = bootScreen.querySelector('.boot-screen__status');
         const errors = bootScreen.querySelector('.boot-screen__errors');
@@ -556,15 +555,14 @@
         let finished = false;
         let leaving = false;
         let exitTimer;
-        let deadlineTimer;
         let pageReady = false;
         let preloadReady = false;
         let pageError = false;
         let progress = { loaded: 0, total: 0, failed: [], running: true };
         const labels = {
-            'zh-HK': { title: '全站資源載入', preparing: '正在讀取全站資源清單…', loading: '正在預載全站', ready: '全站資源載入完成', page: '正在準備目前頁面…', failed: '項資源未能載入', retry: '重試未完成項目', skip: '略過預載，直接進入 ↗' },
-            'zh-CN': { title: '全站资源加载', preparing: '正在读取全站资源清单…', loading: '正在预载全站', ready: '全站资源加载完成', page: '正在准备当前页面…', failed: '项资源未能加载', retry: '重试未完成项目', skip: '略过预载，直接进入 ↗' },
-            en: { title: 'Loading all site resources', preparing: 'Reading the site resource list…', loading: 'Loading the entire site', ready: 'All site resources loaded', page: 'Preparing the current page…', failed: 'resources could not load', retry: 'Retry unfinished items', skip: 'Skip preload and enter ↗' }
+            'zh-HK': { title: '全站資源載入', preparing: '正在讀取全站資源清單…', loading: '正在預載全站', ready: '全站資源載入完成', page: '正在準備目前頁面…', failed: '項資源未能載入', retry: '重試未完成項目' },
+            'zh-CN': { title: '全站资源加载', preparing: '正在读取全站资源清单…', loading: '正在预载全站', ready: '全站资源加载完成', page: '正在准备当前页面…', failed: '项资源未能加载', retry: '重试未完成项目' },
+            en: { title: 'Loading all site resources', preparing: 'Reading the site resource list…', loading: 'Loading the entire site', ready: 'All site resources loaded', page: 'Preparing the current page…', failed: 'resources could not load', retry: 'Retry unfinished items' }
         };
         const renderProgress = () => {
             if (finished) return;
@@ -580,13 +578,19 @@
             bar.firstElementChild.style.transform = `scaleX(${percent / 100})`;
             status.textContent = ready ? text.ready : failed.length && !progress.running ? `${failed.length} ${text.failed}` :
                 progress.total ? `${text.loading}: ${progress.loaded} / ${progress.total} (${percent}%)${preloadReady ? ` — ${text.page}` : ''}` : text.preparing;
-            skip.textContent = text.skip;
             retry.textContent = text.retry;
             retry.hidden = progress.running || !failed.length;
             errors.hidden = !failed.length;
             errors.replaceChildren(...failed.map(url => {
                 const item = document.createElement('li');
-                item.textContent = url;
+                const detail = progress.errors?.find(error => error.url === url);
+                const reasons = {
+                    'zh-HK': { timeout: '下載逾時（60 秒）', http: '伺服器回應', image: '圖片無法載入或解碼', network: '連線失敗或請求被阻擋', manifest: '資源清單格式錯誤' },
+                    'zh-CN': { timeout: '下载超时（60 秒）', http: '服务器响应', image: '图片无法加载或解码', network: '连接失败或请求被阻挡', manifest: '资源清单格式错误' },
+                    en: { timeout: 'Download timed out (60 seconds)', http: 'Server response', image: 'Image could not load or decode', network: 'Connection failed or request blocked', manifest: 'Invalid resource list' }
+                };
+                const reason = (reasons[language] || reasons['zh-HK'])[detail?.code];
+                item.textContent = `${url}${reason ? ` — ${reason}${detail.status ? ` (HTTP ${detail.status})` : ''}` : ''}`;
                 return item;
             }));
         };
@@ -596,7 +600,6 @@
             finished = true;
             task?.cancel();
             window.clearTimeout(exitTimer);
-            window.clearTimeout(deadlineTimer);
             window.removeEventListener('load', onLoaded);
             window.removeEventListener('pageshow', onRestore);
             window.removeEventListener('bhr:languagechange', renderProgress);
@@ -613,7 +616,7 @@
             leaving = true;
             renderProgress();
             bootScreen.classList.add('is-hidden');
-            // Successful preload can finish early; the deadline also handles offline/font failures.
+            // Failures stay visible until retry succeeds; there is no automatic bypass.
             exitTimer = window.setTimeout(finishBootScreen, reduceMotionQuery.matches ? 0 : 550);
         };
         const onLoaded = async () => {
@@ -639,15 +642,11 @@
         };
         const onRestore = event => { if (event.persisted) finishBootScreen(); };
         const onBootKey = event => {
-            if (event.key === 'Escape') { event.preventDefault(); finishBootScreen(); }
             if (event.key === 'Tab') {
-                const buttons = retry.hidden ? [skip] : [retry, skip];
-                const index = buttons.indexOf(document.activeElement);
                 event.preventDefault();
-                buttons[(index + (event.shiftKey ? -1 : 1) + buttons.length) % buttons.length].focus();
+                (retry.hidden ? bootScreen : retry).focus();
             }
         };
-        skip.addEventListener('click', finishBootScreen);
         retry.addEventListener('click', () => task ? run() : window.location.reload());
         document.addEventListener('keydown', onBootKey);
         window.addEventListener('pageshow', onRestore);
@@ -656,10 +655,9 @@
         background.forEach(element => { element.inert = true; });
         body.classList.add('is-booting');
         bootScreen.hidden = false;
-        skip.focus({ preventScroll: true });
+        bootScreen.focus({ preventScroll: true });
         renderProgress();
         if (document.readyState === 'complete') onLoaded();
-        deadlineTimer = window.setTimeout(finishBootScreen, 4000);
         run();
     } else {
         window.requestAnimationFrame(() => window.requestAnimationFrame(startQueuedMotion));
