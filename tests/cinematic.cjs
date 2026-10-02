@@ -9,6 +9,9 @@ module.exports = async (browser, baseURL) => {
   fs.mkdirSync(previews, {recursive:true});
   let release;
   let pending = new Promise(resolve => { release = resolve; });
+  // Simulate an older cached base stylesheet without the new import.
+  await context.route('**/style.css', route => route.fulfill({contentType:'text/css',
+    body:fs.readFileSync(path.join(__dirname,'../style.css'),'utf8').replace('@import url("assets/boot-cinematic.css");','') }));
   await context.route('**/assets/preload-manifest.json', route => route.fulfill({contentType:'application/json', body:JSON.stringify({
     resources:[{url:'style.css',type:'fetch'},{url:'assets/lunar-collection/crimson-vow-mobile.webp',type:'image'}]
   })}));
@@ -20,6 +23,7 @@ module.exports = async (browser, baseURL) => {
     const screen = page.locator('.boot-screen');
     await page.waitForFunction(() => document.querySelector('.boot-screen__bar')?.getAttribute('aria-valuenow') === '50');
     assert.equal(await page.locator('.boot-screen--cinematic').count(), 1);
+    assert.equal(await page.locator('#bhr-cinematic-style').count(), 1);
     assert.equal(await page.evaluate(() => sessionStorage.getItem('bhr-lunar-arrival-v1')), null);
     assert.equal(await page.locator('#main-content').evaluate(el => el.inert), true);
     assert.equal(await page.locator('.boot-screen__ring-progress').getAttribute('stroke-dashoffset'), '50');

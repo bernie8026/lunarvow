@@ -1,6 +1,15 @@
 (() => {
     'use strict';
 
+    // An older cached base stylesheet must still receive the arrival styles.
+    if (!document.getElementById('bhr-cinematic-style')) {
+        const arrivalStyle = document.createElement('link');
+        arrivalStyle.id = 'bhr-cinematic-style';
+        arrivalStyle.rel = 'stylesheet';
+        arrivalStyle.href = 'assets/boot-cinematic.css';
+        document.head.appendChild(arrivalStyle);
+    }
+
     const themeId = 'crimson-rose-theme';
     if (!document.getElementById(themeId)) {
         const themeLink = document.createElement('link');
