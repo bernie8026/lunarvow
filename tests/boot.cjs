@@ -40,7 +40,7 @@ function setup(options = {}) {
   if (!options.inner) body.classList.add('home-page');
   body.appendChild(header); body.appendChild(main);
   const document = Object.assign(new Target(), {
-    body, documentElement: {lang:'en'}, fonts: {ready:options.fonts || Promise.resolve()}, readyState: options.complete ? 'complete' : 'loading',
+    body, documentElement: {lang:options.language || 'en'}, fonts: {ready:options.fonts || Promise.resolve()}, readyState: options.complete ? 'complete' : 'loading',
     createElement: tag => new Element(tag.toUpperCase()),
     getElementById: () => main
   });
@@ -52,7 +52,7 @@ function setup(options = {}) {
     requestAnimationFrame(fn) { return window.setTimeout(fn, 16); }
   });
   const reduceMotionQuery = Object.assign(new Target(), { matches: !!options.reduced });
-  const session = new Map(options.seen ? [['bhr-lunar-arrival-v1', 'complete']] : []);
+  const session = new Map((options.seen ?? true) ? [['bhr-lunar-arrival-v1', 'complete']] : []);
   const context = vm.createContext({ body, document, window, reduceMotionQuery, localStorage:{getItem:()=>null},
     sessionStorage: { getItem:key=>session.get(key), setItem:(key,value)=>session.set(key,value) },
     performance: { now: () => now, getEntriesByType: () => [{type:options.history ? 'back_forward' : 'navigate'}] },
@@ -76,10 +76,70 @@ function setup(options = {}) {
     assert.equal(header.inert, !!options.preexistingInert);
     assert.equal(releases, 1);
   }
-  return {screen, body, document, window, main, reduceMotionQuery, advance, usable, timers, get releases(){return releases;}, get cancels(){return cancels;}, result(ok){report({loaded:ok?2:1,total:2,failed:ok?[]:['bad.png'],running:false});resolveRun(ok);} };
+  return {screen, body, document, window, main, reduceMotionQuery, session, advance, usable, timers, get releases(){return releases;}, get cancels(){return cancels;}, result(ok){report({loaded:ok?2:1,total:2,failed:ok?[]:['bad.png'],running:false});resolveRun(ok);} };
 }
 
 const tests = {
+  'first arrival waits until ten seconds from display, including download time': async () => {
+    const t=setup({seen:false,complete:true});
+    t.advance(2000);t.result(true);await flush();
+    assert.equal(t.screen.querySelector('.boot-screen__bar').attributes['aria-valuenow'],'100');
+    assert.equal(t.screen.querySelector('.boot-screen__skip-animation').hidden,false);
+    assert.equal(t.main.inert,true);assert.equal(t.session.get('bhr-lunar-arrival-v1'),undefined);
+    // Repeated readiness callbacks must not add or restart a timer.
+    t.window.emit('load');await flush();assert.equal(t.timers.size,1);
+    t.advance(7999);assert.equal(t.screen.classList.contains('is-unveiling'),false);assert.equal(t.releases,0);
+    t.advance(1);assert.equal(t.screen.classList.contains('is-unveiling'),true);assert.equal(t.main.inert,true);
+    assert.equal(t.screen.querySelector('.boot-screen__skip-animation').hidden,true);
+    t.advance(1199);assert.equal(t.releases,0);t.advance(1);t.usable();
+    assert.equal(t.session.get('bhr-lunar-arrival-v1'),'complete');assert.equal(t.timers.size,0);
+  },
+  'downloads longer than ten seconds unveil without an additional ten-second wait': async () => {
+    const t=setup({seen:false,complete:true});await flush();t.advance(15000);
+    assert.equal(t.releases,0);assert.equal(t.screen.querySelector('.boot-screen__skip-animation').hidden,true);
+    t.result(true);await flush();assert.equal(t.screen.classList.contains('is-unveiling'),true);
+    t.advance(1200);t.usable();
+  },
+  'Skip cannot bypass downloads, the document, fonts, or a failed retry': async () => {
+    let ready;
+    const fonts=new Promise(resolve=>{ready=resolve;});
+    const t=setup({seen:false,fonts});const skip=t.screen.querySelector('.boot-screen__skip-animation');
+    const locked=()=>{assert.equal(skip.hidden,true);skip.emit('click');assert.equal(t.releases,0);assert.equal(t.main.inert,true);};
+    locked();t.result(false);await flush();locked();
+    t.screen.querySelector('.boot-screen__retry').emit('click');t.result(true);await flush();locked();
+    t.window.emit('load');await flush();locked();ready();await flush();
+    assert.equal(skip.hidden,false);
+    let prevented=false;t.document.emit('keydown',{key:'Tab',preventDefault(){prevented=true;}});
+    assert.ok(prevented);assert.equal(t.document.activeElement,skip);
+    skip.emit('click');t.usable();assert.equal(t.timers.size,0);assert.equal(t.cancels,1);
+    t.advance(20000);skip.emit('click');t.window.emit('load');await flush();
+    assert.equal(t.releases,1);assert.equal(t.cancels,1);assert.equal(t.timers.size,0);
+  },
+  'ready Skip enters immediately and has all three language labels': async () => {
+    for(const [language,label] of [['zh-HK','跳過動畫 / SKIP'],['zh-CN','跳过动画 / SKIP'],['en','Skip animation']]) {
+      const t=setup({seen:false,complete:true,language});t.advance(2000);t.result(true);await flush();
+      const skip=t.screen.querySelector('.boot-screen__skip-animation');assert.equal(skip.textContent,label);
+      skip.emit('click');t.usable();assert.equal(t.timers.size,0);
+      assert.equal(t.session.get('bhr-lunar-arrival-v1'),'complete');
+    }
+  },
+  'reduced motion preserves the ten-second minimum and permits ready Skip': async () => {
+    const a=setup({seen:false,complete:true,reduced:true});a.result(true);await flush();
+    a.advance(9999);assert.equal(a.releases,0);a.advance(1);a.usable();
+    const b=setup({seen:false,complete:true,reduced:true});b.result(true);await flush();
+    b.screen.querySelector('.boot-screen__skip-animation').emit('click');b.usable();
+  },
+  'subsequent navigation has no minimum wait or Skip': async () => {
+    const t=setup({complete:true});t.result(true);await flush();
+    assert.equal(t.screen.classList.contains('boot-screen--cinematic'),false);
+    assert.equal(t.screen.querySelector('.boot-screen__skip-animation').hidden,true);
+    t.advance(550);t.usable();
+  },
+  'BFCache restore cancels the remaining cinematic wait': async () => {
+    const t=setup({seen:false,complete:true});t.result(true);await flush();assert.equal(t.timers.size,1);
+    t.window.emit('pageshow',{persisted:true});t.usable();assert.equal(t.timers.size,0);
+    t.advance(20000);assert.equal(t.releases,1);
+  },
   'font readiness delays completion after the document and resources': async () => {
     let ready;
     const fonts = new Promise(resolve => { ready = resolve; });
