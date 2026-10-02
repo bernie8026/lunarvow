@@ -431,3 +431,16 @@ main > section > blockquote[data-motion-state],
         filter: none !important;
     }
 }
+
+/* Mobile reading space and compact audio dock. */
+@media (max-width: 820px) {
+    .hero-copy { padding: 22px 18px; }
+    .hero-intro { line-height: 1.7; }
+    .hero-actions { gap: 12px; }
+    .ui-button { min-height: 48px; }
+    .hero-figure img { object-fit: contain; }
+    .feature-transmission__body { padding: 28px 22px; }
+    .site-footer {
+        padding-bottom: calc(90px + env(safe-area-inset-bottom));
+    }
+}

@@ -64,7 +64,7 @@
 
     loadLanguageSystem();
 
-    // Every direct entry preloads the complete site; no-JS pages stay unobstructed.
+    // Preloading is best-effort; a slow resource must never lock visitors out.
     const createBootScreen = () => {
         const screen = document.createElement('div');
         screen.className = 'boot-screen';
@@ -556,6 +556,7 @@
         let finished = false;
         let leaving = false;
         let exitTimer;
+        let deadlineTimer;
         let pageReady = false;
         let preloadReady = false;
         let pageError = false;
@@ -595,6 +596,7 @@
             finished = true;
             task?.cancel();
             window.clearTimeout(exitTimer);
+            window.clearTimeout(deadlineTimer);
             window.removeEventListener('load', onLoaded);
             window.removeEventListener('pageshow', onRestore);
             window.removeEventListener('bhr:languagechange', renderProgress);
@@ -611,7 +613,7 @@
             leaving = true;
             renderProgress();
             bootScreen.classList.add('is-hidden');
-            // Only the exit transition is timed; network completion never is.
+            // Successful preload can finish early; the deadline also handles offline/font failures.
             exitTimer = window.setTimeout(finishBootScreen, reduceMotionQuery.matches ? 0 : 550);
         };
         const onLoaded = async () => {
@@ -657,6 +659,7 @@
         skip.focus({ preventScroll: true });
         renderProgress();
         if (document.readyState === 'complete') onLoaded();
+        deadlineTimer = window.setTimeout(finishBootScreen, 4000);
         run();
     } else {
         window.requestAnimationFrame(() => window.requestAnimationFrame(startQueuedMotion));

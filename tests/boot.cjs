@@ -82,21 +82,22 @@ const tests = {
     let ready;
     const fonts = new Promise(resolve => { ready = resolve; });
     const t = setup({complete:true,fonts});
-    t.result(true); await flush(); t.advance(10000); assert.equal(t.releases,0);
+    t.result(true); await flush(); t.advance(1000); assert.equal(t.releases,0);
     ready(); await flush(); t.advance(550); t.usable();
   },
-  'slow full-site downloads never finish at the old deadline': async () => {
-    const t=setup();t.window.emit('load');await flush();t.advance(600000);assert.equal(t.releases,0);
-    assert.equal(t.main.inert,true);t.result(true);await flush();t.advance(549);assert.equal(t.releases,0);
-    t.advance(1);t.usable();assert.equal(t.cancels,1);assert.equal(t.document.activeElement,t.main);
+  'slow downloads release the page after four seconds': async () => {
+    const t=setup();t.window.emit('load');await flush();t.advance(3999);assert.equal(t.releases,0);
+    assert.equal(t.main.inert,true);t.advance(1);t.usable();
+    assert.equal(t.cancels,1);assert.equal(t.document.activeElement,t.main);
+    t.result(true);await flush();t.advance(10000);assert.equal(t.releases,1);
   },
   'resource completion also waits for the current document': async () => {
-    const t=setup();t.result(true);await flush();t.advance(10000);assert.equal(t.releases,0);
+    const t=setup();t.result(true);await flush();t.advance(1000);assert.equal(t.releases,0);
     assert.equal(t.screen.querySelector('.boot-screen__bar').attributes['aria-valuenow'],'99');
     t.window.emit('load');await flush();t.advance(550);t.usable();
   },
-  'failure remains visible and retry waits for success': async () => {
-    const t=setup({complete:true});t.result(false);await flush();t.advance(600000);assert.equal(t.releases,0);
+  'failure offers retry during the loading window': async () => {
+    const t=setup({complete:true});t.result(false);await flush();t.advance(1000);assert.equal(t.releases,0);
     const retry=t.screen.querySelector('.boot-screen__retry');assert.equal(retry.hidden,false);
     assert.equal(t.screen.querySelector('.boot-screen__bar').attributes['aria-valuenow'],'50');
     retry.emit('click');t.result(true);await flush();t.advance(550);t.usable();
@@ -105,19 +106,25 @@ const tests = {
     const t=setup({preexistingInert:true});t.screen.querySelector('.boot-screen__skip').emit('click');t.usable();
     t.result(true);await flush();t.advance(10000);assert.equal(t.releases,1);assert.equal(t.timers.size,0);
   },
+  'failed downloads and fonts cannot keep the page inert forever': async () => {
+    for (const options of [{complete:true}, {complete:true, fonts:new Promise(()=>{})}]) {
+      const t=setup(options);t.result(false);await flush();
+      t.advance(4000);t.usable();assert.equal(t.timers.size,0);
+    }
+  },
   'keyboard focus cycles through retry and skip': async () => {
     const t=setup();t.result(false);await flush();let prevented=false;
     t.document.emit('keydown',{key:'Tab',preventDefault(){prevented=true;}});
     assert.ok(prevented);assert.equal(t.document.activeElement,t.screen.querySelector('.boot-screen__retry'));
     t.document.emit('keydown',{key:'Escape',preventDefault(){}});t.usable();
   },
-  'reduced motion, inner pages, anchors and history still wait for resources': async () => {
+  'fast preloads still work on reduced motion, inner pages, anchors and history': async () => {
     for(const options of [{reduced:true},{inner:true},{hash:'#archive'},{history:true}]) {
-      const t=setup({...options,complete:true});assert.ok(t.screen);await flush();t.advance(10000);assert.equal(t.releases,0);
+      const t=setup({...options,complete:true});assert.ok(t.screen);await flush();t.advance(1000);assert.equal(t.releases,0);
       t.result(true);await flush();t.advance(options.reduced?0:550);t.usable();
     }
   },
-  'BFCache restore cleans up; reduced motion does not bypass downloads': async () => {
+  'BFCache restore cleans up and reduced motion preserves the bounded loading window': async () => {
     const a=setup();a.window.emit('pageshow',{persisted:true});a.usable();
     const b=setup();b.reduceMotionQuery.emit('change',{matches:true});assert.equal(b.releases,0);
     b.screen.querySelector('.boot-screen__skip').emit('click');b.usable();

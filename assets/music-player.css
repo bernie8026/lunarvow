@@ -139,10 +139,42 @@
 
 @media (max-width: 820px) {
     .music-console {
-        bottom: calc(86px + env(safe-area-inset-bottom));
-        left: max(12px, env(safe-area-inset-left));
-        grid-template-columns: minmax(0, 1fr) 80px;
+        bottom: calc(12px + env(safe-area-inset-bottom));
+        right: max(12px, env(safe-area-inset-right));
+        left: auto;
+        grid-template-columns: minmax(0, 1fr);
+        width: 54px;
+        min-height: 54px;
+    }
+
+    .music-console::before,
+    .music-console__copy,
+    .music-console__volume {
+        display: none;
+    }
+
+    .music-console__toggle {
+        grid-template-columns: 34px;
+        justify-content: center;
+        border-right: 0;
+    }
+
+    .music-console:focus-within {
         width: min(308px, calc(100vw - 24px));
+        grid-template-columns: minmax(0, 1fr) 80px;
+    }
+
+    .music-console:focus-within .music-console__toggle {
+        grid-template-columns: 34px minmax(0, 1fr);
+        border-right: 1px solid rgba(255, 255, 255, 0.14);
+    }
+
+    .music-console:focus-within .music-console__copy {
+        display: block;
+    }
+
+    .music-console:focus-within .music-console__volume {
+        display: grid;
     }
 
     .music-console__volume {
