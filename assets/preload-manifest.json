@@ -189,6 +189,34 @@
       "type": "fetch"
     },
     {
+      "url": "assets/lunar-collection/crimson-vow-desktop.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/lunar-collection/crimson-vow-mobile.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/lunar-collection/lunar-vow-official-banner.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/lunar-collection/moonlight-desktop.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/lunar-collection/moonlight-mobile.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/lunar-collection/theresa-crimson-love.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/lunar-gallery.css",
+      "type": "fetch"
+    },
+    {
       "url": "assets/lunar-guide-title-i18n.js",
       "type": "fetch"
     },
