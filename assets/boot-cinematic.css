@@ -151,7 +151,7 @@
 .boot-screen__percentage { font: 300 2.8rem/1 var(--display); font-variant-numeric: tabular-nums; letter-spacing: -.04em; color: #fff0f5; }
 .boot-screen--cinematic .boot-screen__bar { width: 100%; height: 3px; margin: 15px 0 9px; background: #f4a4be19; overflow: visible; }
 .boot-screen--cinematic .boot-screen__bar span { background: linear-gradient(90deg, #8e1237, #ff608b, #ffe0ec); box-shadow: 0 0 18px #f85c9290; }
-.boot-screen--cinematic .boot-screen__status { display: block; max-width: none; margin: 0; color: #be98a9; font-size: .68rem; }
+.boot-screen.boot-screen--cinematic .boot-screen__status { display: block; max-width: none; margin: 0; color: #be98a9; font-size: .68rem; }
 .boot-screen--cinematic .boot-screen__errors { width: 100%; max-height: 17vh; margin: 12px 0 0; color: #ffe0e8; background: #9b25441c; }
 .boot-screen--cinematic .boot-screen__actions { justify-content: flex-start; }
 .boot-screen--cinematic[data-phase="failed"] .boot-screen__phase { color: #ff9bb8; }

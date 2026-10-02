@@ -27,6 +27,8 @@ module.exports = async (browser, baseURL) => {
     await page.keyboard.press('Escape');
     assert.equal(await screen.isVisible(), true);
     await page.locator('.boot-screen__art').evaluate(img => img.decode());
+    await page.waitForFunction(() => getComputedStyle(document.querySelector('.boot-screen__art')).opacity === '1' &&
+      getComputedStyle(document.querySelector('.boot-screen__poem')).opacity === '1');
     for (const [width,height] of [[1440,900],[390,844],[320,568],[844,390]]) {
       await page.setViewportSize({width,height});
       const bounds = await page.evaluate(() => {
