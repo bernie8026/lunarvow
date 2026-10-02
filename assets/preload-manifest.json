@@ -17,6 +17,10 @@
       "type": "fetch"
     },
     {
+      "url": "assets/boot-cinematic.css",
+      "type": "fetch"
+    },
+    {
       "url": "assets/endfield-ui.css",
       "type": "fetch"
     },

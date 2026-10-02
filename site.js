@@ -65,9 +65,13 @@
     loadLanguageSystem();
 
     // Enter only after every resource and the current page are ready.
+    const bootSessionKey = 'bhr-lunar-arrival-v1';
     const createBootScreen = () => {
         const screen = document.createElement('div');
         screen.className = 'boot-screen';
+        let firstArrival = true;
+        try { firstArrival = sessionStorage.getItem(bootSessionKey) !== 'complete'; } catch { /* The arrival still works without storage. */ }
+        if (firstArrival) screen.classList.add('boot-screen--cinematic');
         screen.hidden = true;
         screen.setAttribute('role', 'dialog');
         screen.setAttribute('aria-modal', 'true');
@@ -75,13 +79,39 @@
         screen.setAttribute('data-i18n-ignore', '');
         screen.setAttribute('tabindex', '-1');
         screen.innerHTML = `
+            <div class="boot-screen__masthead" aria-hidden="true">
+                <span><b>BHR</b> <span>BERNIE'S HONKAI REALM</span></span>
+                <span>LUNAR VOW / CRIMSON LOVE</span>
+            </div>
+            <div class="boot-screen__cinema">
+                <div class="boot-screen__ambient" aria-hidden="true"></div>
+                <div class="boot-screen__particles" aria-hidden="true">${Array.from({ length: 14 }, (_, i) => `<i style="--x:${(i * 29 + 7) % 100}%;--y:${(i * 17 + 13) % 100}%;--delay:${-i * .7}s;--duration:${7 + i % 5}s"></i>`).join('')}</div>
+                <div class="boot-screen__copy">
+                    <span class="boot-screen__eyebrow">THE CRIMSON MOON / 01</span>
+                    <h2 class="boot-screen__title">月下誓約</h2>
+                    <p class="boot-screen__subtitle">予愛以心</p>
+                    <p class="boot-screen__poem">於緋紅月色之下，再次相逢。</p>
+                    <span class="boot-screen__signature" aria-hidden="true">LUNAR VOW<span>CRIMSON LOVE</span></span>
+                </div>
+                <div class="boot-screen__visual" aria-hidden="true">
+                    <div class="boot-screen__moon"></div>
+                    <div class="boot-screen__orbit boot-screen__orbit--outer"></div>
+                    <div class="boot-screen__orbit boot-screen__orbit--inner"></div>
+                    <svg class="boot-screen__ring" viewBox="0 0 200 200"><circle cx="100" cy="100" r="94"/><circle class="boot-screen__ring-progress" cx="100" cy="100" r="94" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/></svg>
+                    <img class="boot-screen__art" src="assets/lunar-collection/moonlight-desktop.webp" width="1080" height="608" alt="" decoding="async" fetchpriority="high">
+                    <span class="boot-screen__visual-code">THERESA / LUNAR VOW</span>
+                </div>
+            </div>
             <div class="boot-screen__mark" aria-hidden="true">BHR</div>
-            <p>BERNIE'S HONKAI REALM</p>
-            <div class="boot-screen__bar" role="progressbar" aria-label="全站資源" aria-valuemin="0" aria-valuemax="100"><span></span></div>
-            <small class="boot-screen__status" role="status" aria-live="polite">正在讀取全站資源清單…</small>
-            <ul class="boot-screen__errors" hidden></ul>
-            <div class="boot-screen__actions">
-                <button class="boot-screen__retry" type="button" hidden>重試未完成項目</button>
+            <p class="boot-screen__compact-brand">BERNIE'S HONKAI REALM</p>
+            <div class="boot-screen__console">
+                <div class="boot-screen__readout"><span class="boot-screen__phase">正在準備與月下相逢</span><span class="boot-screen__percentage" aria-hidden="true">000<span>%</span></span></div>
+                <div class="boot-screen__bar" role="progressbar" aria-label="全站資源" aria-valuemin="0" aria-valuemax="100"><span></span></div>
+                <small class="boot-screen__status" role="status" aria-live="polite">正在讀取全站資源清單…</small>
+                <ul class="boot-screen__errors" hidden></ul>
+                <div class="boot-screen__actions">
+                    <button class="boot-screen__retry" type="button" hidden>重試未完成項目</button>
+                </div>
             </div>`;
         body.appendChild(screen);
         return screen;
@@ -550,6 +580,9 @@
         const status = bootScreen.querySelector('.boot-screen__status');
         const errors = bootScreen.querySelector('.boot-screen__errors');
         const bar = bootScreen.querySelector('.boot-screen__bar');
+        const percentage = bootScreen.querySelector('.boot-screen__percentage');
+        const ring = bootScreen.querySelector('.boot-screen__ring-progress');
+        const phase = bootScreen.querySelector('.boot-screen__phase');
         const background = Array.from(body.children).filter(element => element !== bootScreen && element.tagName !== 'SCRIPT');
         const previousInert = background.map(element => element.inert);
         let finished = false;
@@ -559,6 +592,11 @@
         let preloadReady = false;
         let pageError = false;
         let progress = { loaded: 0, total: 0, failed: [], running: true };
+        const arrivalLabels = {
+            'zh-HK': { title: '月下誓約', subtitle: '予愛以心', poem: '於緋紅月色之下，再次相逢。', loading: '正在準備與月下相逢', ready: '月下，與你重逢', failed: '等待未完成嘅資源' },
+            'zh-CN': { title: '月下誓约', subtitle: '予爱以心', poem: '于绯红月色之下，再次相逢。', loading: '正在准备与月下相逢', ready: '月下，与你重逢', failed: '等待未完成的资源' },
+            en: { title: 'LUNAR VOW', subtitle: 'CRIMSON LOVE', poem: 'Under a crimson moon, we meet again.', loading: 'Preparing your arrival', ready: 'Together under the crimson moon', failed: 'Waiting for unfinished resources' }
+        };
         const labels = {
             'zh-HK': { title: '全站資源載入', preparing: '正在讀取全站資源清單…', loading: '正在預載全站', ready: '全站資源載入完成', page: '正在準備目前頁面…', failed: '項資源未能載入', retry: '重試未完成項目' },
             'zh-CN': { title: '全站资源加载', preparing: '正在读取全站资源清单…', loading: '正在预载全站', ready: '全站资源加载完成', page: '正在准备当前页面…', failed: '项资源未能加载', retry: '重试未完成项目' },
@@ -572,6 +610,14 @@
             const failed = [...progress.failed, ...(pageError ? ['Current page / fonts'] : [])];
             const ready = preloadReady && pageReady;
             const percent = ready ? 100 : progress.total ? Math.min(99, Math.floor(progress.loaded / progress.total * 100)) : 0;
+            const arrival = arrivalLabels[language] || arrivalLabels['zh-HK'];
+            bootScreen.setAttribute('data-phase', ready ? 'ready' : failed.length && !progress.running ? 'failed' : 'loading');
+            percentage.textContent = `${String(percent).padStart(3, '0')}%`;
+            ring.setAttribute('stroke-dashoffset', String(100 - percent));
+            phase.textContent = ready ? arrival.ready : failed.length && !progress.running ? arrival.failed : arrival.loading;
+            bootScreen.querySelector('.boot-screen__title').textContent = arrival.title;
+            bootScreen.querySelector('.boot-screen__subtitle').textContent = arrival.subtitle;
+            bootScreen.querySelector('.boot-screen__poem').textContent = arrival.poem;
             bootScreen.setAttribute('aria-label', text.title);
             bar.setAttribute('aria-label', text.title);
             bar.setAttribute('aria-valuenow', String(percent));
@@ -598,6 +644,9 @@
         const finishBootScreen = () => {
             if (finished) return;
             finished = true;
+            if (pageReady && preloadReady) {
+                try { sessionStorage.setItem(bootSessionKey, 'complete'); } catch { /* Storage is optional. */ }
+            }
             task?.cancel();
             window.clearTimeout(exitTimer);
             window.removeEventListener('load', onLoaded);
@@ -615,9 +664,10 @@
             if (finished || leaving || !pageReady || !preloadReady) return;
             leaving = true;
             renderProgress();
-            bootScreen.classList.add('is-hidden');
+            const cinematic = bootScreen.classList.contains('boot-screen--cinematic') && !reduceMotionQuery.matches;
+            bootScreen.classList.add(cinematic ? 'is-unveiling' : 'is-hidden');
             // Failures stay visible until retry succeeds; there is no automatic bypass.
-            exitTimer = window.setTimeout(finishBootScreen, reduceMotionQuery.matches ? 0 : 550);
+            exitTimer = window.setTimeout(finishBootScreen, reduceMotionQuery.matches ? 0 : cinematic ? 1200 : 550);
         };
         const onLoaded = async () => {
             try {

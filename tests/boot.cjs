@@ -8,7 +8,7 @@ const extract = (start, end) => {
   assert.ok(a >= 0 && b > a, 'boot lifecycle boundaries exist');
   return source.slice(a, b);
 };
-const creation = extract('    const createBootScreen =', '    const header =');
+const creation = extract('    const bootSessionKey =', '    const header =');
 const flush = async () => { for (let i = 0; i < 12; i++) await Promise.resolve(); };
 const lifecycle = extract('    if (bootScreen) {', '    if (menuToggle && menu) {');
 
@@ -52,7 +52,9 @@ function setup(options = {}) {
     requestAnimationFrame(fn) { return window.setTimeout(fn, 16); }
   });
   const reduceMotionQuery = Object.assign(new Target(), { matches: !!options.reduced });
+  const session = new Map(options.seen ? [['bhr-lunar-arrival-v1', 'complete']] : []);
   const context = vm.createContext({ body, document, window, reduceMotionQuery, localStorage:{getItem:()=>null},
+    sessionStorage: { getItem:key=>session.get(key), setItem:(key,value)=>session.set(key,value) },
     performance: { now: () => now, getEntriesByType: () => [{type:options.history ? 'back_forward' : 'navigate'}] },
     startQueuedMotion: () => releases++
   });
@@ -83,27 +85,27 @@ const tests = {
     const fonts = new Promise(resolve => { ready = resolve; });
     const t = setup({complete:true,fonts});
     t.result(true); await flush(); t.advance(1000); assert.equal(t.releases,0);
-    ready(); await flush(); t.advance(550); t.usable();
+    ready(); await flush(); t.advance(1200); t.usable();
   },
   'slow downloads never bypass the complete preload requirement': async () => {
     const t=setup();t.window.emit('load');await flush();t.advance(600000);assert.equal(t.releases,0);
     assert.equal(t.main.inert,true);assert.equal(t.cancels,0);
-    t.result(true);await flush();t.advance(550);t.usable();
+    t.result(true);await flush();t.advance(1200);t.usable();
     assert.equal(t.cancels,1);assert.equal(t.document.activeElement,t.main);
   },
   'resource completion also waits for the current document': async () => {
     const t=setup();t.result(true);await flush();t.advance(1000);assert.equal(t.releases,0);
     assert.equal(t.screen.querySelector('.boot-screen__bar').attributes['aria-valuenow'],'99');
-    t.window.emit('load');await flush();t.advance(550);t.usable();
+    t.window.emit('load');await flush();t.advance(1200);t.usable();
   },
   'failure offers retry until every resource succeeds': async () => {
     const t=setup({complete:true});t.result(false);await flush();t.advance(1000);assert.equal(t.releases,0);
     const retry=t.screen.querySelector('.boot-screen__retry');assert.equal(retry.hidden,false);
     assert.equal(t.screen.querySelector('.boot-screen__bar').attributes['aria-valuenow'],'50');
-    retry.emit('click');t.result(true);await flush();t.advance(550);t.usable();
+    retry.emit('click');t.result(true);await flush();t.advance(1200);t.usable();
   },
   'completion restores existing inert state exactly once': async () => {
-    const t=setup({preexistingInert:true,complete:true});t.result(true);await flush();t.advance(550);t.usable();
+    const t=setup({preexistingInert:true,complete:true});t.result(true);await flush();t.advance(1200);t.usable();
     t.advance(10000);assert.equal(t.releases,1);assert.equal(t.timers.size,0);
   },
   'failed downloads and pending fonts prevent early entry': async () => {
@@ -118,18 +120,18 @@ const tests = {
     t.document.emit('keydown',{key:'Tab',preventDefault(){prevented=true;}});
     assert.ok(prevented);assert.equal(t.document.activeElement,t.screen.querySelector('.boot-screen__retry'));
     t.document.emit('keydown',{key:'Escape',preventDefault(){}});assert.equal(t.releases,0);
-    t.screen.querySelector('.boot-screen__retry').emit('click');t.result(true);t.window.emit('load');await flush();t.advance(550);t.usable();
+    t.screen.querySelector('.boot-screen__retry').emit('click');t.result(true);t.window.emit('load');await flush();t.advance(1200);t.usable();
   },
   'fast preloads still work on reduced motion, inner pages, anchors and history': async () => {
     for(const options of [{reduced:true},{inner:true},{hash:'#archive'},{history:true}]) {
       const t=setup({...options,complete:true});assert.ok(t.screen);await flush();t.advance(1000);assert.equal(t.releases,0);
-      t.result(true);await flush();t.advance(options.reduced?0:550);t.usable();
+      t.result(true);await flush();t.advance(options.reduced?0:1200);t.usable();
     }
   },
   'BFCache restore cleans up and reduced motion still waits for completion': async () => {
     const a=setup();a.window.emit('pageshow',{persisted:true});a.usable();
     const b=setup();b.reduceMotionQuery.emit('change',{matches:true});assert.equal(b.releases,0);
-    b.result(true);b.window.emit('load');await flush();b.advance(550);b.usable();
+    b.result(true);b.window.emit('load');await flush();b.advance(1200);b.usable();
   },
   'cached character reveals wait for boot completion': () => {
     const image = {style:{},dataset:{},matches:()=>true}; const state = {};
