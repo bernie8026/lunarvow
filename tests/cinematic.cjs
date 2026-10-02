@@ -16,7 +16,7 @@ module.exports = async (browser, baseURL) => {
   const page = await context.newPage();
   page.on('pageerror', error => issues.push(error.message));
   try {
-    await page.goto(baseURL + '/index.html');
+    await page.goto(baseURL + '/index.html', {waitUntil:'domcontentloaded'});
     const screen = page.locator('.boot-screen');
     await page.waitForFunction(() => document.querySelector('.boot-screen__bar')?.getAttribute('aria-valuenow') === '50');
     assert.equal(await page.locator('.boot-screen--cinematic').count(), 1);
@@ -58,7 +58,7 @@ module.exports = async (browser, baseURL) => {
     assert.equal(await page.locator('#main-content').evaluate(el => el.inert), false);
 
     pending = new Promise(resolve => { release = resolve; });
-    await page.goto(baseURL + '/gallery.html');
+    await page.goto(baseURL + '/gallery.html', {waitUntil:'domcontentloaded'});
     await screen.waitFor({state:'visible'});
     assert.equal(await page.locator('.boot-screen--cinematic').count(), 0);
     assert.equal(await page.locator('#main-content').evaluate(el => el.inert), true);
