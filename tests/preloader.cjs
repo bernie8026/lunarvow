@@ -19,7 +19,8 @@ function setup(resources) {
       const body = deferred();
       const request = {url:url.href,body,options}; requests.push(request);
       options.signal.addEventListener('abort',()=>body.reject(new Error('aborted')));
-      return {ok:true,arrayBuffer:()=>body.promise};
+      const status = resources.find(resource => resource.url === new URL(url).pathname.split('/').pop())?.status || 200;
+      return {ok:status === 200,status,arrayBuffer:()=>body.promise};
     },
     Image: class {
       constructor(){ images.push(this); this.decoded=deferred(); }
@@ -46,23 +47,31 @@ function setup(resources) {
   const failed=setup([{url:'good.css'},{url:'bad.json'}]); const first=failed.task.run(); await flush();
   failed.requests[0].body.resolve(); failed.requests[1].body.reject(new Error('network')); assert.equal(await first,false);
   assert.equal(failed.updates.at(-1).loaded,1); assert.equal(failed.updates.at(-1).failed[0],'bad.json');
+  assert.equal(failed.updates.at(-1).errors[0].code,'network');
   const retry=failed.task.run(); await flush(); assert.equal(failed.requests.length,3,'retry only failed request');
   failed.requests[2].body.resolve(); assert.equal(await retry,true);
   console.log('PASS preload: failed transfers never count, selective retry');
 
   const timeout=setup([{url:'stalled.mp3'}]);const waiting=timeout.task.run();await flush();
   [...timeout.timers.values()].forEach(fn=>fn());assert.equal(await waiting,false);assert.equal(timeout.updates.at(-1).loaded,0);
+  assert.equal(timeout.updates.at(-1).errors[0].code,'timeout');
   const cancel=setup(Array.from({length:12},(_,i)=>({url:`${i}.html`}))); const canceled=cancel.task.run();await flush();
   assert.equal(cancel.requests.length,6,'bounded concurrency');cancel.task.cancel();assert.equal(await canceled,false);
   assert.equal(cancel.requests.length,6,'cancellation stops pending downloads');assert.equal(cancel.timers.size,0);
-  console.log('PASS preload: timeout reports failure; skip cancels the queue');
+  console.log('PASS preload: timeout reports failure; cancellation stops the queue');
 
   const imageFail=setup([{url:'bad.png',type:'image'}]);const decode=imageFail.task.run();await flush();
   imageFail.images[0].onload();imageFail.images[0].decoded.reject(new Error('decode'));assert.equal(await decode,false);
+  assert.equal(imageFail.updates.at(-1).errors[0].code,'image');
   const manifest=setup([{url:'style.css'}]);manifest.setManifestFailure(true);assert.equal(await manifest.task.run(),false);
   assert.equal(manifest.updates.at(-1).failed[0],'assets/preload-manifest.json');manifest.setManifestFailure(false);
+  assert.equal(manifest.updates.at(-1).errors[0].code,'http');assert.equal(manifest.updates.at(-1).errors[0].status,503);
   const again=manifest.task.run();await flush();manifest.requests[0].body.resolve();assert.equal(await again,true);
   console.log('PASS preload: invalid image and manifest recovery');
+  const missing=setup([{url:'missing.css',status:404}]);assert.equal(await missing.task.run(),false);
+  assert.equal(missing.updates.at(-1).errors[0].code,'http');assert.equal(missing.updates.at(-1).errors[0].status,404);
+  const invalid=setup([]);assert.equal(await invalid.task.run(),false);assert.equal(invalid.updates.at(-1).errors[0].code,'manifest');
+  console.log('PASS preload: HTTP failures and invalid manifests retain actionable reasons');
 
   const data=JSON.parse(fs.readFileSync(path.join(root,'assets/preload-manifest.json')));
   const urls=new Set(data.resources.map(r=>r.url));
@@ -79,5 +88,7 @@ function setup(resources) {
   const rebuilt=buildManifest(data.resources.map(r=>r.url).filter(u=>!u.startsWith('https:')&&!u.includes('?')),
     JSON.parse(fs.readFileSync(path.join(root,'data/characters.json'))),fs.readFileSync(path.join(root,'assets/music-player.js'),'utf8'),fs.readFileSync(path.join(root,'assets/i18n.js'),'utf8'));
   assert.deepEqual(rebuilt,data);
-  console.log('PASS preload: all subpages, external portraits, styles and versioned music in reproducible manifest');
+  assert.ok([...urls].every(url=>!/^https?:/.test(url)), 'every preload resource is hosted with the site');
+  assert.ok(urls.has('assets/vendor/opencc/hk2cn.js'));
+  console.log('PASS preload: all subpages, local portraits, OpenCC, styles and music in reproducible manifest');
 })().catch(error=>{console.error(error);process.exitCode=1;});

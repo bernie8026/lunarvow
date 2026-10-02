@@ -24,7 +24,7 @@ module.exports = async (browser, baseURL) => {
     await page.evaluate(() => Object.defineProperty(window, 'localStorage', {
       get() { throw new DOMException('Blocked', 'SecurityError'); }
     }));
-    await page.route('https://cdn.jsdelivr.net/**', route => route.abort());
+    await page.route('**/assets/vendor/opencc/hk2cn.js', route => route.abort());
     await page.addScriptTag({ url: `${origin}/assets/i18n.js` });
     assert.equal(await page.evaluate(() => window.BHR_I18N.language), 'zh-HK');
     await page.evaluate(() => window.BHR_I18N.setLanguage('en', true));
@@ -72,7 +72,7 @@ module.exports = async (browser, baseURL) => {
     const race = await createFixture();
     let release;
     const gate = new Promise(resolve => { release = resolve; });
-    await race.route('https://cdn.jsdelivr.net/**', async route => {
+    await race.route('**/assets/vendor/opencc/hk2cn.js', async route => {
       await gate;
       await route.fulfill({ contentType: 'text/javascript', body: 'window.OpenCC = { Converter: () => value => value };' });
     });
