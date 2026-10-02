@@ -9,6 +9,9 @@ module.exports = async (browser, baseURL) => {
   fs.mkdirSync(previews, {recursive:true});
   let release;
   let pending = new Promise(resolve => { release = resolve; });
+  // Simulate an older cached base stylesheet without the new import.
+  await context.route('**/style.css', route => route.fulfill({contentType:'text/css',
+    body:fs.readFileSync(path.join(__dirname,'../style.css'),'utf8').replace('@import url("assets/boot-cinematic.css");','') }));
   await context.route('**/assets/preload-manifest.json', route => route.fulfill({contentType:'application/json', body:JSON.stringify({
     resources:[{url:'style.css',type:'fetch'},{url:'assets/lunar-collection/crimson-vow-mobile.webp',type:'image'}]
   })}));
@@ -20,6 +23,7 @@ module.exports = async (browser, baseURL) => {
     const screen = page.locator('.boot-screen');
     await page.waitForFunction(() => document.querySelector('.boot-screen__bar')?.getAttribute('aria-valuenow') === '50');
     assert.equal(await page.locator('.boot-screen--cinematic').count(), 1);
+    assert.equal(await page.locator('#bhr-cinematic-style').count(), 1);
     assert.equal(await page.evaluate(() => sessionStorage.getItem('bhr-lunar-arrival-v1')), null);
     assert.equal(await page.locator('#main-content').evaluate(el => el.inert), true);
     assert.equal(await page.locator('.boot-screen__ring-progress').getAttribute('stroke-dashoffset'), '50');
@@ -27,19 +31,24 @@ module.exports = async (browser, baseURL) => {
     await page.keyboard.press('Escape');
     assert.equal(await screen.isVisible(), true);
     await page.locator('.boot-screen__art').evaluate(img => img.decode());
+    await page.waitForFunction(() => getComputedStyle(document.querySelector('.boot-screen__art')).opacity === '1' &&
+      getComputedStyle(document.querySelector('.boot-screen__poem')).opacity === '1');
     for (const [width,height] of [[1440,900],[390,844],[320,568],[844,390]]) {
       await page.setViewportSize({width,height});
       const bounds = await page.evaluate(() => {
         const root = document.querySelector('.boot-screen');
         const status = document.querySelector('.boot-screen__status').getBoundingClientRect();
         const art = document.querySelector('.boot-screen__art');
+        const artBox = art.getBoundingClientRect();
+        const consoleTop = document.querySelector('.boot-screen__console').getBoundingClientRect().top;
         return {overflow:root.scrollWidth > root.clientWidth + 1,statusBottom:status.bottom,
-          artWidth:art.naturalWidth,fit:getComputedStyle(art).objectFit};
+          artWidth:art.naturalWidth,fit:getComputedStyle(art).objectFit,artBottom:artBox.bottom,consoleTop};
       });
       assert.equal(bounds.overflow, false, `cinematic width ${width}`);
       assert.ok(bounds.statusBottom <= height, `progress remains in view at ${width} × ${height}`);
       assert.ok(bounds.artWidth > 0);
       assert.equal(bounds.fit, 'contain');
+      assert.ok(bounds.artBottom <= bounds.consoleTop + 1, `artwork does not overlap progress at ${width} × ${height}`);
       await page.screenshot({path:path.join(previews, `arrival-${width}x${height}.png`)});
     }
     await page.setViewportSize({width:1440,height:900});
