@@ -35,13 +35,16 @@ module.exports = async (browser, baseURL) => {
         const root = document.querySelector('.boot-screen');
         const status = document.querySelector('.boot-screen__status').getBoundingClientRect();
         const art = document.querySelector('.boot-screen__art');
+        const artBox = art.getBoundingClientRect();
+        const consoleTop = document.querySelector('.boot-screen__console').getBoundingClientRect().top;
         return {overflow:root.scrollWidth > root.clientWidth + 1,statusBottom:status.bottom,
-          artWidth:art.naturalWidth,fit:getComputedStyle(art).objectFit};
+          artWidth:art.naturalWidth,fit:getComputedStyle(art).objectFit,artBottom:artBox.bottom,consoleTop};
       });
       assert.equal(bounds.overflow, false, `cinematic width ${width}`);
       assert.ok(bounds.statusBottom <= height, `progress remains in view at ${width} × ${height}`);
       assert.ok(bounds.artWidth > 0);
       assert.equal(bounds.fit, 'contain');
+      assert.ok(bounds.artBottom <= bounds.consoleTop + 1, `artwork does not overlap progress at ${width} × ${height}`);
       await page.screenshot({path:path.join(previews, `arrival-${width}x${height}.png`)});
     }
     await page.setViewportSize({width:1440,height:900});
