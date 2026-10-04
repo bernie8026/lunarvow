@@ -1,5 +1,6 @@
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
+const path = require('node:path');
 module.exports = async (browser, baseURL) => {
  const errors = [];
  const page = await browser.newPage({ reducedMotion: 'reduce' });
@@ -41,10 +42,71 @@ module.exports = async (browser, baseURL) => {
  await page.goto(baseURL);
    await page.locator('.boot-screen').waitFor({state:'hidden'});
  await page.waitForFunction(()=>window.BHR_I18N);
- for (const lang of ['en','zh-CN','zh-HK','en','zh-HK']) {
-  await page.evaluate(lang=>window.BHR_I18N.setLanguage(lang),lang);
-  assert.equal(await page.locator('html').getAttribute('lang'),lang);
-  assert.ok(await page.locator('.skip-link').textContent());
+ await page.waitForFunction(()=>[...document.styleSheets].some(sheet=>sheet.href?.endsWith('/i18n.css')));
+ const previews=path.join('/tmp','lunarvow-boot-preview');
+ fs.mkdirSync(previews,{recursive:true});
+ const capture=async(target,name)=>{
+  const style=await page.addStyleTag({content:'html { scroll-behavior: auto !important; } .site-header, .section-rail, .skip-link, .music-console { opacity: 0 !important; }'});
+  try {
+   await target.scrollIntoViewIfNeeded();
+   await target.screenshot({path:path.join(previews,name),animations:'disabled'});
+  } finally { await style.evaluate(style=>style.remove()); }
+ };
+ // Check actual text rectangles inside their frames: page scrollWidth alone
+ // misses clipped numbers, oversized glyphs and text touching panel borders.
+ for (const width of [320,390,768,1024,1440,1920]) {
+  await page.setViewportSize({width,height:900});
+  for (const lang of ['en','zh-CN','zh-HK']) {
+   await page.evaluate(lang=>window.BHR_I18N.setLanguage(lang),lang);
+   await page.waitForFunction(()=>!document.body.classList.contains('is-language-switching'));
+   await page.evaluate(()=>document.fonts.ready);
+   assert.equal(await page.locator('html').getAttribute('lang'),lang);
+   assert.ok(await page.locator('.skip-link').textContent());
+   const layout=await page.evaluate(()=>{
+    const failures=[];
+    const contains=(outer,inner,inset=0)=>inner.left>=outer.left+inset-1 && inner.right<=outer.right-inset+1 && inner.top>=outer.top+inset-1 && inner.bottom<=outer.bottom-inset+1;
+    const checkText=(element,frame,inset,label)=>{
+     const walker=document.createTreeWalker(element,NodeFilter.SHOW_TEXT);
+     for(let node;node=walker.nextNode();) {
+      if(!node.textContent.trim()) continue;
+      const range=document.createRange(); range.selectNodeContents(node);
+      for(const rect of range.getClientRects()) {
+       if(!contains(frame.getBoundingClientRect(),rect,inset)) failures.push(label+': '+node.textContent.trim());
+      }
+     }
+    };
+    for(const heading of document.querySelectorAll('.section-heading')) {
+     const label=heading.closest('section').id;
+     for(const child of heading.children) {
+      if(getComputedStyle(child).display==='none') continue;
+      if(!contains(heading.getBoundingClientRect(),child.getBoundingClientRect(),8)) failures.push(label+' heading child outside padded frame');
+     }
+     checkText(heading,heading,8,label+' heading text');
+     const index=heading.querySelector('.section-index');
+     checkText(index,index,3,label+' index glyph');
+    }
+    const profile=document.querySelector('.profile-layout');
+    for(const panel of profile.children) {
+     if(!contains(profile.getBoundingClientRect(),panel.getBoundingClientRect(),8)) failures.push('profile panel outside frame');
+     for(const paragraph of panel.querySelectorAll('p')) checkText(paragraph,panel,12,'profile paragraph');
+    }
+    checkText(document.querySelector('.profile-meta'),document.querySelector('.profile-copy'),12,'profile details');
+    const copy=document.querySelector('.profile-copy > p').getBoundingClientRect();
+    if(innerWidth>=1024 && copy.width<280) failures.push('desktop biography text column too narrow');
+    const statement=document.querySelector('.profile-statement');
+    const biography=document.querySelector('.profile-copy');
+    if(innerWidth<=1000 && biography.getBoundingClientRect().top<statement.getBoundingClientRect().bottom-1) failures.push('narrow profile panels must stack');
+    return {failures,scroll:document.documentElement.scrollWidth};
+   });
+   assert.ok(layout.scroll<=width+1,`homepage ${lang} overflows at ${width}`);
+   assert.deepEqual(layout.failures,[],`homepage ${lang} framed text at ${width}`);
+   if ([390,1440].includes(width)) {
+    for (const section of ['latest','archive']) await capture(page.locator('#'+section+' .section-heading'),`home-heading-${section}-${lang}-${width}.png`);
+    await capture(page.locator('#profile'),`home-profile-${lang}-${width}.png`);
+   }
+   if(width===1920 && lang==='zh-HK') await capture(page.locator('#profile'),`home-profile-${lang}-${width}.png`);
+  }
+  console.log('PASS homepage framed text in all three languages at width',width);
  }
  await page.setViewportSize({width:390,height:844});
  const nojs=await browser.newPage({javaScriptEnabled:false,viewport:{width:390,height:844}});

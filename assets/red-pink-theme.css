@@ -387,7 +387,6 @@ main > section > blockquote[data-motion-state],
 .hero-footer__version strong { white-space: normal; }
 .home-hero { min-height: max(780px, 100svh); }
 .feature-transmission__body h3 { line-height: 1.15; }
-.profile-statement p { line-height: 1.22; overflow-wrap: anywhere; }
 .site-nav a[aria-current="location"] { color: var(--paper); }
 .site-nav a[aria-current="location"]::after { transform: scaleX(1); }
 
@@ -442,5 +441,138 @@ main > section > blockquote[data-motion-state],
     .feature-transmission__body { padding: 28px 22px; }
     .site-footer {
         padding-bottom: calc(90px + env(safe-area-inset-bottom));
+    }
+}
+
+/* Homepage frames need readable type and real space around their contents.
+   Keep these rules more specific than the language stylesheet injected later. */
+body.home-page main .section-heading {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) minmax(40px, 0.3fr);
+    align-items: center;
+    gap: clamp(20px, 3vw, 40px);
+    padding: clamp(20px, 2vw, 30px);
+}
+
+body.home-page main .section-heading > div {
+    min-width: 0;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 0;
+}
+
+body.home-page main .section-index {
+    flex: 0 0 auto;
+    width: clamp(44px, 4vw, 58px);
+    height: clamp(44px, 4vw, 58px);
+    min-width: 0;
+    min-height: 0;
+    padding: 6px;
+    font-size: clamp(1.5rem, 2.2vw, 2rem);
+    letter-spacing: -0.025em;
+    line-height: 1;
+}
+
+body.home-page main .section-heading p {
+    writing-mode: horizontal-tb;
+    font-size: 0.625rem;
+    line-height: 1.5;
+    letter-spacing: 0.08em;
+}
+
+body.home-page main .section-heading h2 {
+    min-width: 0;
+    max-width: 100%;
+    font-size: clamp(1.875rem, 3.2vw, 3.5rem);
+    line-height: 1.25;
+    letter-spacing: -0.025em;
+    overflow-wrap: break-word;
+}
+
+body.home-page main .section-heading__line {
+    display: block;
+    margin-bottom: 0;
+}
+
+body.home-page main .profile-layout {
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    align-items: stretch;
+    gap: clamp(24px, 3vw, 40px);
+    padding: clamp(28px, 3vw, 40px);
+}
+
+body.home-page main .profile-statement,
+body.home-page main .profile-copy {
+    min-width: 0;
+    padding: clamp(20px, 2.5vw, 36px);
+}
+
+body.home-page main .profile-statement__mark {
+    position: static;
+    display: block;
+    margin-bottom: 18px;
+    font-size: 4rem;
+    line-height: 0.75;
+}
+
+body.home-page main .profile-statement p {
+    font-family: var(--body);
+    font-size: clamp(1.5rem, 2.3vw, 2.75rem);
+    font-weight: 800;
+    line-height: 1.5;
+    letter-spacing: -0.015em;
+    overflow-wrap: break-word;
+}
+
+body.home-page main .profile-copy > p {
+    max-width: none;
+    font-size: clamp(1rem, 1.15vw, 1.125rem);
+    line-height: 1.85;
+    overflow-wrap: break-word;
+}
+
+body.home-page main .profile-meta {
+    margin-top: 28px;
+}
+
+body.home-page main .profile-meta span {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 12px;
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+}
+
+body.home-page main .profile-meta small {
+    font-size: 0.625rem;
+    letter-spacing: 0.06em;
+}
+
+@media (max-width: 1000px) {
+    body.home-page main .profile-layout {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+@media (max-width: 900px) {
+    body.home-page main .section-heading {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 18px;
+    }
+
+    body.home-page main .section-heading__line {
+        display: none;
+    }
+}
+
+@media (max-width: 600px) {
+    body.home-page main .profile-layout {
+        gap: 18px;
+        padding: 32px 12px 12px;
+    }
+
+    body.home-page main .profile-meta span {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 4px;
     }
 }
