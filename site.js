@@ -120,6 +120,7 @@
                 <ul class="boot-screen__errors" hidden></ul>
                 <div class="boot-screen__actions">
                     <button class="boot-screen__retry" type="button" hidden>重試未完成項目</button>
+                    <button class="boot-screen__skip-animation" type="button" hidden>跳過動畫</button>
                 </div>
             </div>`;
         body.appendChild(screen);
@@ -586,6 +587,7 @@
 
     if (bootScreen) {
         const retry = bootScreen.querySelector('.boot-screen__retry');
+        const skipAnimation = bootScreen.querySelector('.boot-screen__skip-animation');
         const status = bootScreen.querySelector('.boot-screen__status');
         const errors = bootScreen.querySelector('.boot-screen__errors');
         const bar = bootScreen.querySelector('.boot-screen__bar');
@@ -594,8 +596,12 @@
         const phase = bootScreen.querySelector('.boot-screen__phase');
         const background = Array.from(body.children).filter(element => element !== bootScreen && element.tagName !== 'SCRIPT');
         const previousInert = background.map(element => element.inert);
+        const firstArrival = bootScreen.classList.contains('boot-screen--cinematic');
+        const minimumArrivalMs = firstArrival ? 10000 : 0;
+        let arrivalStartedAt;
         let finished = false;
         let leaving = false;
+        let minimumTimer;
         let exitTimer;
         let pageReady = false;
         let preloadReady = false;
@@ -607,9 +613,9 @@
             en: { title: 'LUNAR VOW', subtitle: 'CRIMSON LOVE', poem: 'Under a crimson moon, we meet again.', loading: 'Preparing your arrival', ready: 'Together under the crimson moon', failed: 'Waiting for unfinished resources' }
         };
         const labels = {
-            'zh-HK': { title: '全站資源載入', preparing: '正在讀取全站資源清單…', loading: '正在預載全站', ready: '全站資源載入完成', page: '正在準備目前頁面…', failed: '項資源未能載入', retry: '重試未完成項目' },
-            'zh-CN': { title: '全站资源加载', preparing: '正在读取全站资源清单…', loading: '正在预载全站', ready: '全站资源加载完成', page: '正在准备当前页面…', failed: '项资源未能加载', retry: '重试未完成项目' },
-            en: { title: 'Loading all site resources', preparing: 'Reading the site resource list…', loading: 'Loading the entire site', ready: 'All site resources loaded', page: 'Preparing the current page…', failed: 'resources could not load', retry: 'Retry unfinished items' }
+            'zh-HK': { title: '全站資源載入', preparing: '正在讀取全站資源清單…', loading: '正在預載全站', ready: '全站資源載入完成', waiting: '載入完成，可以跳過動畫即刻入站', skipAnimation: '跳過動畫 / SKIP', page: '正在準備目前頁面…', failed: '項資源未能載入', retry: '重試未完成項目' },
+            'zh-CN': { title: '全站资源加载', preparing: '正在读取全站资源清单…', loading: '正在预载全站', ready: '全站资源加载完成', waiting: '加载完成，可以跳过动画立即进入', skipAnimation: '跳过动画 / SKIP', page: '正在准备当前页面…', failed: '项资源未能加载', retry: '重试未完成项目' },
+            en: { title: 'Loading all site resources', preparing: 'Reading the site resource list…', loading: 'Loading the entire site', ready: 'All site resources loaded', waiting: 'All resources loaded. Skip the animation to enter now.', skipAnimation: 'Skip animation', page: 'Preparing the current page…', failed: 'resources could not load', retry: 'Retry unfinished items' }
         };
         const renderProgress = () => {
             if (finished) return;
@@ -631,10 +637,12 @@
             bar.setAttribute('aria-label', text.title);
             bar.setAttribute('aria-valuenow', String(percent));
             bar.firstElementChild.style.transform = `scaleX(${percent / 100})`;
-            status.textContent = ready ? text.ready : failed.length && !progress.running ? `${failed.length} ${text.failed}` :
+            status.textContent = ready ? firstArrival && !leaving ? text.waiting : text.ready : failed.length && !progress.running ? `${failed.length} ${text.failed}` :
                 progress.total ? `${text.loading}: ${progress.loaded} / ${progress.total} (${percent}%)${preloadReady ? ` — ${text.page}` : ''}` : text.preparing;
             retry.textContent = text.retry;
             retry.hidden = progress.running || !failed.length;
+            skipAnimation.textContent = text.skipAnimation;
+            skipAnimation.hidden = !firstArrival || !ready || leaving;
             errors.hidden = !failed.length;
             errors.replaceChildren(...failed.map(url => {
                 const item = document.createElement('li');
@@ -657,6 +665,7 @@
                 try { sessionStorage.setItem(bootSessionKey, 'complete'); } catch { /* Storage is optional. */ }
             }
             task?.cancel();
+            window.clearTimeout(minimumTimer);
             window.clearTimeout(exitTimer);
             window.removeEventListener('load', onLoaded);
             window.removeEventListener('pageshow', onRestore);
@@ -671,6 +680,18 @@
         };
         const maybeLeave = () => {
             if (finished || leaving || !pageReady || !preloadReady) return;
+            // Count the first ten seconds from display, including time spent loading.
+            const remaining = minimumArrivalMs - (performance.now() - arrivalStartedAt);
+            if (remaining > 0) {
+                if (minimumTimer === undefined) {
+                    minimumTimer = window.setTimeout(() => {
+                        minimumTimer = undefined;
+                        maybeLeave();
+                    }, remaining);
+                }
+                return;
+            }
+            window.clearTimeout(minimumTimer);
             leaving = true;
             renderProgress();
             const cinematic = bootScreen.classList.contains('boot-screen--cinematic') && !reduceMotionQuery.matches;
@@ -703,16 +724,21 @@
         const onBootKey = event => {
             if (event.key === 'Tab') {
                 event.preventDefault();
-                (retry.hidden ? bootScreen : retry).focus();
+                (!retry.hidden ? retry : !skipAnimation.hidden ? skipAnimation : bootScreen).focus();
             }
         };
         retry.addEventListener('click', () => task ? run() : window.location.reload());
+        skipAnimation.addEventListener('click', () => {
+            // Skip only the remaining presentation; resources and fonts must be ready.
+            if (firstArrival && pageReady && preloadReady && !leaving) finishBootScreen();
+        });
         document.addEventListener('keydown', onBootKey);
         window.addEventListener('pageshow', onRestore);
         window.addEventListener('bhr:languagechange', renderProgress);
         window.addEventListener('load', onLoaded, { once: true });
         background.forEach(element => { element.inert = true; });
         body.classList.add('is-booting');
+        arrivalStartedAt = performance.now();
         bootScreen.hidden = false;
         bootScreen.focus({ preventScroll: true });
         renderProgress();

@@ -155,6 +155,20 @@
 .boot-screen.boot-screen--cinematic .boot-screen__status { display: block; max-width: none; margin: 0; color: #be98a9; font-size: .68rem; }
 .boot-screen--cinematic .boot-screen__errors { width: 100%; max-height: 17vh; margin: 12px 0 0; color: #ffe0e8; background: #9b25441c; }
 .boot-screen--cinematic .boot-screen__actions { justify-content: flex-start; }
+.boot-screen__skip-animation {
+    position: relative;
+    z-index: 1;
+    margin-top: 16px;
+    padding: 12px 18px;
+    border: 1px solid var(--signal);
+    background: transparent;
+    color: var(--paper);
+    font: 700 .7rem/1.6 var(--display);
+    letter-spacing: .04em;
+    cursor: pointer;
+}
+.boot-screen__skip-animation:hover { background: #ffffff14; }
+.boot-screen__skip-animation[hidden] { display: none; }
 .boot-screen--cinematic[data-phase="failed"] .boot-screen__phase { color: #ff9bb8; }
 
 /* The 100% reveal is a short iris opening, never a substitute for resource readiness. */
