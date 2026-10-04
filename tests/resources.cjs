@@ -49,6 +49,56 @@ module.exports = async (browser, baseURL) => {
     assert.deepEqual(issues, []);
     console.log('PASS resources: real complete manifest, full audio transfer, all 21 portraits and local OpenCC');
 
+    const previews = '/tmp/lunarvow-boot-preview';
+    fs.mkdirSync(previews, {recursive:true});
+    const capture = async (target, name) => {
+      // Capture the complete module without viewport-fixed controls covering it.
+      const style = await page.addStyleTag({content:'html { scroll-behavior: auto !important; } .site-header, .section-rail, .skip-link, .music-console { visibility: hidden !important; }'});
+      try {
+        await target.scrollIntoViewIfNeeded();
+        await target.screenshot({path:path.join(previews,name),animations:'disabled'});
+      } finally { await style.evaluate(style => style.remove()); }
+    };
+    const destinations = ['guide.html','hi3.html','gallery.html','story.html','captain-line.html','honkai-info.html'];
+    assert.deepEqual(await page.locator('.archive-card').evaluateAll(cards => cards.map(card => card.getAttribute('href'))), destinations);
+    assert.equal(await page.locator('.archive-card__media img').count(), 8);
+    for (const card of await page.locator('.archive-card').all()) {
+      await card.scrollIntoViewIfNeeded();
+      const images = await card.locator('img').evaluateAll(async images => Promise.all(images.map(async image => {
+        await image.decode();
+        return {width:image.naturalWidth,fit:getComputedStyle(image).objectFit,source:image.getAttribute('src')};
+      })));
+      assert.ok(images.length > 0 && images.every(image => image.width > 0 && image.fit === 'contain'));
+      assert.ok(images.every(image => manifest.resources.some(resource => resource.url === image.source)), 'cover images join the complete preload');
+    }
+    for (const [width,height] of [[1440,900],[390,844]]) {
+      await page.setViewportSize({width,height});
+      for (const language of ['zh-HK','en']) {
+        await page.evaluate(language => window.BHR_I18N.setLanguage(language), language);
+        assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
+        const images = await page.locator('.archive-card__media img').evaluateAll(images => images.map(image => {
+          const bounds=image.getBoundingClientRect(), frame=image.parentElement.getBoundingClientRect();
+          return bounds.width > 0 && bounds.height > 0 && bounds.left >= frame.left - 1 && bounds.right <= frame.right + 1 && bounds.top >= frame.top - 1 && bounds.bottom <= frame.bottom + 1;
+        }));
+        assert.ok(images.every(Boolean), 'full images stay inside their separate panels');
+        await capture(page.locator('.archive-grid'),`archive-${width}-${language}.png`);
+      }
+    }
+    await page.locator('.archive-card[href="guide.html"]').click();
+    await page.waitForURL('**/guide.html');
+    await page.locator('.boot-screen').waitFor({state:'hidden'});
+    const featured=page.locator('.featured-guide--illustrated');
+    await featured.scrollIntoViewIfNeeded();
+    await featured.locator('img').evaluate(image => image.decode());
+    assert.equal(await featured.locator('img').evaluate(image => getComputedStyle(image).objectFit), 'contain');
+    assert.equal(await featured.locator('.primary-link').getAttribute('href'), 'lunar-vow-guide.html');
+    for (const width of [1440,390]) {
+      await page.setViewportSize({width,height:900});
+      await capture(featured,`guide-cover-${width}.png`);
+    }
+    assert.deepEqual(issues, []);
+    console.log('PASS resources: six illustrated archive links, complete local cover images, two-language layouts and the featured guide cover');
+
     await page.goto(baseURL + '/gallery.html');
     await page.locator('.boot-screen').waitFor({state: 'hidden'});
     await page.waitForFunction(() => window.BHR_I18N);
