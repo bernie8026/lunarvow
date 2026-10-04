@@ -13,6 +13,10 @@
       "type": "fetch"
     },
     {
+      "url": "assets/archive-visuals.css",
+      "type": "fetch"
+    },
+    {
       "url": "assets/audio/lunar-vow-theme-loop.webm",
       "type": "fetch"
     },
