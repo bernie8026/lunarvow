@@ -72,10 +72,12 @@ module.exports = async function testGallery(browser, baseURL) {
     await page.evaluate(() => BHR_I18N.setLanguage('en'));
     for (const character of roster) {
       for (const suit of character.battlesuits) {
-        await page.locator('#search').fill(suit.en);
-        assert.equal(await page.locator('.card:visible').count(), 1, suit.en);
-        assert.equal(await page.locator('.card:visible').getAttribute('data-character'), character.slug);
-        assert.equal(await page.locator('.card:visible .tag').innerText(), suit.en);
+        for (const query of [suit.en, suit.zh]) {
+          await page.locator('#search').fill(query);
+          assert.equal(await page.locator('.card:visible').count(), 1, query);
+          assert.equal(await page.locator('.card:visible').getAttribute('data-character'), character.slug);
+          assert.equal(await page.locator('.card:visible .tag').innerText(), suit.en, query);
+        }
       }
     }
     await page.locator('#clear-search').click();
@@ -88,7 +90,7 @@ module.exports = async function testGallery(browser, baseURL) {
     assert.equal(await page.locator('.card:visible').count(), 0, 'Character and category filters intersect');
     await page.locator('#clear-search').click();
 
-    console.log('PASS gallery: every one of 115 named variants is searchable; character and category filters intersect correctly');
+    console.log('PASS gallery: all 115 variants are searchable in Chinese and English; character and category filters intersect correctly');
 
     await page.setViewportSize({width:1440,height:900});
     for (const character of roster) {
