@@ -601,6 +601,22 @@
       "type": "fetch"
     },
     {
+      "url": "assets/news-data.js",
+      "type": "fetch"
+    },
+    {
+      "url": "assets/news-view.js",
+      "type": "fetch"
+    },
+    {
+      "url": "assets/news.css",
+      "type": "fetch"
+    },
+    {
+      "url": "assets/news.js",
+      "type": "fetch"
+    },
+    {
       "url": "assets/placeholder.png",
       "type": "image"
     },
@@ -629,6 +645,10 @@
       "type": "fetch"
     },
     {
+      "url": "data/news.json",
+      "type": "fetch"
+    },
+    {
       "url": "gallery.html",
       "type": "fetch"
     },
@@ -650,6 +670,10 @@
     },
     {
       "url": "lunar-vow-guide.html",
+      "type": "fetch"
+    },
+    {
+      "url": "news.html",
       "type": "fetch"
     },
     {

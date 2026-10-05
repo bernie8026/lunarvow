@@ -10,9 +10,13 @@
     <link rel="stylesheet" href="assets/music-player.css">
     <link id="crimson-rose-theme" rel="stylesheet" href="assets/red-pink-theme.css">
     <link rel="stylesheet" href="assets/archive-visuals.css">
+    <link rel="stylesheet" href="assets/news.css">
     <script src="assets/preloader.js" defer></script>
     <script src="site.js" defer></script>
     <script src="assets/music-player.js" defer></script>
+    <script src="assets/news-data.js" defer></script>
+    <script src="assets/news-view.js" defer></script>
+    <script src="assets/news.js" defer></script>
 </head>
 <body class="home-page">
     <a class="skip-link" href="#main-content">跳至主要內容</a>
@@ -71,7 +75,7 @@
 
                 <div class="hero-actions">
                     <a class="ui-button ui-button--primary" href="lunar-vow-guide.html">
-                        <span>OPEN V8.7 GUIDE</span>
+                        <span>OPEN LUNAR GUIDE</span>
                         <b>↗</b>
                     </a>
                     <a class="ui-button ui-button--ghost" href="#archive">EXPLORE ARCHIVE</a>
@@ -103,8 +107,8 @@
                     SCROLL TO ACCESS
                 </a>
                 <div class="hero-footer__version">
-                    <span>LAST DATA SYNC</span>
-                    <strong>2026.07.18 / VER. 8.7+</strong>
+                    <span>NEWS CHECKED</span>
+                    <strong><time data-news-checked datetime="2026-10-05">2026.10.05</time> / OFFICIAL NEWS</strong>
                 </div>
             </div>
         </section>
@@ -128,28 +132,15 @@
                     <span class="section-index">02</span>
                     <p>LATEST TRANSMISSION</p>
                 </div>
-                <h2>最新檔案</h2>
+                <h2>最新消息</h2>
                 <span class="section-heading__line"></span>
             </header>
 
-            <article class="feature-transmission" data-reveal>
-                <a class="feature-transmission__visual" href="story.html" aria-label="開啟崩壞3rd完整劇情整理">
-                    <span class="feature-transmission__stamp">NEW STORY</span>
-                    <img src="assets/hi3/characters/lunar-vow-crimson-love.webp" alt="月下誓約・予愛以心" width="960" height="660" loading="lazy" decoding="async">
-                    <span class="feature-transmission__code">FILE // STORY-00</span>
-                </a>
-                <div class="feature-transmission__body">
-                    <p class="eyebrow"><span></span>STORY ARCHIVE / FULL SPOILERS</p>
-                    <h3>由聖芙蕾雅<br>去到火星</h3>
-                    <p>主線第一部、第一部半、第二部，以及艦長線／月下重逢集中整理，附劇透警告同快速索引。</p>
-                    <ul class="data-list">
-                        <li><span>01</span>KIANA & FINALITY</li>
-                        <li><span>02</span>MARS / PART 2</li>
-                        <li><span>03</span>CAPTAINVERSE & LUNA</li>
-                    </ul>
-                    <a class="text-link" href="story.html">ACCESS STORY ARCHIVE <b>→</b></a>
-                </div>
-            </article>
+            <!-- NEWS:START -->
+<div data-news-root data-news-mode="home" data-i18n-ignore>
+<div class="news-intro"><p>按地區整理官方消息。大陸服活動唔代表台港澳服同步開放；消息按以下核對日整理。</p><p class="news-checked">官方資料核對 <time datetime="2026-10-05">2026.10.05</time></p></div><p class="news-stale" hidden>核對已超過 14 日，請開啟官方來源查看後續公告。</p><div class="news-versions" aria-label="版本資料截至 2026.10.05"><a class="news-version" href="https://apps.apple.com/tw/app/%E5%B4%A9%E5%A3%9E3rd/id1233055283" target="_blank" rel="noopener noreferrer"><span>台港澳</span><strong>v9.0</strong><small>官方來源 ↗</small></a><a class="news-version" href="https://steamcommunity.com/app/1671200/allnews/?l=english" target="_blank" rel="noopener noreferrer"><span>國際服</span><strong>v9.0</strong><small>官方來源 ↗</small></a><a class="news-version" href="https://steamcommunity.com/app/1668940/allnews/" target="_blank" rel="noopener noreferrer"><span>大陸服</span><strong>v9.1</strong><small>官方來源 ↗</small></a></div><article class="news-card news-card--spotlight" id="spotlight-cn-luna-login" data-news-id="cn-luna-login"><figure class="news-portrait"><img src="assets/hi3/characters/lunar-vow-crimson-love.webp" alt="月下誓約・予愛以心角色立繪" width="960" height="660" loading="lazy" decoding="async"><figcaption>角色立繪／HoYoverse</figcaption></figure><div class="news-card__body"><p class="news-kicker">月下重點</p><div class="news-tags"><span class="news-region">大陸服</span><span>活動</span><span>v9.1</span></div><p class="news-date">公告 <time datetime="2026-09-29">2026.09.29</time></p><h3>溯夢之行：自選月下角色卡</h3><p class="news-summary">20 級起，第 1 日可自選月下或深空定錨角色卡／晉升印章；第 3、5、7 日各有補給卡或 1200 水晶自選獎勵。</p><div class="news-period"><span class="news-status news-status--active">進行中</span><p>10.01 04:00 – 11.26 04:00 <span class="news-timezone">UTC+08:00</span></p></div><div class="news-sources"><a class="news-source" href="https://www.taptap.cn/moment/853681631158863654?group_id=17" target="_blank" rel="noopener noreferrer">官方來源 ↗<span class="sr-only"> — 溯夢之行：自選月下角色卡</span></a></div></div></article><div class="news-grid news-grid--home"><article class="news-card" id="news-cn-epilogue" data-news-id="cn-epilogue"><div class="news-card__body"><div class="news-tags"><span class="news-region">大陸服</span><span>劇情</span><span>v9.1</span></div><p class="news-date">公告 <time datetime="2026-09-29">2026.09.29</time></p><h3>第二部後日談：海正用火的聲音歌唱</h3><p class="news-summary">10 月 5 日 10:00 開放全部劇情，30 級起可參與；限時主線任務可領取攜夢待曙禮盒。</p><div class="news-period"><span class="news-status news-status--active">進行中</span><p>10.05 10:00 – 11.26 04:00（限時任務） <span class="news-timezone">UTC+08:00</span></p></div><div class="news-sources"><a class="news-source" href="https://www.taptap.cn/moment/854131154712791988?group_id=17" target="_blank" rel="noopener noreferrer">官方來源 ↗<span class="sr-only"> — 第二部後日談：海正用火的聲音歌唱</span></a></div></div></article><article class="news-card" id="news-cn-ost" data-news-id="cn-ost"><div class="news-card__body"><div class="news-tags"><span class="news-region">大陸服</span><span>音樂</span><span>v9.1</span></div><p class="news-date">公告 <time datetime="2026-10-05">2026.10.05</time></p><h3>兩張全新 HOYO-MiX 原聲專輯上架</h3><p class="news-summary">《於未來彼端回眸》同《映憶流歌》登上騰訊音樂，分別收錄 20 首及 9 首配樂。</p><div class="news-period"><span class="news-status news-status--notice">版本公告</span><p>10.05 起</p></div><div class="news-sources"><a class="news-source" href="https://www.taptap.cn/moment/854128373364950305?group_id=17" target="_blank" rel="noopener noreferrer">官方來源 ↗<span class="sr-only"> — 兩張全新 HOYO-MiX 原聲專輯上架</span></a></div></div></article><article class="news-card" id="news-cn-luna-system" data-news-id="cn-luna-system"><div class="news-card__body"><div class="news-tags"><span class="news-region">大陸服</span><span>裝備／系統</span><span>v9.1</span></div><p class="news-date">公告 <time datetime="2026-09-24">2026.09.24</time></p><h3>月下更新：G4 長夜將明開放鍛造</h3><p class="news-summary">長夜將明新增 G4 鍛造；月下角色卡加入家園補給，並修正相偕之契對特定護盾／關卡機制嘅異常效果。</p><div class="news-period"><span class="news-status news-status--notice">版本公告</span><p>9.1 大陸服系統更新</p></div><div class="news-sources"><a class="news-source" href="https://www.taptap.cn/moment/852131358120609445?group_id=17" target="_blank" rel="noopener noreferrer">官方來源 ↗<span class="sr-only"> — 月下更新：G4 長夜將明開放鍛造</span></a></div></div></article><article class="news-card" id="news-tw-version-90" data-news-id="tw-version-90"><div class="news-card__body"><div class="news-tags"><span class="news-region">台港澳</span><span>版本</span><span>v9.0</span></div><p class="news-date">公告 <time datetime="2026-08-20">2026.08.20</time></p><h3>9.0「曙夢向明」台港澳現行版本</h3><p class="news-summary">S 級協同者希娜狄雅、浮生新神之鍵、第二部終章同艦艦活動上線；本區尚未核實 9.1 發行公告。</p><div class="news-period"><span class="news-status news-status--notice">版本公告</span><p>完整日程見官方公告</p></div><div class="news-sources"><a class="news-source" href="https://apps.apple.com/tw/app/%E5%B4%A9%E5%A3%9E3rd/id1233055283" target="_blank" rel="noopener noreferrer">官方來源 ↗<span class="sr-only"> — 9.0「曙夢向明」台港澳現行版本</span></a></div></div></article></div><div class="news-bottom"><a class="news-browse" href="news.html">查看全部消息 <span aria-hidden="true">↗</span></a><a class="news-story-link" href="story.html">返回劇情檔案 →<small>主線同艦長線整理（含劇透）</small></a></div>
+</div>
+<!-- NEWS:END -->
         </section>
 
         <section class="content-section content-section--archive tracked-section" id="archive" data-section="archive">
