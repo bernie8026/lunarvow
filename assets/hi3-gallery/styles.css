@@ -558,6 +558,7 @@ body.database-page .valkyrie-file .lb-shell {
     max-height: calc(100dvh - 158px);
     overflow: auto;
     overscroll-behavior: contain;
+    overflow-anchor: none;
 }
 
 body.database-page .valkyrie-file .lb-visual {

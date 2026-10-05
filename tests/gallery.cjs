@@ -128,7 +128,15 @@ module.exports = async function testGallery(browser, baseURL) {
         });
         assert.deepEqual(layout,{pageOverflow:false,fileOverflow:false,closeVisible:true}, width + ' ' + language);
         if (width === 390 || width === 1440) {
-          await page.locator('.lb-img').evaluate(image => image.decode());
+          await page.locator('.lb-img').evaluate(async image => {
+            await image.decode();
+            await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+          });
+          const photo = await page.locator('.lb-img').evaluate(image => {
+            const style = getComputedStyle(image), bounds = image.getBoundingClientRect();
+            return {opacity:style.opacity,visibility:style.visibility,top:bounds.top,bottom:bounds.bottom,width:bounds.width};
+          });
+          assert.ok(Number(photo.opacity) > 0.95 && photo.visibility === 'visible' && photo.top >= 0 && photo.bottom <= 844 && photo.width > 0, 'Selected portrait remains visible: ' + JSON.stringify(photo));
           await dialog.screenshot({path:'/tmp/lunarvow-boot-preview/valkyrie-file-' + width + '-' + language + '.png',animations:'disabled'});
         }
         // Live language changes preserve the currently selected variant.
@@ -140,7 +148,9 @@ module.exports = async function testGallery(browser, baseURL) {
     }
     await page.setViewportSize({width:1440,height:900});
     await page.evaluate(() => BHR_I18N.setLanguage('zh-HK'));
+    const captureStyle = await page.addStyleTag({content:'.site-header, .music-console, .skip-link { visibility:hidden !important; }'});
     await page.locator('#hi3-gallery').screenshot({path:'/tmp/lunarvow-boot-preview/valkyrie-directory.png',animations:'disabled'});
+    await captureStyle.evaluate(style => style.remove());
     await page.evaluate(() => BHR_I18N.setLanguage('zh-HK'));
     assert.deepEqual(errors, []);
 

@@ -175,7 +175,11 @@
     };
     const updateIndex = () => characters.forEach(character => {
       character._search = indexOf([character.en, character.zh, character.slug, ...(character.aliases || [])].join(' '));
-      character.battlesuits.forEach(suit => { suit._search = indexOf([suit.en, suit.zh, suit.slug, suit.version || '', ...(suit.aliases || [])].join(' ')); });
+      character.battlesuits.forEach(suit => {
+        const names = [suit.en, suit.zh, suit.slug, ...(suit.aliases || [])];
+        suit._search = indexOf([...names, suit.version || ''].join(' '));
+        suit._names = new Set(names.flatMap(name => [normalize(name), normalize(simplify(name))]));
+      });
     });
     const showState = (message, action, handler) => {
       if (!statePanel) { statePanel = document.createElement('div'); statePanel.className = 'empty-state'; statePanel.dataset.i18nIgnore = ''; grid.append(statePanel); }
@@ -213,9 +217,12 @@
         return;
       }
       const terms = input.value.trim().split(/\s+/).map(normalize).filter(Boolean);
+      const query = normalize(input.value);
       let visible = 0, matching = 0;
       for (const character of characters) {
-        const suits = character.battlesuits.filter(suit => categoryMatches(suit) && terms.every(term => (character._search + suit._search).includes(term)));
+        const matches = character.battlesuits.filter(suit => categoryMatches(suit) && terms.every(term => (character._search + suit._search).includes(term)));
+        const exact = query ? matches.filter(suit => suit._names.has(query)) : [];
+        const suits = exact.length ? exact : matches;
         const show = (characterFilter.value === 'all' || character.slug === characterFilter.value) && suits.length > 0;
         character._card.hidden = !show;
         if (show) {
