@@ -3,189 +3,1816 @@
     "slug": "kiana-kaslana",
     "en": "Kiana Kaslana",
     "zh": "琪亞娜·卡斯蘭娜",
-    "battlesuit": "Herrscher of Finality",
+    "aliases": [
+      "Kiana",
+      "琪亞娜",
+      "草履蟲"
+    ],
+    "default_suit": "herrscher-of-finality",
+    "battlesuits": [
+      {
+        "slug": "white-comet",
+        "en": "White Comet",
+        "zh": "領域裝·白練",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/white-comet.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Kiana%20White%20Comet.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/White_Comet"
+      },
+      {
+        "slug": "valkyrie-ranger",
+        "en": "Valkyrie Ranger",
+        "zh": "女武神·遊俠",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/valkyrie-ranger.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Kiana%20Valkyrie%20Ranger.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Valkyrie_Ranger"
+      },
+      {
+        "slug": "void-drifter",
+        "en": "Void Drifter",
+        "zh": "天穹遊俠",
+        "kind": "augment",
+        "variant": "main",
+        "augment_of": "valkyrie-ranger",
+        "image": "assets/hi3/battlesuits/void-drifter.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Kiana%20Void%20Drifter.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Void_Drifter"
+      },
+      {
+        "slug": "divine-prayer",
+        "en": "Divine Prayer",
+        "zh": "聖女祈禱",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/divine-prayer.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Kiana%20Divine%20Prayer.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Divine_Prayer"
+      },
+      {
+        "slug": "knight-moonbeam",
+        "en": "Knight Moonbeam",
+        "zh": "白騎士·月光",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/knight-moonbeam.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Kiana%20Knight%20Moonbeam.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Knight_Moonbeam"
+      },
+      {
+        "slug": "herrscher-of-the-void",
+        "en": "Herrscher of the Void",
+        "zh": "空之律者",
+        "kind": "battlesuit",
+        "variant": "sirin",
+        "image": "assets/hi3/battlesuits/herrscher-of-the-void.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Kiana%20Herrscher%20of%20the%20Void.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Herrscher_of_the_Void"
+      },
+      {
+        "slug": "herrscher-of-flamescion",
+        "en": "Herrscher of Flamescion",
+        "zh": "薪炎之律者",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/herrscher-of-flamescion.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Kiana%20Herrscher%20of%20Flamescion.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Herrscher_of_Flamescion"
+      },
+      {
+        "slug": "herrscher-of-finality",
+        "en": "Herrscher of Finality",
+        "zh": "終焉之律者",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/portraits/kiana-kaslana.png",
+        "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Battlesuits/Herrscher_of_Finality_29.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Herrscher_of_Finality"
+      },
+      {
+        "slug": "ba-dum-fiery-wishing-star",
+        "en": "Ba-Dum! Fiery Wishing Star",
+        "zh": "咚！熾願吉星",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/ba-dum-fiery-wishing-star.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/kiana%20badum.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Ba-Dum!_Fiery_Wishing_Star"
+      }
+    ],
     "image": "assets/hi3/portraits/kiana-kaslana.png",
-    "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Battlesuits/Herrscher_of_Finality_29.png",
-    "wiki_source": "https://honkaiimpact3.fandom.com/wiki/File:Herrscher%20of%20Finality%20%28Portrait%29.png"
+    "battlesuit": "Herrscher of Finality",
+    "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Battlesuits/Herrscher_of_Finality_29.png"
   },
   {
     "slug": "raiden-mei",
     "en": "Raiden Mei",
     "zh": "雷電芽衣",
-    "battlesuit": "Herrscher of Origin",
+    "aliases": [
+      "Mei",
+      "芽衣"
+    ],
+    "default_suit": "herrscher-of-origin",
+    "battlesuits": [
+      {
+        "slug": "crimson-impulse",
+        "en": "Crimson Impulse",
+        "zh": "脈衝裝·緋紅",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/crimson-impulse.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Mei%20Crimson%20Impulse.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Crimson_Impulse"
+      },
+      {
+        "slug": "valkyrie-bladestrike",
+        "en": "Valkyrie Bladestrike",
+        "zh": "女武神·強襲",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/valkyrie-bladestrike.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Mei%20Valkyrie%20Bladestrike.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Valkyrie_Bladestrike"
+      },
+      {
+        "slug": "striker-fulminata",
+        "en": "Striker Fulminata",
+        "zh": "破曉強襲",
+        "kind": "augment",
+        "variant": "main",
+        "augment_of": "valkyrie-bladestrike",
+        "image": "assets/hi3/battlesuits/striker-fulminata.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Mei%20Striker%20Fulminata.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Striker_Fulminata"
+      },
+      {
+        "slug": "shadow-dash",
+        "en": "Shadow Dash",
+        "zh": "影舞衝擊",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/shadow-dash.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Mei%20Shadow%20Dash.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Shadow_Dash"
+      },
+      {
+        "slug": "danzai-spectramancer",
+        "en": "Danzai Spectramancer",
+        "zh": "斷罪影舞",
+        "kind": "augment",
+        "variant": "main",
+        "augment_of": "shadow-dash",
+        "image": "assets/hi3/battlesuits/danzai-spectramancer.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Mei%20Danzai%20Spectramancer.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Danzai_Spectramancer"
+      },
+      {
+        "slug": "lightning-empress",
+        "en": "Lightning Empress",
+        "zh": "雷電女王的鬼鎧",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/lightning-empress.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Mei%20Lightning%20Empress.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Lightning_Empress"
+      },
+      {
+        "slug": "herrscher-of-thunder",
+        "en": "Herrscher of Thunder",
+        "zh": "雷之律者",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/herrscher-of-thunder.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Mei%20Herrscher%20of%20Thunder.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Herrscher_of_Thunder"
+      },
+      {
+        "slug": "herrscher-of-origin",
+        "en": "Herrscher of Origin",
+        "zh": "始源之律者",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/portraits/raiden-mei.png",
+        "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Herrscher_of_Origin_29.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Herrscher_of_Origin"
+      },
+      {
+        "slug": "xentinel-dawnbearing-crescent",
+        "en": "Xentinel · Dawnbearing Crescent",
+        "zh": "鎮×偃月叩曉",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/xentinel-dawnbearing-crescent.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Mei%20Xentinel.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Xentinel_%C2%B7_Dawnbearing_Crescent"
+      },
+      {
+        "slug": "a-post-honkai-odyssey-mei",
+        "en": "A Post-Honkai Odyssey: Mei",
+        "zh": "後崩壞書・芽衣",
+        "kind": "apho",
+        "variant": "apho",
+        "image": "assets/hi3/portraits/raiden-mei.png",
+        "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Herrscher_of_Origin_29.png",
+        "image_label": {
+          "en": "Herrscher of Origin",
+          "zh": "始源之律者"
+        },
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/A_Post-Honkai_Odyssey"
+      }
+    ],
     "image": "assets/hi3/portraits/raiden-mei.png",
-    "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Herrscher_of_Origin_29.png",
-    "wiki_source": "https://honkaiimpact3.fandom.com/wiki/File:Herrscher%20of%20Origin%20%28Portrait%29.png"
+    "battlesuit": "Herrscher of Origin",
+    "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Herrscher_of_Origin_29.png"
   },
   {
     "slug": "bronya-zaychik",
     "en": "Bronya Zaychik",
-    "zh": "布洛妮婭·捷伊慈克",
-    "battlesuit": "Herrscher of Truth",
+    "zh": "布洛妮婭·扎伊切克",
+    "aliases": [
+      "Bronya",
+      "布洛妮婭·捷伊慈克"
+    ],
+    "default_suit": "herrscher-of-truth",
+    "battlesuits": [
+      {
+        "slug": "valkyrie-chariot",
+        "en": "Valkyrie Chariot",
+        "zh": "女武神·戰車",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/valkyrie-chariot.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Bronya%20Valkyrie%20Chariot.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Valkyrie_Chariot"
+      },
+      {
+        "slug": "snowy-sniper",
+        "en": "Snowy Sniper",
+        "zh": "雪地狙擊",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/snowy-sniper.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Bronya%20Snowy%20Sniper.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Snowy_Sniper"
+      },
+      {
+        "slug": "yamabuki-armor",
+        "en": "Yamabuki Armor",
+        "zh": "驅動裝·山吹",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/yamabuki-armor.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Bronya%20Yambuki%20Armor.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Yamabuki_Armor"
+      },
+      {
+        "slug": "drive-kometa",
+        "en": "Drive Kometa",
+        "zh": "彗星驅動",
+        "kind": "augment",
+        "variant": "main",
+        "augment_of": "yamabuki-armor",
+        "image": "assets/hi3/battlesuits/drive-kometa.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Drive%20Kometa.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Drive_Kometa"
+      },
+      {
+        "slug": "wolf-s-dawn",
+        "en": "Wolf's Dawn",
+        "zh": "銀狼的黎明",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/wolf-s-dawn.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Bronya%20Wolf%20Dawn.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Wolf's_Dawn"
+      },
+      {
+        "slug": "dimension-breaker",
+        "en": "Dimension Breaker",
+        "zh": "次元邊界突破",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/dimension-breaker.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Bronya%20Dimension%20Breaker.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Dimension_Breaker"
+      },
+      {
+        "slug": "black-nucleus",
+        "en": "Black Nucleus",
+        "zh": "異度黑核侵蝕",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/black-nucleus.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Bronya%20Black%20Nucleus.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Black_Nucleus"
+      },
+      {
+        "slug": "herrscher-of-reason",
+        "en": "Herrscher of Reason",
+        "zh": "理之律者",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/herrscher-of-reason.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Bronya%20Herrscher%20of%20Reason.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Herrscher_of_Reason"
+      },
+      {
+        "slug": "haxxor-bunny",
+        "en": "Haxxor Bunny",
+        "zh": "迷城駭兔",
+        "kind": "battlesuit",
+        "variant": "captainverse",
+        "image": "assets/hi3/battlesuits/haxxor-bunny.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Bronya%20Haxxor%20Bunny.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Haxxor_Bunny",
+        "aliases": [
+          "駭兔",
+          "Bronie"
+        ]
+      },
+      {
+        "slug": "silverwing-n-ex",
+        "en": "Silverwing: N-EX",
+        "zh": "次生銀翼",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/silverwing-n-ex.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Bronya%20Silverwing%20N-EX.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Silverwing%3A_N-EX"
+      },
+      {
+        "slug": "herrscher-of-truth",
+        "en": "Herrscher of Truth",
+        "zh": "真理之律者",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/portraits/bronya-zaychik.png",
+        "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Herrscher_of_Truth_29.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Herrscher_of_Truth"
+      },
+      {
+        "slug": "a-post-honkai-odyssey-2-bronya",
+        "en": "A Post-Honkai Odyssey 2: Bronya",
+        "zh": "後崩壞書2・布洛妮婭",
+        "kind": "apho",
+        "variant": "apho",
+        "image": "assets/hi3/battlesuits/silverwing-n-ex.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Bronya%20Silverwing%20N-EX.png",
+        "image_label": {
+          "en": "Silverwing: N-EX",
+          "zh": "次生銀翼"
+        },
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/A_Post-Honkai_Odyssey"
+      }
+    ],
     "image": "assets/hi3/portraits/bronya-zaychik.png",
-    "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Herrscher_of_Truth_29.png",
-    "wiki_source": "https://honkaiimpact3.fandom.com/wiki/File:Herrscher%20of%20Truth%20%28Portrait%29.png"
+    "battlesuit": "Herrscher of Truth",
+    "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Herrscher_of_Truth_29.png"
   },
   {
     "slug": "himeko-murata",
-    "en": "Himeko Murata",
-    "zh": "姬子·村田",
-    "battlesuit": "Vermilion Knight: Eclipse",
+    "en": "Murata Himeko",
+    "zh": "無量塔姬子",
+    "aliases": [
+      "Himeko Murata",
+      "姬子·村田",
+      "姬子"
+    ],
+    "default_suit": "vermilion-knight-eclipse",
+    "battlesuits": [
+      {
+        "slug": "battle-storm",
+        "en": "Battle Storm",
+        "zh": "戰場疾風",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/battle-storm.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Himeko%20Battle%20Storm.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Battle_Storm"
+      },
+      {
+        "slug": "valkyrie-triumph",
+        "en": "Valkyrie Triumph",
+        "zh": "女武神·凱旋",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/valkyrie-triumph.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Himeko%20Valkyrie%20Triumph.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Valkyrie_Triumph"
+      },
+      {
+        "slug": "scarlet-fusion",
+        "en": "Scarlet Fusion",
+        "zh": "融核裝·深紅",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/scarlet-fusion.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Himeko%20Scarlet%20Fusion.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Scarlet_Fusion"
+      },
+      {
+        "slug": "blood-rose",
+        "en": "Blood Rose",
+        "zh": "血色玫瑰",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/blood-rose.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Himeko%20Blood%20Rose.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Blood_Rose"
+      },
+      {
+        "slug": "kriegsmesser",
+        "en": "Kriegsmesser",
+        "zh": "極地戰刃",
+        "kind": "battlesuit",
+        "variant": "captainverse",
+        "image": "assets/hi3/battlesuits/kriegsmesser.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Himeko%20Kriegsmesser.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Kriegsmesser"
+      },
+      {
+        "slug": "vermilion-knight-eclipse",
+        "en": "Vermilion Knight: Eclipse",
+        "zh": "真紅騎士·月蝕",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/portraits/himeko-murata.png",
+        "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Vermilion_Knight_-_Eclipse_29.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Vermilion_Knight%3A_Eclipse"
+      }
+    ],
     "image": "assets/hi3/portraits/himeko-murata.png",
-    "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Vermilion_Knight_-_Eclipse_29.png",
-    "wiki_source": "https://honkaiimpact3.fandom.com/wiki/File:Vermilion%20Knight%20-%20Eclipse%20%28Portrait%29.png"
-  },
-  {
-    "slug": "theresa-apocalypse",
-    "en": "Theresa Apocalypse",
-    "zh": "德麗莎·阿波卡利斯",
-    "battlesuit": "Celestial Hymn",
-    "image": "assets/hi3/portraits/theresa-apocalypse.png",
-    "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Celestial_Hymn_29.png",
-    "wiki_source": "https://honkaiimpact3.fandom.com/wiki/File:Celestial%20Hymn%20%28Portrait%29.png"
-  },
-  {
-    "slug": "fischl",
-    "en": "Fischl",
-    "zh": "菲謝爾",
-    "battlesuit": "Prinzessin der Verurteilung!",
-    "image": "assets/hi3/portraits/fischl.png",
-    "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Prinzessin_der_Verurteilung_29.png",
-    "wiki_source": "https://honkaiimpact3.fandom.com/wiki/File:Prinzessin%20der%20Verurteilung%21%20%28Portrait%29.png"
+    "battlesuit": "Vermilion Knight: Eclipse",
+    "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Vermilion_Knight_-_Eclipse_29.png"
   },
   {
     "slug": "yae-sakura",
     "en": "Yae Sakura",
     "zh": "八重櫻",
-    "battlesuit": "Flame Sakitama",
+    "aliases": [
+      "Sakura"
+    ],
+    "default_suit": "flame-sakitama",
+    "battlesuits": [
+      {
+        "slug": "gyakushinn-miko",
+        "en": "Gyakushinn Miko",
+        "zh": "逆神巫女",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/gyakushinn-miko.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Sakura%20Gyakushinn%20Miko.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Gyakushinn_Miko"
+      },
+      {
+        "slug": "goushinnso-memento",
+        "en": "Goushinnso Memento",
+        "zh": "御神裝·勿忘",
+        "kind": "battlesuit",
+        "variant": "previous-era",
+        "image": "assets/hi3/battlesuits/goushinnso-memento.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Sakura%20Goushinnso%20Memento.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Goushinnso_Memento"
+      },
+      {
+        "slug": "flame-sakitama",
+        "en": "Flame Sakitama",
+        "zh": "真炎幸魂",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/portraits/yae-sakura.png",
+        "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Flame_Sakitama_29.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Flame_Sakitama"
+      },
+      {
+        "slug": "darkbolt-jonin",
+        "en": "Darkbolt Jonin",
+        "zh": "夜隱重霞",
+        "kind": "battlesuit",
+        "variant": "captainverse",
+        "image": "assets/hi3/battlesuits/darkbolt-jonin.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Sakura%20Darkbolt%20Jonin.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Darkbolt_Jonin",
+        "aliases": [
+          "霞",
+          "Kasumi"
+        ]
+      }
+    ],
     "image": "assets/hi3/portraits/yae-sakura.png",
-    "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Flame_Sakitama_29.png",
-    "wiki_source": "https://honkaiimpact3.fandom.com/wiki/File:Flame%20Sakitama%20%28Portrait%29.png"
+    "battlesuit": "Flame Sakitama",
+    "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Flame_Sakitama_29.png"
+  },
+  {
+    "slug": "theresa-apocalypse",
+    "en": "Theresa Apocalypse",
+    "zh": "德麗莎·阿波卡利斯",
+    "aliases": [
+      "Theresa"
+    ],
+    "default_suit": "lunar-vow-crimson-love",
+    "battlesuits": [
+      {
+        "slug": "valkyrie-pledge",
+        "en": "Valkyrie Pledge",
+        "zh": "女武神·誓約",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/valkyrie-pledge.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Theresa%20Valkyrie%20Pledge.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Valkyrie_Pledge"
+      },
+      {
+        "slug": "violet-executer",
+        "en": "Violet Executer",
+        "zh": "處刑裝·紫苑",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/violet-executer.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Theresa%20Violet%20Executor.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Violet_Executer"
+      },
+      {
+        "slug": "twilight-paladin",
+        "en": "Twilight Paladin",
+        "zh": "暮光騎士·月煌",
+        "kind": "augment",
+        "variant": "main",
+        "augment_of": "violet-executer",
+        "image": "assets/hi3/battlesuits/twilight-paladin.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Theresa%20Twilight%20Paladin.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Twilight_Paladin"
+      },
+      {
+        "slug": "sakuno-rondo",
+        "en": "Sakuno Rondo",
+        "zh": "櫻火輪舞",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/sakuno-rondo.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Theresa%20Sakuno%20Rondo.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Sakuno_Rondo"
+      },
+      {
+        "slug": "celestial-hymn",
+        "en": "Celestial Hymn",
+        "zh": "神恩頌歌",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/portraits/theresa-apocalypse.png",
+        "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Celestial_Hymn_29.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Celestial_Hymn"
+      },
+      {
+        "slug": "luna-kindred",
+        "en": "Luna Kindred",
+        "zh": "月下初擁",
+        "kind": "battlesuit",
+        "variant": "captainverse",
+        "image": "assets/hi3/battlesuits/luna-kindred.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Theresa%20Luna%20Kindred.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Luna_Kindred",
+        "aliases": [
+          "Luna",
+          "月下"
+        ]
+      },
+      {
+        "slug": "starlit-astrologos",
+        "en": "Starlit Astrologos",
+        "zh": "朔夜觀星",
+        "kind": "battlesuit",
+        "variant": "captainverse",
+        "image": "assets/hi3/battlesuits/starlit-astrologos.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Theresa%20Starlit%20Astrologos.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Starlit_Astrologos",
+        "aliases": [
+          "觀星",
+          "孔明",
+          "Kongming"
+        ]
+      },
+      {
+        "slug": "lunar-vow-crimson-love",
+        "en": "Lunar Vow: Crimson Love",
+        "zh": "月下誓約・予愛以心",
+        "kind": "battlesuit",
+        "variant": "captainverse",
+        "image": "assets/hi3/portraits/lunar-vow-crimson-love.png",
+        "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Lunar_Vow_-_Crimson_Love_29.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Lunar_Vow%3A_Crimson_Love",
+        "aliases": [
+          "Luna",
+          "月下"
+        ]
+      },
+      {
+        "slug": "schicksal-s-imperative",
+        "en": "Schicksal's Imperative",
+        "zh": "天命難逃",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/schicksal-s-imperative.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Theresa%20Schicksal's%20Imperative.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Schicksal's_Imperative"
+      }
+    ],
+    "image": "assets/hi3/portraits/lunar-vow-crimson-love.png",
+    "battlesuit": "Lunar Vow: Crimson Love",
+    "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Lunar_Vow_-_Crimson_Love_29.png"
+  },
+  {
+    "slug": "fu-hua",
+    "en": "Fu Hua",
+    "zh": "符華",
+    "aliases": [
+      "Hua"
+    ],
+    "default_suit": "fenghuang-of-vicissitude",
+    "battlesuits": [
+      {
+        "slug": "valkyrie-accipiter",
+        "en": "Valkyrie Accipiter",
+        "zh": "女武神·迅羽",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/valkyrie-accipiter.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Fu%20Hua%20Valkyrie%20Accipiter.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Valkyrie_Accipiter"
+      },
+      {
+        "slug": "hawk-of-the-fog",
+        "en": "Hawk of the Fog",
+        "zh": "霧都迅羽",
+        "kind": "augment",
+        "variant": "main",
+        "augment_of": "valkyrie-accipiter",
+        "image": "assets/hi3/battlesuits/hawk-of-the-fog.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Fu%20Hua%20Hawk%20of%20the%20Fog.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Hawk_of_the_Fog"
+      },
+      {
+        "slug": "phoenix",
+        "en": "Phoenix",
+        "zh": "熾翎",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/phoenix.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Fu%20Hua%20Phoenix.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Phoenix"
+      },
+      {
+        "slug": "night-squire",
+        "en": "Night Squire",
+        "zh": "白夜執事",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/night-squire.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Fu%20Hua%20Night%20Squire.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Night_Squire"
+      },
+      {
+        "slug": "shadow-knight",
+        "en": "Shadow Knight",
+        "zh": "影騎士·月輪",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/shadow-knight.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Fu%20Hua%20Shadow%20Knight.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Shadow_Knight"
+      },
+      {
+        "slug": "azure-empyrea",
+        "en": "Azure Empyrea",
+        "zh": "雲墨丹心",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/azure-empyrea.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Fu%20Hua%20Azure%20Empyrea.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Azure_Empyrea"
+      },
+      {
+        "slug": "herrscher-of-sentience",
+        "en": "Herrscher of Sentience",
+        "zh": "識之律者",
+        "kind": "battlesuit",
+        "variant": "sentience",
+        "image": "assets/hi3/battlesuits/herrscher-of-sentience.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Fu%20Hua%20Herrscher%20of%20Sentience.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Herrscher_of_Sentience",
+        "aliases": [
+          "Senti",
+          "小識"
+        ]
+      },
+      {
+        "slug": "fenghuang-of-vicissitude",
+        "en": "Fenghuang of Vicissitude",
+        "zh": "浮生·渡塵之羽",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/fenghuang-of-vicissitude.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Fu%20Hua%20Fenghuang%20of%20Vicissitude.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Fenghuang_of_Vicissitude"
+      }
+    ],
+    "image": "assets/hi3/battlesuits/fenghuang-of-vicissitude.webp",
+    "battlesuit": "Fenghuang of Vicissitude",
+    "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Fu%20Hua%20Fenghuang%20of%20Vicissitude.png"
+  },
+  {
+    "slug": "kallen-kaslana",
+    "en": "Kallen Kaslana",
+    "zh": "卡蓮·卡斯蘭娜",
+    "aliases": [
+      "Kallen",
+      "卡蓮"
+    ],
+    "default_suit": "sixth-serenade",
+    "battlesuits": [
+      {
+        "slug": "ritual-imayoh",
+        "en": "Ritual Imayoh",
+        "zh": "聖儀裝·今樣",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/ritual-imayoh.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Kallen%20Ritual%20Imayoh.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Ritual_Imayoh"
+      },
+      {
+        "slug": "sixth-serenade",
+        "en": "Sixth Serenade",
+        "zh": "第六夜想曲",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/sixth-serenade.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Kallen%20Sixth%20Serenade.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Sixth_Serenade"
+      },
+      {
+        "slug": "sundenjager",
+        "en": "Sündenjäger",
+        "zh": "原罪獵人",
+        "kind": "battlesuit",
+        "variant": "captainverse",
+        "image": "assets/hi3/battlesuits/sundenjager.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Kallen%20Sundenjager.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/S%C3%BCndenj%C3%A4ger"
+      }
+    ],
+    "image": "assets/hi3/battlesuits/sixth-serenade.webp",
+    "battlesuit": "Sixth Serenade",
+    "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Kallen%20Sixth%20Serenade.png"
+  },
+  {
+    "slug": "rita-rossweisse",
+    "en": "Rita Rossweisse",
+    "zh": "麗塔·洛絲薇瑟",
+    "aliases": [
+      "Rita",
+      "麗塔"
+    ],
+    "default_suit": "miss-espionage",
+    "battlesuits": [
+      {
+        "slug": "umbral-rose",
+        "en": "Umbral Rose",
+        "zh": "黯薔薇",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/umbral-rose.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Rita%20Umbral%20Rose.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Umbral_Rose"
+      },
+      {
+        "slug": "phantom-iron",
+        "en": "Phantom Iron",
+        "zh": "獵襲裝·影鐵",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/phantom-iron.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Rita%20Phantom%20Iron.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Phantom_Iron"
+      },
+      {
+        "slug": "argent-knight-artemis",
+        "en": "Argent Knight: Artemis",
+        "zh": "蒼騎士·月魂",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/argent-knight-artemis.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Rita%20Argent%20Knight.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Argent_Knight%3A_Artemis"
+      },
+      {
+        "slug": "fallen-rosemary",
+        "en": "Fallen Rosemary",
+        "zh": "失落迷迭",
+        "kind": "battlesuit",
+        "variant": "captainverse",
+        "image": "assets/hi3/battlesuits/fallen-rosemary.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Rita%20Fallen%20Rosemary.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Fallen_Rosemary",
+        "aliases": [
+          "Irene",
+          "艾琳"
+        ]
+      },
+      {
+        "slug": "spina-astera",
+        "en": "Spina Astera",
+        "zh": "繚亂星棘",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/spina-astera.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Rita%20Spina%20Astera.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Spina_Astera"
+      },
+      {
+        "slug": "miss-espionage",
+        "en": "Miss Espionage",
+        "zh": "窈窕諜影",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/miss-espionage.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Miss%20Espionage.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Miss_Espionage"
+      }
+    ],
+    "image": "assets/hi3/battlesuits/miss-espionage.webp",
+    "battlesuit": "Miss Espionage",
+    "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Miss%20Espionage.png"
+  },
+  {
+    "slug": "seele-vollerei",
+    "en": "Seele Vollerei",
+    "zh": "希兒·芙樂艾",
+    "aliases": [
+      "Seele",
+      "希兒"
+    ],
+    "default_suit": "wings-of-panacea",
+    "battlesuits": [
+      {
+        "slug": "swallowtail-phantasm",
+        "en": "Swallowtail Phantasm",
+        "zh": "幻海夢蝶",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/swallowtail-phantasm.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Seele%20Swallowtail%20Phantasm.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Swallowtail_Phantasm"
+      },
+      {
+        "slug": "stygian-nymph",
+        "en": "Stygian Nymph",
+        "zh": "彼岸雙生",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/stygian-nymph.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Seele%20Stygian%20Nymph.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Stygian_Nymph"
+      },
+      {
+        "slug": "starchasm-nyx",
+        "en": "Starchasm Nyx",
+        "zh": "魘夜星淵",
+        "kind": "battlesuit",
+        "variant": "veliona",
+        "image": "assets/hi3/battlesuits/starchasm-nyx.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Seele%20Starchasm%20Nyx.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Starchasm_Nyx",
+        "aliases": [
+          "Veliona",
+          "黑希"
+        ]
+      },
+      {
+        "slug": "herrscher-of-rebirth",
+        "en": "Herrscher of Rebirth",
+        "zh": "死生之律者",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/herrscher-of-rebirth.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Seele%20Herrscher%20of%20Rebirth.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Herrscher_of_Rebirth"
+      },
+      {
+        "slug": "wings-of-panacea",
+        "en": "Wings of Panacea",
+        "zh": "癒生佑翎",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/wings-of-panacea.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Seele%20Wings%20of%20Panacea.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Wings_of_Panacea"
+      }
+    ],
+    "image": "assets/hi3/battlesuits/wings-of-panacea.webp",
+    "battlesuit": "Wings of Panacea",
+    "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Seele%20Wings%20of%20Panacea.png"
+  },
+  {
+    "slug": "liliya-olenyeva",
+    "en": "Liliya Olenyeva",
+    "zh": "莉莉婭·阿琳",
+    "aliases": [
+      "Liliya",
+      "莉莉婭"
+    ],
+    "default_suit": "blueberry-blitz",
+    "battlesuits": [
+      {
+        "slug": "blueberry-blitz",
+        "en": "Blueberry Blitz",
+        "zh": "藍莓特攻",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/blueberry-blitz.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Liliya%20Blueberry%20Blitz.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Blueberry_Blitz"
+      }
+    ],
+    "image": "assets/hi3/battlesuits/blueberry-blitz.webp",
+    "battlesuit": "Blueberry Blitz",
+    "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Liliya%20Blueberry%20Blitz.png"
+  },
+  {
+    "slug": "rozaliya-olenyeva",
+    "en": "Rozaliya Olenyeva",
+    "zh": "蘿莎莉婭·阿琳",
+    "aliases": [
+      "Rozaliya",
+      "蘿莎莉婭"
+    ],
+    "default_suit": "molotov-cherry",
+    "battlesuits": [
+      {
+        "slug": "molotov-cherry",
+        "en": "Molotov Cherry",
+        "zh": "櫻桃炸彈",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/molotov-cherry.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Rozaliya%20Molotov%20Cherry.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Molotov_Cherry"
+      },
+      {
+        "slug": "fervent-tempo",
+        "en": "Fervent Tempo Δ",
+        "zh": "狂熱藍調Δ",
+        "kind": "augment",
+        "variant": "captainverse",
+        "augment_of": "molotov-cherry",
+        "image": "assets/hi3/battlesuits/fervent-tempo.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/fervent-tempo.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Fervent_Tempo_%CE%94",
+        "aliases": [
+          "Delta",
+          "德爾塔"
+        ]
+      }
+    ],
+    "image": "assets/hi3/battlesuits/molotov-cherry.webp",
+    "battlesuit": "Molotov Cherry",
+    "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Rozaliya%20Molotov%20Cherry.png"
+  },
+  {
+    "slug": "durandal",
+    "en": "Durandal",
+    "zh": "幽蘭黛爾",
+    "aliases": [
+      "Bianka Ataegina",
+      "比安卡",
+      "杜蘭德爾",
+      "呆鵝"
+    ],
+    "default_suit": "reign-solaris",
+    "battlesuits": [
+      {
+        "slug": "valkyrie-gloria",
+        "en": "Valkyrie Gloria",
+        "zh": "女武神·榮光",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/valkyrie-gloria.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Durandal%20Valkyrie%20Gloria.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Valkyrie_Gloria"
+      },
+      {
+        "slug": "bright-knight-excelsis",
+        "en": "Bright Knight: Excelsis",
+        "zh": "輝騎士·月魄",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/bright-knight-excelsis.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Durandal%20Bright%20Knight.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Bright_Knight%3A_Excelsis"
+      },
+      {
+        "slug": "dea-anchora",
+        "en": "Dea Anchora",
+        "zh": "不滅星錨",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/dea-anchora.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Durandal%20Dea%20Anchora.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Dea_Anchora"
+      },
+      {
+        "slug": "palatinus-equinox",
+        "en": "Palatinus Equinox",
+        "zh": "天元騎英",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/palatinus-equinox.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Durandal%20Palatinus%20Equinox.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Palatinus_Equinox"
+      },
+      {
+        "slug": "reign-solaris",
+        "en": "Reign Solaris",
+        "zh": "天光馳徹",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/reign-solaris.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/dudu.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Reign_Solaris"
+      }
+    ],
+    "image": "assets/hi3/battlesuits/reign-solaris.webp",
+    "battlesuit": "Reign Solaris",
+    "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/dudu.png"
+  },
+  {
+    "slug": "asuka",
+    "en": "Asuka",
+    "zh": "明日香",
+    "aliases": [
+      "Asuka Langley",
+      "惣流·明日香·蘭格雷",
+      "Evangelion",
+      "EVA"
+    ],
+    "default_suit": "blazing-hope",
+    "battlesuits": [
+      {
+        "slug": "blazing-hope",
+        "en": "Blazing Hope",
+        "zh": "明日福音",
+        "kind": "battlesuit",
+        "variant": "collab",
+        "image": "assets/hi3/battlesuits/blazing-hope.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Asuka%20Blazing%20Hope.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Blazing_Hope"
+      }
+    ],
+    "image": "assets/hi3/battlesuits/blazing-hope.webp",
+    "battlesuit": "Blazing Hope",
+    "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Asuka%20Blazing%20Hope.png"
+  },
+  {
+    "slug": "fischl",
+    "en": "Fischl",
+    "zh": "菲謝爾",
+    "aliases": [
+      "Genshin",
+      "原神"
+    ],
+    "default_suit": "prinzessin-der-verurteilung",
+    "battlesuits": [
+      {
+        "slug": "prinzessin-der-verurteilung",
+        "en": "Prinzessin der Verurteilung!",
+        "zh": "斷罪皇女！！",
+        "kind": "battlesuit",
+        "variant": "collab",
+        "image": "assets/hi3/portraits/fischl.png",
+        "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Prinzessin_der_Verurteilung_29.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Prinzessin_der_Verurteilung!"
+      }
+    ],
+    "image": "assets/hi3/portraits/fischl.png",
+    "battlesuit": "Prinzessin der Verurteilung!",
+    "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Prinzessin_der_Verurteilung_29.png"
   },
   {
     "slug": "elysia",
     "en": "Elysia",
     "zh": "愛莉希雅",
-    "battlesuit": "Miss Pink Elf♪",
-    "image": "assets/hi3/portraits/elysia.png",
-    "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Miss_Pink_Elf_29.png",
-    "wiki_source": "https://honkaiimpact3.fandom.com/wiki/File:Miss%20Pink%20Elf%E2%99%AA%20%28Portrait%29.png"
+    "aliases": [
+      "Ely",
+      "愛莉"
+    ],
+    "default_suit": "hi-love-elf",
+    "battlesuits": [
+      {
+        "slug": "miss-pink-elf",
+        "en": "Miss Pink Elf♪",
+        "zh": "粉色妖精小姐♪",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/portraits/elysia.png",
+        "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Miss_Pink_Elf_29.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Miss_Pink_Elf%E2%99%AA"
+      },
+      {
+        "slug": "herrscher-of-human-ego",
+        "en": "Herrscher of Human: Ego",
+        "zh": "真我·人之律者",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/herrscher-of-human-ego.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Elysia%20Herrscher%20of%20Human%20Ego.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Herrscher_of_Human%3A_Ego"
+      },
+      {
+        "slug": "hi-love-elf",
+        "en": "Hi♪ Love Elf♥",
+        "zh": "嗨♪愛願妖精♥",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/hi-love-elf.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Elysia%20Hi%20Love%20Elf.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Hi%E2%99%AA_Love_Elf%E2%99%A5"
+      }
+    ],
+    "image": "assets/hi3/battlesuits/hi-love-elf.webp",
+    "battlesuit": "Hi♪ Love Elf♥",
+    "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Elysia%20Hi%20Love%20Elf.png"
+  },
+  {
+    "slug": "natasha-cioara",
+    "en": "Natasha Cioara",
+    "zh": "娜塔莎·希奧拉",
+    "aliases": [
+      "Raven",
+      "渡鴉",
+      "娜塔莎"
+    ],
+    "default_suit": "midnight-absinthe",
+    "battlesuits": [
+      {
+        "slug": "midnight-absinthe",
+        "en": "Midnight Absinthe",
+        "zh": "午夜苦艾",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/midnight-absinthe.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Raven%20Midnight%20Absinthe.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Midnight_Absinthe"
+      }
+    ],
+    "image": "assets/hi3/battlesuits/midnight-absinthe.webp",
+    "battlesuit": "Midnight Absinthe",
+    "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Raven%20Midnight%20Absinthe.png"
   },
   {
     "slug": "mobius",
     "en": "Mobius",
     "zh": "梅比烏斯",
-    "battlesuit": "Infinite Ouroboros",
+    "aliases": [
+      "蛇蛇"
+    ],
+    "default_suit": "infinite-ouroboros",
+    "battlesuits": [
+      {
+        "slug": "infinite-ouroboros",
+        "en": "Infinite Ouroboros",
+        "zh": "無限·噬界之蛇",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/portraits/mobius.png",
+        "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Infinite_Ouroboros_29.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Infinite_Ouroboros"
+      }
+    ],
     "image": "assets/hi3/portraits/mobius.png",
-    "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Infinite_Ouroboros_29.png",
-    "wiki_source": "https://honkaiimpact3.fandom.com/wiki/File:Infinite%20Ouroboros%20%28Portrait%29.png"
-  },
-  {
-    "slug": "eden",
-    "en": "Eden",
-    "zh": "伊甸",
-    "battlesuit": "Golden Diva",
-    "image": "assets/hi3/portraits/eden.png",
-    "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Golden_Diva.png",
-    "wiki_source": "https://honkaiimpact3.fandom.com/wiki/File:Golden%20Diva%20%28Portrait%29.png"
-  },
-  {
-    "slug": "aponia",
-    "en": "Aponia",
-    "zh": "阿波尼亞",
-    "battlesuit": "Disciplinary Perdition",
-    "image": "assets/hi3/portraits/aponia.png",
-    "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Disciplinary_Perdition.png",
-    "wiki_source": "https://honkaiimpact3.fandom.com/wiki/File:Disciplinary%20Perdition%20%28Portrait%29.png"
-  },
-  {
-    "slug": "vill-v",
-    "en": "Vill-V",
-    "zh": "維爾薇",
-    "battlesuit": "Helical Contraption",
-    "image": "assets/hi3/portraits/vill-v.png",
-    "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Helical_Contraption.png",
-    "wiki_source": "https://honkaiimpact3.fandom.com/wiki/File:Helical%20Contraption%20%28Portrait%29.png"
-  },
-  {
-    "slug": "griseo",
-    "en": "Griseo",
-    "zh": "格雷修",
-    "battlesuit": "Starry Impression",
-    "image": "assets/hi3/portraits/griseo.png",
-    "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Starry_Impression.png",
-    "wiki_source": "https://honkaiimpact3.fandom.com/wiki/File:Starry%20Impression%20%28Portrait%29.png"
-  },
-  {
-    "slug": "pardofelis",
-    "en": "Pardofelis",
-    "zh": "帕朵菲莉絲",
-    "battlesuit": "Reverist Calico",
-    "image": "assets/hi3/portraits/pardofelis.png",
-    "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Reverist_Calico.png",
-    "wiki_source": "https://honkaiimpact3.fandom.com/wiki/File:Reverist%20Calico%20%28Portrait%29.png"
-  },
-  {
-    "slug": "li-sushang",
-    "en": "Li Sushang",
-    "zh": "李素裳",
-    "battlesuit": "Jade Knight",
-    "image": "assets/hi3/portraits/li-sushang.png",
-    "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Jade_Knight.png",
-    "wiki_source": "https://honkaiimpact3.fandom.com/wiki/File:Jade%20Knight%20%28Portrait%29.png"
-  },
-  {
-    "slug": "susannah",
-    "en": "Susannah Manatt",
-    "zh": "蘇珊娜·曼納特",
-    "battlesuit": "Valkyrie Quicksand",
-    "image": "assets/hi3/portraits/susannah.png",
-    "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Valkyrie_Quicksand.png",
-    "wiki_source": "https://honkaiimpact3.fandom.com/wiki/File:Valkyrie%20Quicksand%20%28Portrait%29.png"
-  },
-  {
-    "slug": "prometheus",
-    "en": "PROMETHEUS",
-    "zh": "普羅米修斯",
-    "battlesuit": "Terminal Aide 0017",
-    "image": "assets/hi3/portraits/prometheus.png",
-    "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Terminal_Aide.png",
-    "wiki_source": "https://honkaiimpact3.fandom.com/wiki/File:Terminal%20Aide%200017%20%28Portrait%29.png"
+    "battlesuit": "Infinite Ouroboros",
+    "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Infinite_Ouroboros_29.png"
   },
   {
     "slug": "carole-pepper",
     "en": "Carole Pepper",
     "zh": "卡蘿爾·佩珀",
-    "battlesuit": "Sweet 'n' Spicy",
+    "aliases": [
+      "Carole",
+      "卡蘿爾"
+    ],
+    "default_suit": "sweet-n-spicy",
+    "battlesuits": [
+      {
+        "slug": "sweet-n-spicy",
+        "en": "Sweet 'n' Spicy",
+        "zh": "甜辣女孩",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/portraits/carole-pepper.png",
+        "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Sweet_And_Spicy_29.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Sweet_'n'_Spicy"
+      },
+      {
+        "slug": "a-post-honkai-odyssey-carole",
+        "en": "A Post-Honkai Odyssey: Carole",
+        "zh": "後崩壞書・卡蘿爾",
+        "kind": "apho",
+        "variant": "apho",
+        "image": "assets/hi3/portraits/carole-pepper.png",
+        "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Sweet_And_Spicy_29.png",
+        "image_label": {
+          "en": "Sweet 'n' Spicy",
+          "zh": "甜辣女孩"
+        },
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/A_Post-Honkai_Odyssey"
+      }
+    ],
     "image": "assets/hi3/portraits/carole-pepper.png",
-    "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Sweet_And_Spicy_29.png",
-    "wiki_source": "https://honkaiimpact3.fandom.com/wiki/File:Sweet%20%27n%27%20Spicy%20%28Portrait%29.png"
+    "battlesuit": "Sweet 'n' Spicy",
+    "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Sweet_And_Spicy_29.png"
+  },
+  {
+    "slug": "pardofelis",
+    "en": "Pardofelis",
+    "zh": "帕朵菲莉絲",
+    "aliases": [
+      "Pardo",
+      "帕朵"
+    ],
+    "default_suit": "reverist-calico",
+    "battlesuits": [
+      {
+        "slug": "reverist-calico",
+        "en": "Reverist Calico",
+        "zh": "空夢·掠集之獸",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/portraits/pardofelis.png",
+        "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Reverist_Calico.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Reverist_Calico"
+      }
+    ],
+    "image": "assets/hi3/portraits/pardofelis.png",
+    "battlesuit": "Reverist Calico",
+    "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Reverist_Calico.png"
+  },
+  {
+    "slug": "aponia",
+    "en": "Aponia",
+    "zh": "阿波尼亞",
+    "aliases": [],
+    "default_suit": "disciplinary-perdition",
+    "battlesuits": [
+      {
+        "slug": "disciplinary-perdition",
+        "en": "Disciplinary Perdition",
+        "zh": "戒律·深罪之檻",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/portraits/aponia.png",
+        "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Disciplinary_Perdition.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Disciplinary_Perdition"
+      }
+    ],
+    "image": "assets/hi3/portraits/aponia.png",
+    "battlesuit": "Disciplinary Perdition",
+    "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Disciplinary_Perdition.png"
+  },
+  {
+    "slug": "eden",
+    "en": "Eden",
+    "zh": "伊甸",
+    "aliases": [],
+    "default_suit": "golden-diva",
+    "battlesuits": [
+      {
+        "slug": "golden-diva",
+        "en": "Golden Diva",
+        "zh": "黃金·璀耀之歌",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/portraits/eden.png",
+        "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Golden_Diva.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Golden_Diva"
+      }
+    ],
+    "image": "assets/hi3/portraits/eden.png",
+    "battlesuit": "Golden Diva",
+    "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Golden_Diva.png"
+  },
+  {
+    "slug": "griseo",
+    "en": "Griseo",
+    "zh": "格蕾修",
+    "aliases": [
+      "格雷修"
+    ],
+    "default_suit": "cosmic-expression",
+    "battlesuits": [
+      {
+        "slug": "starry-impression",
+        "en": "Starry Impression",
+        "zh": "繁星·繪世之卷",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/portraits/griseo.png",
+        "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Starry_Impression.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Starry_Impression"
+      },
+      {
+        "slug": "cosmic-expression",
+        "en": "Cosmic Expression",
+        "zh": "天行·繪星之卷",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/cosmic-expression.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Griseo%20Cosmic%20Expression.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Cosmic_Expression"
+      }
+    ],
+    "image": "assets/hi3/battlesuits/cosmic-expression.webp",
+    "battlesuit": "Cosmic Expression",
+    "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Griseo%20Cosmic%20Expression.png"
+  },
+  {
+    "slug": "vill-v",
+    "en": "Vill-V",
+    "zh": "維爾薇",
+    "aliases": [
+      "VillV"
+    ],
+    "default_suit": "helical-contraption",
+    "battlesuits": [
+      {
+        "slug": "helical-contraption",
+        "en": "Helical Contraption",
+        "zh": "螺旋·愚戲之匣",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/portraits/vill-v.png",
+        "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Helical_Contraption.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Helical_Contraption"
+      }
+    ],
+    "image": "assets/hi3/portraits/vill-v.png",
+    "battlesuit": "Helical Contraption",
+    "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Helical_Contraption.png"
+  },
+  {
+    "slug": "li-sushang",
+    "en": "Li Sushang",
+    "zh": "李素裳",
+    "aliases": [
+      "Sushang",
+      "素裳"
+    ],
+    "default_suit": "peregrine-sword",
+    "battlesuits": [
+      {
+        "slug": "jade-knight",
+        "en": "Jade Knight",
+        "zh": "玉騎士·月痕",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/portraits/li-sushang.png",
+        "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Jade_Knight.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Jade_Knight"
+      },
+      {
+        "slug": "peregrine-sword",
+        "en": "Peregrine Sword",
+        "zh": "一客逍遊",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/peregrine-sword.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/ps.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Peregrine_Sword"
+      }
+    ],
+    "image": "assets/hi3/battlesuits/peregrine-sword.webp",
+    "battlesuit": "Peregrine Sword",
+    "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/ps.png"
+  },
+  {
+    "slug": "ai-hyperion",
+    "en": "Ai Hyperion Λ",
+    "zh": "愛衣·休伯利安Λ",
+    "aliases": [
+      "Ai Chan",
+      "愛衣",
+      "包菜"
+    ],
+    "default_suit": "chrono-navi",
+    "battlesuits": [
+      {
+        "slug": "chrono-navi",
+        "en": "Chrono Navi",
+        "zh": "時帆旅人",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/chrono-navi.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Chrono%20Navi.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Chrono_Navi"
+      }
+    ],
+    "image": "assets/hi3/battlesuits/chrono-navi.webp",
+    "battlesuit": "Chrono Navi",
+    "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Chrono%20Navi.png"
+  },
+  {
+    "slug": "susannah",
+    "en": "Susannah Manatt",
+    "zh": "蘇莎娜·曼納特",
+    "aliases": [
+      "蘇珊娜·曼納特",
+      "Susannah",
+      "蘇莎娜"
+    ],
+    "default_suit": "valkyrie-quicksand",
+    "battlesuits": [
+      {
+        "slug": "valkyrie-quicksand",
+        "en": "Valkyrie Quicksand",
+        "zh": "女武神·熱砂",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/portraits/susannah.png",
+        "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Valkyrie_Quicksand.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Valkyrie_Quicksand"
+      }
+    ],
+    "image": "assets/hi3/portraits/susannah.png",
+    "battlesuit": "Valkyrie Quicksand",
+    "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Valkyrie_Quicksand.png"
+  },
+  {
+    "slug": "prometheus",
+    "en": "PROMETHEUS",
+    "zh": "普羅米修斯",
+    "aliases": [
+      "兔兔"
+    ],
+    "default_suit": "terminal-aide-0017",
+    "battlesuits": [
+      {
+        "slug": "terminal-aide-0017",
+        "en": "Terminal Aide 0017",
+        "zh": "終末協理0017",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/portraits/prometheus.png",
+        "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Terminal_Aide.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Terminal_Aide_0017"
+      }
+    ],
+    "image": "assets/hi3/portraits/prometheus.png",
+    "battlesuit": "Terminal Aide 0017",
+    "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Terminal_Aide.png"
+  },
+  {
+    "slug": "misteln-schariac",
+    "en": "Misteln Schariac",
+    "zh": "米絲忒琳·沙尼亞特",
+    "aliases": [
+      "Hare",
+      "羽兔",
+      "米絲忒琳"
+    ],
+    "default_suit": "dreamweaver",
+    "battlesuits": [
+      {
+        "slug": "dreamweaver",
+        "en": "Dreamweaver",
+        "zh": "織羽夢旌",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/dreamweaver.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Hare%20Dreamweaver.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Dreamweaver"
+      }
+    ],
+    "image": "assets/hi3/battlesuits/dreamweaver.webp",
+    "battlesuit": "Dreamweaver",
+    "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Hare%20Dreamweaver.png"
+  },
+  {
+    "slug": "shigure-kira",
+    "en": "Shigure Kira",
+    "zh": "時雨綺羅",
+    "aliases": [
+      "Kira",
+      "綺羅"
+    ],
+    "default_suit": "sugary-starburst",
+    "battlesuits": [
+      {
+        "slug": "sugary-starburst",
+        "en": "Sugary Starburst",
+        "zh": "糖露星霜",
+        "kind": "battlesuit",
+        "variant": "main",
+        "image": "assets/hi3/battlesuits/sugary-starburst.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Kira%20Sugary%20Starburst.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Sugary_Starburst"
+      }
+    ],
+    "image": "assets/hi3/battlesuits/sugary-starburst.webp",
+    "battlesuit": "Sugary Starburst",
+    "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Kira%20Sugary%20Starburst.png"
   },
   {
     "slug": "sirin",
     "en": "Sirin",
     "zh": "西琳",
-    "battlesuit": "Miracle ☆ Magical Girl",
+    "aliases": [
+      "魔法少女"
+    ],
+    "default_suit": "miracle-magical-girl",
+    "battlesuits": [
+      {
+        "slug": "miracle-magical-girl",
+        "en": "Miracle ☆ Magical Girl",
+        "zh": "奇蹟☆魔法少女",
+        "kind": "battlesuit",
+        "variant": "captainverse",
+        "image": "assets/hi3/portraits/sirin.png",
+        "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Magical_Girl.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Miracle_%E2%98%86_Magical_Girl"
+      }
+    ],
     "image": "assets/hi3/portraits/sirin.png",
-    "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Magical_Girl.png",
-    "wiki_source": "https://honkaiimpact3.fandom.com/wiki/File:Miracle%20%E2%98%86%20Magical%20Girl%20%28Portrait%29.png"
+    "battlesuit": "Miracle ☆ Magical Girl",
+    "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Magical_Girl.png"
+  },
+  {
+    "slug": "senadina",
+    "en": "Senadina",
+    "zh": "希娜狄雅",
+    "aliases": [
+      "Sena"
+    ],
+    "default_suit": "deepspace-anchor-first-light",
+    "battlesuits": [
+      {
+        "slug": "deepspace-anchor-first-light",
+        "en": "Deepspace Anchor: First Light",
+        "zh": "深空定錨·曙光",
+        "kind": "battlesuit",
+        "variant": "part2",
+        "image": "assets/hi3/battlesuits/deepspace-anchor-first-light.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Senadina%20Deepspace%20Anchor.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Deepspace_Anchor%3A_First_Light"
+      }
+    ],
+    "image": "assets/hi3/battlesuits/deepspace-anchor-first-light.webp",
+    "battlesuit": "Deepspace Anchor: First Light",
+    "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Senadina%20Deepspace%20Anchor.png"
+  },
+  {
+    "slug": "erdos-helia",
+    "en": "Erdős Helia",
+    "zh": "艾爾德什·赫麗婭",
+    "aliases": [
+      "Erdos Helia",
+      "Helia",
+      "赫麗婭"
+    ],
+    "default_suit": "planar-armament-warped-spacetime",
+    "battlesuits": [
+      {
+        "slug": "valkyrie-boltstorm",
+        "en": "Valkyrie Boltstorm",
+        "zh": "女武神·巡矢",
+        "kind": "battlesuit",
+        "variant": "part2",
+        "image": "assets/hi3/battlesuits/valkyrie-boltstorm.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Helia%20Valkyrie%20Boltstorm.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Valkyrie_Boltstorm"
+      },
+      {
+        "slug": "planar-armament-warped-spacetime",
+        "en": "Planar Armament: Warped Spacetime",
+        "zh": "位面武器·失序時空",
+        "kind": "battlesuit",
+        "variant": "part2",
+        "image": "assets/hi3/battlesuits/planar-armament-warped-spacetime.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/New%20Helia.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Planar_Armament%3A_Warped_Spacetime"
+      }
+    ],
+    "image": "assets/hi3/battlesuits/planar-armament-warped-spacetime.webp",
+    "battlesuit": "Planar Armament: Warped Spacetime",
+    "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/New%20Helia.png"
+  },
+  {
+    "slug": "coralie-planck",
+    "en": "Coralie 6626 Planck",
+    "zh": "科拉莉·6626·普朗克",
+    "aliases": [
+      "Coralie",
+      "科拉莉"
+    ],
+    "default_suit": "behold-fate-defying-dragon",
+    "battlesuits": [
+      {
+        "slug": "valkyrie-blastmetal",
+        "en": "Valkyrie Blastmetal",
+        "zh": "女武神·重機",
+        "kind": "battlesuit",
+        "variant": "part2",
+        "image": "assets/hi3/battlesuits/valkyrie-blastmetal.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Coralie%20Valkyrie%20Blastmetal.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Valkyrie_Blastmetal"
+      },
+      {
+        "slug": "behold-fate-defying-dragon",
+        "en": "Behold! Fate-Defying Dragon",
+        "zh": "逆命魔龍·降臨！",
+        "kind": "battlesuit",
+        "variant": "part2",
+        "image": "assets/hi3/battlesuits/behold-fate-defying-dragon.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/scoralie.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Behold!_Fate-Defying_Dragon"
+      }
+    ],
+    "image": "assets/hi3/battlesuits/behold-fate-defying-dragon.webp",
+    "battlesuit": "Behold! Fate-Defying Dragon",
+    "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/scoralie.png"
   },
   {
     "slug": "thelema-nutriscu",
     "en": "Thelema Nutriscu",
     "zh": "瑟莉姆·納特里斯庫",
-    "battlesuit": "Mad Pleasure: Shadowbringer",
+    "aliases": [
+      "Thelema",
+      "瑟莉姆",
+      "泰蕾瑪"
+    ],
+    "default_suit": "mad-pleasure-shadowbringer",
+    "battlesuits": [
+      {
+        "slug": "mad-pleasure-shadowbringer",
+        "en": "Mad Pleasure: Shadowbringer",
+        "zh": "享樂狂宴·邀影",
+        "kind": "battlesuit",
+        "variant": "part2",
+        "image": "assets/hi3/portraits/thelema-nutriscu.png",
+        "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Shadowbringer.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Mad_Pleasure%3A_Shadowbringer"
+      }
+    ],
     "image": "assets/hi3/portraits/thelema-nutriscu.png",
-    "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Shadowbringer.png",
-    "wiki_source": "https://honkaiimpact3.fandom.com/wiki/File:Mad%20Pleasure%20-%20Shadowbringer%20%28Portrait%29.png"
+    "battlesuit": "Mad Pleasure: Shadowbringer",
+    "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Shadowbringer.png"
   },
   {
-    "slug": "lunar-vow-crimson-love",
-    "en": "Lunar Vow: Crimson Love",
-    "zh": "月下誓約・予愛以心",
-    "battlesuit": "Lunar Vow: Crimson Love",
-    "image": "assets/hi3/portraits/lunar-vow-crimson-love.png",
-    "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Lunar_Vow_-_Crimson_Love_29.png",
-    "wiki_source": "https://honkaiimpact3.fandom.com/wiki/File:Lunar%20Vow%20-%20Crimson%20Love%20%28Portrait%29.png"
+    "slug": "lantern",
+    "en": "Lantern",
+    "zh": "燈",
+    "aliases": [
+      "蘭瑟姆",
+      "Rantern",
+      "Lantern"
+    ],
+    "default_suit": "lone-destruction-shadowchaser",
+    "battlesuits": [
+      {
+        "slug": "lone-destruction-shadowchaser",
+        "en": "Lone Destruction: Shadowchaser",
+        "zh": "破棄孤光·逐影",
+        "kind": "battlesuit",
+        "variant": "part2",
+        "image": "assets/hi3/battlesuits/lone-destruction-shadowchaser.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Lantern%20Lone%20Destruction.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Lone_Destruction%3A_Shadowchaser"
+      }
+    ],
+    "image": "assets/hi3/battlesuits/lone-destruction-shadowchaser.webp",
+    "battlesuit": "Lone Destruction: Shadowchaser",
+    "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Lantern%20Lone%20Destruction.png"
+  },
+  {
+    "slug": "songque",
+    "en": "Songque",
+    "zh": "松雀",
+    "aliases": [],
+    "default_suit": "jovial-deception-shadowdimmer",
+    "battlesuits": [
+      {
+        "slug": "jovial-deception-shadowdimmer",
+        "en": "Jovial Deception: Shadowdimmer",
+        "zh": "瞞天樂遊·曙影",
+        "kind": "battlesuit",
+        "variant": "part2",
+        "image": "assets/hi3/battlesuits/jovial-deception-shadowdimmer.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Songque%20Jovial%20Deception.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Jovial_Deception%3A_Shadowdimmer"
+      }
+    ],
+    "image": "assets/hi3/battlesuits/jovial-deception-shadowdimmer.webp",
+    "battlesuit": "Jovial Deception: Shadowdimmer",
+    "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Songque%20Jovial%20Deception.png"
+  },
+  {
+    "slug": "vita",
+    "en": "Vita",
+    "zh": "薇塔",
+    "aliases": [],
+    "default_suit": "lone-planetfarer",
+    "battlesuits": [
+      {
+        "slug": "lone-planetfarer",
+        "en": "Lone Planetfarer",
+        "zh": "孑遺千星",
+        "kind": "battlesuit",
+        "variant": "part2",
+        "image": "assets/hi3/battlesuits/lone-planetfarer.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Vita%20Lone%20Planetfarer.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Lone_Planetfarer"
+      }
+    ],
+    "image": "assets/hi3/battlesuits/lone-planetfarer.webp",
+    "battlesuit": "Lone Planetfarer",
+    "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Vita%20Lone%20Planetfarer.png"
+  },
+  {
+    "slug": "sparkle",
+    "en": "Sparkle",
+    "zh": "花火",
+    "aliases": [
+      "Honkai Star Rail",
+      "崩壞星穹鐵道",
+      "星鐵"
+    ],
+    "default_suit": "thousand-faced-maestro-cameo",
+    "battlesuits": [
+      {
+        "slug": "thousand-faced-maestro-cameo",
+        "en": "Thousand-Faced Maestro: Cameo!",
+        "zh": "詭戲千役「友情出演！」",
+        "kind": "battlesuit",
+        "variant": "collab",
+        "image": "assets/hi3/battlesuits/thousand-faced-maestro-cameo.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/sparkle.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/Thousand-Faced_Maestro%3A_Cameo!"
+      }
+    ],
+    "image": "assets/hi3/battlesuits/thousand-faced-maestro-cameo.webp",
+    "battlesuit": "Thousand-Faced Maestro: Cameo!",
+    "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/sparkle.png"
+  },
+  {
+    "slug": "dreamseeker",
+    "en": "Dreamseeker",
+    "zh": "尋夢者",
+    "aliases": [
+      "萊伊拉",
+      "蕾伊拉",
+      "Leylah"
+    ],
+    "default_suit": "herrscher-of-time",
+    "battlesuits": [
+      {
+        "slug": "herrscher-of-time",
+        "en": "Herrscher of Time",
+        "zh": "時序之律者",
+        "kind": "battlesuit",
+        "variant": "part2",
+        "image": "assets/hi3/battlesuits/herrscher-of-time.webp",
+        "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Herrscher%20of%20Time.png",
+        "entry_source": "https://steamcommunity.com/app/1668940/allnews/",
+        "version": "CN 9.1"
+      }
+    ],
+    "image": "assets/hi3/battlesuits/herrscher-of-time.webp",
+    "battlesuit": "Herrscher of Time",
+    "source": "https://github.com/johnhonkai/testpls/blob/ed9a6dc03066afe7bbf0163bf64204236a1724ac/static/images/valkportrait/Herrscher%20of%20Time.png"
+  },
+  {
+    "slug": "timido-cute",
+    "en": "Timido Cute",
+    "zh": "緹米朵·丘忒",
+    "aliases": [
+      "Timido",
+      "緹米朵"
+    ],
+    "default_suit": "a-post-honkai-odyssey-2-timido",
+    "battlesuits": [
+      {
+        "slug": "a-post-honkai-odyssey-2-timido",
+        "en": "A Post-Honkai Odyssey 2: Timido",
+        "zh": "後崩壞書2・緹米朵",
+        "kind": "apho",
+        "variant": "apho",
+        "image": "assets/hi3/battlesuits/a-post-honkai-odyssey-2-timido.webp",
+        "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Playable-Character-Image-Folder/Timido.png",
+        "entry_source": "https://honkaiimpact3.fandom.com/wiki/A_Post-Honkai_Odyssey"
+      }
+    ],
+    "image": "assets/hi3/battlesuits/a-post-honkai-odyssey-2-timido.webp",
+    "battlesuit": "A Post-Honkai Odyssey 2: Timido",
+    "source": "https://github.com/WaffleToast1814/Honkai-Impact-3rd-Website/blob/a0833e72e96e1d1180d3530acf146605730e4d48/Playable-Character-Image-Folder/Timido.png"
   }
 ]

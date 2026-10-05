@@ -418,3 +418,291 @@ dialog.lightbox {
         transition: none;
     }
 }
+
+/* A complete character file has a selectable list of battlesuits. */
+body.database-page .gallery-heading h2 {
+    font-size: clamp(1.6rem, 4vw, 2.8rem);
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+}
+
+body.database-page .database-summary {
+    margin-top: 16px;
+    color: var(--signal, #fa527c);
+    font-size: 0.8rem;
+    line-height: 1.6;
+}
+
+body.database-page .gallery-counter strong {
+    font-size: 2rem;
+    line-height: 1.15;
+}
+
+body.database-page .controls {
+    padding: 16px;
+}
+
+body.database-page .search-panel,
+body.database-page .search-feedback {
+    width: 100%;
+    max-width: none;
+}
+
+body.database-page .database-filters {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    margin-top: 16px;
+}
+
+body.database-page .database-filters label {
+    display: grid;
+    min-width: 0;
+    gap: 8px;
+    font-size: 0.76rem;
+    color: #c6b8c0;
+}
+
+body.database-page .database-filters select {
+    width: 100%;
+    min-width: 0;
+    min-height: 44px;
+    padding: 10px 28px 10px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    background: #160d14;
+    color: #fff0f5;
+    font: inherit;
+    font-size: 0.9rem;
+    color-scheme: dark;
+    clip-path: none;
+}
+
+body.database-page .database-filters select:focus-visible {
+    outline: 2px solid var(--signal, #fa527c);
+    outline-offset: 2px;
+}
+
+body.database-page .card .name {
+    font-size: 1rem;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+body.database-page .card .tag {
+    display: block;
+    font-size: 0.78rem;
+    line-height: 1.6;
+    letter-spacing: 0;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+    overflow-wrap: anywhere;
+}
+
+body.database-page .branch-count {
+    margin-top: 12px;
+    color: #c29daa;
+    font-size: 0.74rem;
+    line-height: 1.5;
+}
+
+body.database-page dialog.valkyrie-file {
+    width: min(1040px, calc(100vw - 32px));
+    max-width: calc(100vw - 32px);
+    max-height: calc(100dvh - 32px);
+    overflow: hidden;
+    clip-path: none;
+    border-color: rgba(250, 82, 124, 0.6);
+    box-sizing: border-box;
+}
+
+body.database-page .valkyrie-file .lb-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 20px 24px;
+    border-bottom: 1px solid rgba(250, 82, 124, 0.28);
+    background: #1b0c15;
+}
+
+body.database-page .valkyrie-file .lb-header > div {
+    min-width: 0;
+}
+
+body.database-page .valkyrie-file .lb-kicker {
+    color: var(--signal, #fa527c);
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+}
+
+body.database-page .valkyrie-file #lb-caption {
+    margin: 5px 0 0;
+    font-size: clamp(1.05rem, 2.3vw, 1.65rem);
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+body.database-page .valkyrie-file .lb-close {
+    flex: 0 0 auto;
+    width: auto;
+    min-height: 44px;
+    padding: 10px 14px;
+    font-size: 0.76rem;
+    white-space: nowrap;
+}
+
+body.database-page .valkyrie-file .lb-shell {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr);
+    max-width: none;
+    max-height: calc(100dvh - 158px);
+    overflow: auto;
+    overscroll-behavior: contain;
+    overflow-anchor: none;
+}
+
+body.database-page .valkyrie-file .lb-visual {
+    position: sticky;
+    top: 0;
+    align-self: start;
+    align-content: start;
+    padding: 28px 20px;
+    background: radial-gradient(ellipse at center top, #381322, #100911 70%);
+}
+
+body.database-page .valkyrie-file .lb-img {
+    width: 100%;
+    max-width: 360px;
+    max-height: 380px;
+    min-height: 180px;
+    aspect-ratio: 6 / 5;
+    object-fit: contain;
+    background: transparent;
+}
+
+body.database-page .valkyrie-file #lb-image-label {
+    margin: 16px 0 0;
+    color: #ba9fae;
+    font-size: 0.8rem;
+    line-height: 1.65;
+    overflow-wrap: anywhere;
+}
+
+body.database-page .valkyrie-file .lb-panel {
+    display: block;
+    min-width: 0;
+    padding: 24px;
+}
+
+body.database-page .valkyrie-file .lb-panel::before {
+    content: none;
+}
+
+body.database-page .valkyrie-file #lb-kind,
+body.database-page .valkyrie-file #lb-note {
+    font-family: inherit;
+    font-size: 0.8rem;
+    font-weight: 400;
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+}
+
+body.database-page .valkyrie-file #lb-kind {
+    color: var(--signal, #fa527c) !important;
+}
+
+body.database-page .valkyrie-file #lb-battlesuit {
+    margin: 8px 0 12px;
+    font-size: 1.3rem;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+body.database-page .valkyrie-file .lb-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 18px;
+    margin-top: 16px;
+}
+
+body.database-page .valkyrie-file .lb-links a {
+    display: inline;
+    margin: 0;
+    color: #f8b9cc;
+    font-size: 0.72rem;
+    line-height: 1.8;
+    overflow-wrap: anywhere;
+}
+
+body.database-page .valkyrie-file #lb-branches-label {
+    margin: 24px 0 12px;
+    font-size: 0.82rem;
+    font-weight: 500;
+}
+
+body.database-page .valkyrie-file .suit-list {
+    display: grid;
+    gap: 8px;
+}
+
+body.database-page .valkyrie-file button.suit-button {
+    display: grid;
+    grid-template-columns: 58px minmax(0, 1fr);
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    min-height: 70px;
+    padding: 8px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: #1b1119;
+    color: #f4e9ef;
+    text-align: left;
+    clip-path: none;
+    cursor: pointer;
+}
+
+body.database-page .valkyrie-file button.suit-button[aria-pressed="true"] {
+    border-color: var(--signal, #fa527c);
+    background: #3c1729;
+}
+
+body.database-page .valkyrie-file .suit-button img {
+    width: 58px;
+    height: 52px;
+    object-fit: contain;
+}
+
+body.database-page .valkyrie-file .suit-button span {
+    min-width: 0;
+    color: inherit;
+    font-size: 0.86rem;
+    font-weight: 400;
+    letter-spacing: 0;
+}
+
+body.database-page .valkyrie-file .suit-button strong,
+body.database-page .valkyrie-file .suit-button small {
+    display: block;
+    line-height: 1.55;
+    overflow-wrap: anywhere;
+}
+
+body.database-page .valkyrie-file .suit-button small {
+    margin-top: 4px;
+    color: #c0a9b7;
+    font-size: 0.7rem;
+}
+
+@media (max-width: 700px) {
+    body.database-page .valkyrie-file .lb-header { padding: 14px 12px; gap: 8px; }
+    body.database-page .valkyrie-file .lb-shell { display: block; max-height: calc(100dvh - 144px); }
+    body.database-page .valkyrie-file .lb-visual { position: relative; padding: 14px; }
+    body.database-page .valkyrie-file .lb-img { max-width: 220px; max-height: 190px; min-height: 0; }
+    body.database-page .valkyrie-file .lb-panel { padding: 18px 14px; }
+    body.database-page .valkyrie-file #lb-battlesuit { font-size: 1.15rem; }
+}
+
+@media (max-width: 420px) {
+    body.database-page .database-filters { grid-template-columns: minmax(0, 1fr); }
+    body.database-page .controls { padding: 12px; }
+}

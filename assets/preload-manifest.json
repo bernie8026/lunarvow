@@ -49,6 +49,370 @@
       "type": "fetch"
     },
     {
+      "url": "assets/hi3/battlesuits/a-post-honkai-odyssey-2-timido.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/argent-knight-artemis.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/azure-empyrea.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/ba-dum-fiery-wishing-star.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/battle-storm.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/behold-fate-defying-dragon.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/black-nucleus.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/blazing-hope.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/blood-rose.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/blueberry-blitz.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/bright-knight-excelsis.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/chrono-navi.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/cosmic-expression.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/crimson-impulse.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/danzai-spectramancer.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/darkbolt-jonin.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/dea-anchora.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/deepspace-anchor-first-light.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/dimension-breaker.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/divine-prayer.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/dreamweaver.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/drive-kometa.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/fallen-rosemary.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/fenghuang-of-vicissitude.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/fervent-tempo.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/goushinnso-memento.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/gyakushinn-miko.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/hawk-of-the-fog.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/haxxor-bunny.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/herrscher-of-flamescion.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/herrscher-of-human-ego.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/herrscher-of-reason.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/herrscher-of-rebirth.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/herrscher-of-sentience.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/herrscher-of-the-void.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/herrscher-of-thunder.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/herrscher-of-time.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/hi-love-elf.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/jovial-deception-shadowdimmer.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/knight-moonbeam.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/kriegsmesser.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/lightning-empress.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/lone-destruction-shadowchaser.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/lone-planetfarer.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/luna-kindred.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/midnight-absinthe.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/miss-espionage.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/molotov-cherry.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/night-squire.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/palatinus-equinox.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/peregrine-sword.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/phantom-iron.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/phoenix.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/planar-armament-warped-spacetime.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/reign-solaris.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/ritual-imayoh.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/sakuno-rondo.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/scarlet-fusion.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/schicksal-s-imperative.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/shadow-dash.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/shadow-knight.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/silverwing-n-ex.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/sixth-serenade.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/snowy-sniper.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/spina-astera.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/starchasm-nyx.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/starlit-astrologos.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/striker-fulminata.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/stygian-nymph.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/sugary-starburst.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/sundenjager.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/swallowtail-phantasm.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/thousand-faced-maestro-cameo.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/twilight-paladin.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/umbral-rose.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/valkyrie-accipiter.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/valkyrie-bladestrike.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/valkyrie-blastmetal.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/valkyrie-boltstorm.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/valkyrie-chariot.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/valkyrie-gloria.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/valkyrie-pledge.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/valkyrie-ranger.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/valkyrie-triumph.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/violet-executer.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/void-drifter.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/white-comet.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/wings-of-panacea.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/wolf-s-dawn.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/xentinel-dawnbearing-crescent.webp",
+      "type": "image"
+    },
+    {
+      "url": "assets/hi3/battlesuits/yamabuki-armor.webp",
+      "type": "image"
+    },
+    {
       "url": "assets/hi3/characters/bronya-zaychik.webp",
       "type": "image"
     },

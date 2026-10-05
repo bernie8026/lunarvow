@@ -1,385 +1,271 @@
 (() => {
   'use strict';
-
-  const script = document.currentScript;
-  const IMG_BASE = script?.dataset.imgBase || 'assets/hi3/characters/';
-  const JSON_URL = script?.dataset.json || 'data/characters.json';
-  const PLACEHOLDER = 'assets/placeholder.png';
-
-  const languageCopy = {
+  const JSON_URL = document.currentScript?.dataset.json || 'data/characters.json';
+  const languages = {
     'zh-HK': {
-      placeholder: '輸入角色或戰衣名稱…',
-      offline: '資料庫離線 // 無法載入角色資料',
-      empty: '沒有相符檔案 // 試試其他角色或戰衣名稱',
-      loading: '正在載入角色檔案…',
-      noRecords: '暫時未有角色檔案',
-      retry: '重新載入',
-      clear: '清除搜尋',
-      search: '搜尋角色或戰衣',
-      close: '關閉大圖',
-      source: '查看圖片來源 ↗',
-      visual: '角色肖像',
-      imageError: '暫時無法載入圖片',
-      open: (name) => `開啟 ${name} 圖片`,
-      count: (visible, total) => `顯示 ${visible} / ${total} 個角色檔案`
-    },
-    'zh-CN': {
-      placeholder: '输入角色或战衣名称…',
-      offline: '数据库离线 // 无法加载角色资料',
-      empty: '没有相符档案 // 试试其他角色或战衣名称',
-      loading: '正在加载角色档案…',
-      noRecords: '暂时没有角色档案',
-      retry: '重新加载',
-      clear: '清除搜索',
-      search: '搜索角色或战衣',
-      close: '关闭大图',
-      source: '查看图片来源 ↗',
-      visual: '角色肖像',
-      imageError: '暂时无法加载图片',
-      open: (name) => `打开 ${name} 图片`,
-      count: (visible, total) => `显示 ${visible} / ${total} 个角色档案`
+      placeholder: '輸入角色、裝甲或分支名稱…', search: '搜尋角色或戰衣',
+      loading: '正在載入女武神檔案…', offline: '資料庫離線 // 無法載入角色資料',
+      empty: '沒有相符檔案 // 試試其他角色或裝甲名稱', noRecords: '暫時未有角色檔案',
+      retry: '重新載入', clear: '清除篩選', close: '關閉檔案', source: '圖片來源 ↗', reference: '裝甲／玩法資料 ↗',
+      allCharacters: '所有角色', characterFilter: '角色', categoryFilter: '檔案分類', all: '所有分類',
+      battlesuit: '一般裝甲', augment: '增幅核心', captainverse: '艦長線', collab: '聯動角色',
+      part2: '第二部', apho: '後崩壞書', main: '角色裝甲', 'previous-era': '前文明 SAKURA',
+      sentience: '識之律者・獨立人格', veliona: '「希兒」・另一人格', sirin: '西琳律者人格',
+      heading: '女武神檔案', description: '按角色整理全部裝甲、增幅核心同分支。可以搜尋角色或裝甲名稱，開啟檔案後再切換各個形態；艦長線、聯動同後崩壞書會獨立標示。',
+      visual: '角色檔案', imageError: '暫時無法載入圖片', branches: count => count + ' 個分支',
+      open: name => '開啟 ' + name + ' 女武神檔案', count: (n, total, suits) => '顯示 ' + n + ' / ' + total + ' 個角色檔案・' + suits + ' 個相符分支',
+      summary: (n, suits) => n + ' 個角色群組 / ' + suits + ' 個裝甲及玩法檔案',
+      augmentOf: name => '增幅自：' + name, representative: name => '角色代表圖片：' + name,
+      captainNote: '艦長宇宙同位角色／分支，與主線角色分開標示。',
+      aphoNote: '後崩壞書專用可操作角色，使用該模式的技能與成長系統。',
+      cnVersion: version => '陸服 ' + version.replace('CN ', '') + ' 已推出・各區更新進度可能不同'
     },
     en: {
-      placeholder: 'Enter a character or battlesuit name…',
-      offline: 'DATABASE OFFLINE // Unable to load character data',
-      empty: 'NO MATCHING FILE // Try another character or battlesuit name',
-      loading: 'Loading character files…',
-      noRecords: 'No character files available yet',
-      retry: 'RETRY',
-      clear: 'CLEAR SEARCH',
-      search: 'Search characters or battlesuits',
-      close: 'CLOSE IMAGE',
-      source: 'VIEW IMAGE SOURCE ↗',
-      visual: 'CHARACTER VISUAL',
-      imageError: 'Image currently unavailable',
-      open: (name) => `Open image of ${name}`,
-      count: (visible, total) => `Showing ${visible} of ${total} character files`
+      placeholder: 'Enter a character, battlesuit or variant…', search: 'Search characters or battlesuits',
+      loading: 'Loading Valkyrie files…', offline: 'DATABASE OFFLINE // Unable to load character data',
+      empty: 'NO MATCHING FILE // Try another character or battlesuit name', noRecords: 'No character files available yet',
+      retry: 'RETRY', clear: 'CLEAR FILTERS', close: 'CLOSE FILE', source: 'IMAGE SOURCE ↗', reference: 'BATTLESUIT / MODE DETAILS ↗',
+      allCharacters: 'All characters', characterFilter: 'Character', categoryFilter: 'File category', all: 'All categories',
+      battlesuit: 'Battlesuits', augment: 'Augment cores', captainverse: 'Captainverse', collab: 'Collaborations',
+      part2: 'Part 2', apho: 'A Post-Honkai Odyssey', main: 'Battlesuit', 'previous-era': 'Previous Era SAKURA',
+      sentience: 'Herrscher of Sentience · distinct identity', veliona: 'Veliona · other personality', sirin: 'Sirin · Herrscher persona',
+      heading: 'Valkyrie Files', description: 'Every battlesuit, augment core and variant, grouped by character. Search a character or battlesuit and open their file to switch forms. Captainverse, collaborations and APHO entries are labelled separately.',
+      visual: 'CHARACTER FILE', imageError: 'Image currently unavailable', branches: count => count + ' variants',
+      open: name => 'Open Valkyrie file of ' + name, count: (n, total, suits) => 'Showing ' + n + ' of ' + total + ' character files · ' + suits + ' matching variants',
+      summary: (n, suits) => n + ' character groups / ' + suits + ' battlesuit and mode files',
+      augmentOf: name => 'Augment of: ' + name, representative: name => 'Representative character image: ' + name,
+      captainNote: 'Captainverse counterpart or variant, labelled separately from the main story character.',
+      aphoNote: 'Playable in A Post-Honkai Odyssey, with the mode’s own skills and progression.',
+      cnVersion: version => 'Released in ' + version + ' · regional schedules may differ'
     }
   };
-
-  const currentLanguage = () => window.BHR_I18N?.language || document.body.dataset.language || 'zh-HK';
-  const copy = () => languageCopy[currentLanguage()] || languageCopy['zh-HK'];
-
-  const slugToSources = (slug) => ['webp', 'png', 'jpg', 'jpeg', 'avif']
-    .map((extension) => `${IMG_BASE}${slug}.${extension}`);
-
-  const characterSources = (character) => {
-    const sources = [];
-    if (character.image) sources.push(character.image);
-    sources.push(...slugToSources(character.slug));
-    return [...new Set(sources)];
+  const language = () => window.BHR_I18N?.language || document.body.dataset.language || 'zh-HK';
+  const simplify = value => window.BHR_I18N?.translate(value, 'zh-CN') || value;
+  const copy = () => {
+    if (language() !== 'zh-CN') return languages[language()] || languages['zh-HK'];
+    const converted = Object.fromEntries(Object.entries(languages['zh-HK']).map(([key, value]) => [key,
+      typeof value === 'function' ? (...args) => simplify(value(...args)) : simplify(value)]));
+    return {...converted, search:'搜索角色或战衣', placeholder:'输入角色、装甲或分支名称…',
+      loading:'正在加载女武神档案…', offline:'数据库离线 // 无法加载角色资料', retry:'重新加载',
+      noRecords:'暂时没有角色档案', imageError:'暂时无法加载图片',
+      description:'按角色整理全部装甲、增幅核心和分支。可以搜索角色或装甲名称，打开档案后切换各个形态；舰长线、联动和后崩坏书会独立标示。'};
+  };
+  const nameOf = entry => language() === 'en' ? entry.en : language() === 'zh-CN' ? simplify(entry.zh || entry.en) : entry.zh || entry.en;
+  const normalize = value => String(value || '').normalize('NFKD').toLowerCase()
+    .replace(/[\u0300-\u036f]/g, '').replace(/[\s\p{P}\p{S}]+/gu, '');
+  const indexOf = text => normalize(text + ' ' + simplify(text));
+  const setImage = (image, suit) => {
+    image.alt = nameOf(suit);
+    if (image.getAttribute('src') !== suit.image) image.src = suit.image;
   };
 
-  const createName = (character) => {
-    const name = document.createElement('div');
-    name.className = 'name';
-    name.append(document.createTextNode(character.en));
-
-    if (character.zh) {
-      const chineseName = document.createElement('span');
-      chineseName.className = 'zh';
-      chineseName.textContent = character.zh;
-      name.appendChild(chineseName);
+  let lightbox, lightboxTrigger, openCharacter, openSuit;
+  const renderFile = () => {
+    if (!openCharacter || !openSuit || !lightbox) return;
+    const c = copy(), suit = openSuit;
+    lightbox.querySelector('#lb-caption').textContent = nameOf(openCharacter);
+    lightbox.querySelector('#lb-battlesuit').textContent = nameOf(suit);
+    lightbox.querySelector('.lb-kicker').textContent = c.visual;
+    lightbox.querySelector('.lb-close').textContent = c.close;
+    lightbox.querySelector('#lb-kind').textContent = [c[suit.kind], suit.variant !== 'main' && suit.variant !== 'apho' && c[suit.variant]].filter(Boolean).join(' / ');
+    lightbox.querySelector('#lb-branches-label').textContent = c.branches(openCharacter.battlesuits.length);
+    const notes = [];
+    if (suit.augment_of) {
+      const parent = openCharacter.battlesuits.find(s => s.slug === suit.augment_of);
+      if (parent) notes.push(c.augmentOf(nameOf(parent)));
     }
-
-    return name;
-  };
-
-  const createCard = (character) => {
-    const card = document.createElement('article');
-    card.className = 'card';
-    card.tabIndex = 0;
-    card.setAttribute('role', 'button');
-    card.setAttribute('aria-haspopup', 'dialog');
-    card.setAttribute('aria-label', copy().open(character.zh || character.en));
-
-    const image = document.createElement('img');
-    image.className = 'thumb character-visual';
-    image.alt = `${character.en}${character.zh ? ` / ${character.zh}` : ''} | Honkai Impact 3rd`;
-    image.loading = 'lazy';
-    image.decoding = 'async';
-    image.referrerPolicy = 'no-referrer';
-    image.style.opacity = '0';
-    image.style.visibility = 'hidden';
-
-    // The shared reveal animation handles loaded images when available.
-    image.addEventListener('load', () => {
-      if (!image.dataset.imageState) {
-        image.style.opacity = '1';
-        image.style.visibility = 'visible';
-      }
+    if (suit.variant === 'captainverse') notes.push(c.captainNote);
+    if (suit.kind === 'apho') notes.push(c.aphoNote);
+    if (suit.version) notes.push(c.cnVersion(suit.version));
+    const note = lightbox.querySelector('#lb-note');
+    note.textContent = notes.join(' ');
+    note.hidden = !notes.length;
+    const label = lightbox.querySelector('#lb-image-label');
+    label.textContent = suit.image_label ? c.representative(nameOf(suit.image_label)) : '';
+    label.hidden = !suit.image_label;
+    setImage(lightbox.querySelector('.lb-img'), suit);
+    for (const [id, url, text] of [['lb-source', suit.source, c.source], ['lb-reference', suit.entry_source, c.reference]]) {
+      const link = lightbox.querySelector('#' + id);
+      link.textContent = text; link.hidden = !url;
+      if (url) link.href = url;
+    }
+    lightbox.querySelector('.lb-image-error').textContent = c.imageError;
+    lightbox.querySelectorAll('.suit-button').forEach(button => {
+      const entry = openCharacter.battlesuits.find(s => s.slug === button.dataset.suit);
+      button.setAttribute('aria-pressed', String(entry === suit));
+      button.querySelector('strong').textContent = nameOf(entry);
+      button.querySelector('small').textContent = entry.kind === 'augment' ? c.augment : c[entry.variant] || c.battlesuit;
     });
-
-    const sources = characterSources(character);
-    let sourceIndex = 0;
-
-    const tryNextSource = () => {
-      image.style.opacity = '0';
-      image.style.visibility = 'hidden';
-
-      if (sourceIndex >= sources.length) {
-        image.onerror = null;
-        image.src = PLACEHOLDER;
-        return;
-      }
-      image.src = sources[sourceIndex++];
-    };
-
-    image.onerror = tryNextSource;
-    tryNextSource();
-
-    const meta = document.createElement('div');
-    meta.className = 'meta';
-
-    const tag = document.createElement('div');
-    tag.className = 'tag';
-    tag.textContent = character.battlesuit || 'VALKYRIE // CHARACTER FILE';
-
-    meta.append(createName(character), tag);
-    card.append(image, meta);
-
-    const open = () => openLightbox(
-      image.currentSrc || image.src,
-      currentLanguage() === 'en' ? character.en : character.zh || character.en,
-      character.battlesuit || '',
-      character.source || '',
-      card
-    );
-
-    card.addEventListener('click', open);
-    card.addEventListener('keydown', (event) => {
-      if (event.key === 'Enter' || event.key === ' ') {
-        event.preventDefault();
-        open();
-      }
-    });
-
-    return card;
-  };
-
-  let lightbox;
-  let lightboxTrigger;
-
-  const applyLightboxLanguage = () => {
-    if (!lightbox) return;
-    lightbox.querySelector('.lb-close').textContent = copy().close;
-    lightbox.querySelector('#lb-source').textContent = copy().source;
-    lightbox.querySelector('.lb-panel span').textContent = copy().visual;
-    lightbox.querySelector('.lb-image-error').textContent = copy().imageError;
   };
 
   const ensureLightbox = () => {
     if (lightbox) return lightbox;
-
     lightbox = document.createElement('dialog');
-    lightbox.className = 'lightbox';
+    lightbox.className = 'lightbox valkyrie-file';
+    lightbox.dataset.i18nIgnore = '';
     lightbox.setAttribute('aria-labelledby', 'lb-caption');
     lightbox.setAttribute('aria-describedby', 'lb-battlesuit');
-    lightbox.innerHTML = `
-      <div class="lb-shell">
-        <div class="lb-visual">
-          <img class="lb-img character-visual" style="opacity:0;visibility:hidden" alt="">
-          <p class="lb-image-error" role="status" data-i18n-ignore hidden></p>
-        </div>
-        <div class="lb-panel">
-          <div>
-            <span data-i18n-ignore>CHARACTER VISUAL</span>
-            <p id="lb-caption"></p>
-            <small id="lb-battlesuit"></small>
-            <a id="lb-source" href="#" target="_blank" rel="noopener noreferrer" data-i18n-ignore>SOURCE FILE ↗</a>
-          </div>
-          <button class="lb-close" type="button" autofocus data-i18n-ignore>CLOSE FILE</button>
-        </div>
-      </div>`;
-
+    lightbox.innerHTML = '<header class="lb-header"><div><span class="lb-kicker"></span><h2 id="lb-caption"></h2></div><button class="lb-close" type="button" autofocus></button></header>' +
+      '<div class="lb-shell"><div class="lb-visual"><img class="lb-img character-visual" alt=""><p class="lb-image-error" role="status" hidden></p><p id="lb-image-label" hidden></p></div>' +
+      '<div class="lb-panel"><div class="suit-detail"><p id="lb-kind"></p><h3 id="lb-battlesuit" aria-live="polite" aria-atomic="true"></h3><p id="lb-note" hidden></p>' +
+      '<div class="lb-links"><a id="lb-source" target="_blank" rel="noopener noreferrer"></a><a id="lb-reference" target="_blank" rel="noopener noreferrer"></a></div></div>' +
+      '<h4 id="lb-branches-label"></h4><div class="suit-list" role="group" aria-labelledby="lb-branches-label"></div></div></div>';
     document.body.appendChild(lightbox);
-
-    lightbox.addEventListener('click', (event) => {
-      if (event.target === lightbox) lightbox.close();
-    });
-
+    const image = lightbox.querySelector('.lb-img'), error = lightbox.querySelector('.lb-image-error');
+    image.addEventListener('error', () => { error.hidden = false; });
+    image.addEventListener('load', () => { error.hidden = true; });
+    lightbox.addEventListener('click', event => { if (event.target === lightbox) lightbox.close(); });
     lightbox.querySelector('.lb-close').addEventListener('click', () => lightbox.close());
     lightbox.addEventListener('close', () => {
       document.body.classList.remove('gallery-dialog-open');
-      if (lightboxTrigger?.isConnected && !lightboxTrigger.hidden) lightboxTrigger.focus({ preventScroll: true });
+      if (lightboxTrigger?.isConnected && !lightboxTrigger.hidden) lightboxTrigger.focus({preventScroll:true});
     });
-
-    applyLightboxLanguage();
-
     return lightbox;
   };
-
-  const openLightbox = (source, caption, battlesuit, sourcePage, trigger) => {
+  const openFile = (character, trigger) => {
     const dialog = ensureLightbox();
-    const image = dialog.querySelector('.lb-img');
-    const sourceLink = dialog.querySelector('#lb-source');
-    const imageError = dialog.querySelector('.lb-image-error');
-
+    openCharacter = character;
+    openSuit = character._selected;
     lightboxTrigger = trigger;
-    imageError.hidden = true;
-    image.style.opacity = '0';
-    image.style.visibility = 'hidden';
-    image.onerror = () => { imageError.hidden = false; };
-    image.onload = () => {
-      imageError.hidden = true;
-      if (!image.dataset.imageState) {
-        image.style.opacity = '1';
-        image.style.visibility = 'visible';
-      }
-    };
-    image.src = source;
-    image.alt = caption;
-    dialog.querySelector('#lb-caption').textContent = caption;
-    dialog.querySelector('#lb-battlesuit').textContent = battlesuit;
-
-    if (sourcePage) {
-      sourceLink.href = sourcePage;
-      sourceLink.hidden = false;
-    } else {
-      sourceLink.hidden = true;
-    }
-
-    applyLightboxLanguage();
+    const list = dialog.querySelector('.suit-list');
+    list.replaceChildren(...character.battlesuits.map(suit => {
+      const button = document.createElement('button');
+      button.type = 'button'; button.className = 'suit-button'; button.dataset.suit = suit.slug;
+      const img = document.createElement('img'); img.src = suit.image; img.alt = ''; img.decoding = 'async';
+      const text = document.createElement('span'); text.append(document.createElement('strong'), document.createElement('small'));
+      button.append(img, text);
+      button.addEventListener('click', event => {
+        openSuit = suit; renderFile();
+        if (event.detail > 0 && matchMedia('(max-width: 700px)').matches) {
+          dialog.querySelector('.lb-shell').scrollTo({top:0, behavior:matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'});
+        }
+      });
+      return button;
+    }));
+    renderFile();
     dialog.showModal();
+    dialog.querySelector('.lb-shell').scrollTop = 0;
     document.body.classList.add('gallery-dialog-open');
-    dialog.querySelector('.lb-close').focus({ preventScroll: true });
+    dialog.querySelector('.lb-close').focus({preventScroll:true});
+  };
+  const createCard = character => {
+    const card = document.createElement('article');
+    card.className = 'card'; card.tabIndex = 0; card.dataset.character = character.slug; card.dataset.i18nIgnore = '';
+    card.setAttribute('role', 'button'); card.setAttribute('aria-haspopup', 'dialog');
+    const image = document.createElement('img'); image.className = 'thumb character-visual'; image.loading = 'lazy'; image.decoding = 'async';
+    const meta = document.createElement('div'); meta.className = 'meta';
+    for (const className of ['name','tag','branch-count']) { const item = document.createElement('div'); item.className = className; meta.append(item); }
+    card.append(image, meta);
+    card.addEventListener('click', () => openFile(character, card));
+    card.addEventListener('keydown', event => {
+      if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openFile(character, card); }
+    });
+    return card;
   };
 
   const load = async () => {
-    const grid = document.querySelector('#grid');
-    const input = document.querySelector('#search');
-    const resultCount = document.querySelector('#result-count');
-    const status = document.querySelector('#search-status');
-    const clearButton = document.querySelector('#clear-search');
-    if (!grid || !input || !status || !clearButton) return;
-
-    let searchable = [];
-    let visibleItems = [];
-    let state = 'loading';
-    let statePanel;
-
-    const normalize = (value) => String(value || '').normalize('NFKC').toLowerCase().replace(/[\s\p{P}\p{S}]+/gu, '');
-
-    const updateSearchIndex = () => {
-      searchable.forEach((character) => {
-        const text = `${character.en} ${character.zh || ''} ${character.slug || ''} ${character.battlesuit || ''}`;
-        const simplified = window.BHR_I18N?.translate(text, 'zh-CN') || '';
-        character._search = normalize(`${text} ${simplified}`);
-      });
+    const grid = document.querySelector('#grid'), input = document.querySelector('#search');
+    const status = document.querySelector('#search-status'), clear = document.querySelector('#clear-search');
+    const characterFilter = document.querySelector('#character-filter'), categoryFilter = document.querySelector('#category-filter');
+    if (!grid || !input || !status || !clear || !characterFilter || !categoryFilter) return;
+    let characters = [], state = 'loading', statePanel;
+    const categoryMatches = suit => {
+      const category = categoryFilter.value;
+      return category === 'all' || (['battlesuit','augment','apho'].includes(category) ? suit.kind === category : suit.variant === category);
     };
-
+    const updateIndex = () => characters.forEach(character => {
+      character._search = indexOf([character.en, character.zh, character.slug, ...(character.aliases || [])].join(' '));
+      character.battlesuits.forEach(suit => {
+        const names = [suit.en, suit.zh, suit.slug, ...(suit.aliases || [])];
+        suit._search = indexOf([...names, suit.version || ''].join(' '));
+        suit._names = new Set(names.flatMap(name => [normalize(name), normalize(simplify(name))]));
+      });
+    });
     const showState = (message, action, handler) => {
-      if (!statePanel) {
-        statePanel = document.createElement('div');
-        statePanel.className = 'empty-state';
-        statePanel.dataset.i18nIgnore = '';
-        grid.appendChild(statePanel);
-      }
-      const label = document.createElement('p');
-      label.textContent = message;
-      statePanel.replaceChildren(label);
-      statePanel.hidden = false;
-      if (action) {
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.textContent = action;
-        button.addEventListener('click', handler);
-        statePanel.appendChild(button);
-      }
+      if (!statePanel) { statePanel = document.createElement('div'); statePanel.className = 'empty-state'; statePanel.dataset.i18nIgnore = ''; grid.append(statePanel); }
+      const text = document.createElement('p'); text.textContent = message; statePanel.replaceChildren(text); statePanel.hidden = false;
+      if (action) { const button=document.createElement('button'); button.type='button'; button.textContent=action; button.addEventListener('click', handler); statePanel.append(button); }
     };
-
+    const hasFilters = () => Boolean(input.value || characterFilter.value !== 'all' || categoryFilter.value !== 'all');
+    const clearFilters = () => { input.value = ''; characterFilter.value = 'all'; categoryFilter.value = 'all'; render(); input.focus(); };
     const applyLanguage = () => {
-      input.placeholder = copy().placeholder;
-      input.setAttribute('aria-label', copy().search);
-      clearButton.textContent = copy().clear;
-      searchable.forEach((character) => {
-        const name = currentLanguage() === 'en' ? character.en : character.zh || character.en;
-        character._card.setAttribute('aria-label', copy().open(window.BHR_I18N?.translate(name) || name));
-      });
-      applyLightboxLanguage();
-      if (state === 'loading' || state === 'offline') {
+      const c = copy(); input.placeholder = c.placeholder; input.setAttribute('aria-label', c.search); clear.textContent = c.clear;
+      document.querySelector('#database-title').textContent = c.heading;
+      document.querySelector('#database-description').textContent = c.description;
+      document.querySelector('#character-filter-label').textContent = c.characterFilter;
+      document.querySelector('#category-filter-label').textContent = c.categoryFilter;
+      characterFilter.options[0].textContent = c.allCharacters;
+      for (const option of characterFilter.options) { const character = characters.find(item => item.slug === option.value); if (character) option.textContent = nameOf(character); }
+      for (const option of categoryFilter.options) option.textContent = c[option.value];
+      for (const character of characters) {
+        const card = character._card;
+        card.setAttribute('aria-label', c.open(nameOf(character)));
+        card.querySelector('.name').textContent = nameOf(character);
+        card.querySelector('.tag').textContent = nameOf(character._selected);
+        card.querySelector('.branch-count').textContent = c.branches(character.battlesuits.length);
+        setImage(card.querySelector('img'), character._selected);
+      }
+      document.querySelector('#database-summary').textContent = c.summary(characters.length, characters.reduce((n, item) => n + item.battlesuits.length, 0));
+      renderFile();
+    };
+    const render = () => {
+      clear.hidden = !hasFilters();
+      if (state !== 'ready') {
+        applyLanguage();
         status.textContent = copy()[state];
         showState(copy()[state], state === 'offline' ? copy().retry : '', () => loadData(true));
-      } else {
-        status.textContent = copy().count(visibleItems.length, searchable.length);
-        if (!visibleItems.length) {
-          showState(searchable.length ? copy().empty : copy().noRecords, input.value ? copy().clear : '', clearSearch);
+        return;
+      }
+      const terms = input.value.trim().split(/\s+/).map(normalize).filter(Boolean);
+      const query = normalize(input.value);
+      let visible = 0, matching = 0;
+      for (const character of characters) {
+        const matches = character.battlesuits.filter(suit => categoryMatches(suit) && terms.every(term => (character._search + suit._search).includes(term)));
+        const exact = query ? matches.filter(suit => suit._names.has(query)) : [];
+        const suits = exact.length ? exact : matches;
+        const show = (characterFilter.value === 'all' || character.slug === characterFilter.value) && suits.length > 0;
+        character._card.hidden = !show;
+        if (show) {
+          visible++; matching += suits.length;
+          character._selected = suits.find(suit => suit.slug === character.default_suit) || suits[0];
         }
       }
-    };
-
-    const render = (items) => {
-      visibleItems = items;
-      const visible = new Set(items);
-      searchable.forEach((character) => { character._card.hidden = !visible.has(character); });
-      if (statePanel) statePanel.hidden = true;
-      if (resultCount) resultCount.textContent = String(items.length).padStart(2, '0');
-      clearButton.hidden = !input.value;
       applyLanguage();
+      document.querySelector('#result-count').textContent = String(visible).padStart(2, '0');
+      status.textContent = copy().count(visible, characters.length, matching);
+      if (statePanel) statePanel.hidden = true;
+      if (!visible) showState(characters.length ? copy().empty : copy().noRecords, hasFilters() ? copy().clear : '', clearFilters);
     };
-
-    const filter = () => {
-      const terms = input.value.normalize('NFKC').trim().split(/\s+/).map(normalize).filter(Boolean);
-      render(searchable.filter((character) => terms.every((term) => character._search.includes(term))));
-    };
-
-    const clearSearch = () => {
-      input.value = '';
-      filter();
-      input.focus();
-    };
-
     const loadData = async (restoreFocus = false) => {
       state = 'loading';
-      input.disabled = true;
-      grid.setAttribute('aria-busy', 'true');
-      applyLanguage();
-      const controller = new AbortController();
-      const timeout = window.setTimeout(() => controller.abort(), 15000);
+      for (const control of [input, characterFilter, categoryFilter]) control.disabled = true;
+      grid.setAttribute('aria-busy', 'true'); render();
+      const controller = new AbortController(), timeout = setTimeout(() => controller.abort(), 15000);
       try {
-        const response = await fetch(JSON_URL, { signal: controller.signal });
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        const list = await response.json();
-        if (!Array.isArray(list) || list.some((character) => !character || typeof character.en !== 'string' || typeof character.slug !== 'string')) {
-          throw new Error('Invalid character database');
-        }
-        searchable = list.map((character) => ({ ...character, _card: createCard(character) }));
-        updateSearchIndex();
-        grid.replaceChildren(...searchable.map((character) => character._card));
-        statePanel = null;
-        state = 'ready';
-        input.disabled = false;
-        filter();
-        if (restoreFocus) input.focus();
+        const response = await fetch(JSON_URL, {signal:controller.signal});
+        if (!response.ok) throw new Error('HTTP ' + response.status);
+        const data = await response.json();
+        if (!Array.isArray(data) || data.some(c => !c || typeof c.slug !== 'string' || typeof c.en !== 'string' || !Array.isArray(c.battlesuits) || !c.battlesuits.length || c.battlesuits.some(s => !s.slug || !s.en || !s.image))) throw new Error('Invalid Valkyrie database');
+        characters = data.map(c => {
+          const character = {...c, _selected:c.battlesuits.find(s => s.slug === c.default_suit) || c.battlesuits[0]};
+          character._card = createCard(character);
+          return character;
+        });
+        characterFilter.replaceChildren(characterFilter.options[0], ...characters.map(c => { const option = document.createElement('option'); option.value = c.slug; option.textContent = nameOf(c); return option; }));
+        grid.replaceChildren(...characters.map(c => c._card)); statePanel = null;
+        updateIndex(); state = 'ready';
+        for (const control of [input, characterFilter, categoryFilter]) control.disabled = false;
+        render(); if (restoreFocus) input.focus();
       } catch (error) {
-        state = 'offline';
-        if (resultCount) resultCount.textContent = '00';
-        console.error('Unable to load character database:', error);
-        applyLanguage();
+        console.error('Unable to load Valkyrie database:', error);
+        state = 'offline'; document.querySelector('#result-count').textContent = '00'; render();
         if (restoreFocus) statePanel.querySelector('button')?.focus();
-      } finally {
-        window.clearTimeout(timeout);
-        grid.setAttribute('aria-busy', 'false');
-      }
+      } finally { clearTimeout(timeout); grid.setAttribute('aria-busy', 'false'); }
     };
-
-    input.addEventListener('input', () => {
-      if (state === 'ready') filter();
-    });
-    clearButton.addEventListener('click', clearSearch);
-
-    window.addEventListener('bhr:languagechange', () => {
-      updateSearchIndex();
-      if (state === 'ready') filter();
-      else applyLanguage();
-    });
-    window.addEventListener('bhr:translationsready', () => {
-      updateSearchIndex();
-      if (state === 'ready') filter();
-    });
-
+    for (const control of [input, characterFilter, categoryFilter]) control.addEventListener(control === input ? 'input' : 'change', () => { if (state === 'ready') render(); });
+    clear.addEventListener('click', clearFilters);
+    for (const event of ['bhr:languagechange','bhr:translationsready']) window.addEventListener(event, () => { updateIndex(); render(); });
     await loadData();
   };
-
-  document.addEventListener('DOMContentLoaded', load, { once: true });
+  document.addEventListener('DOMContentLoaded', load, {once:true});
 })();

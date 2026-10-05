@@ -8,6 +8,7 @@ const types = {'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-
 
 (async () => {
   execFileSync(process.execPath, [path.join(root, 'scripts/build-preload-manifest.cjs'), '--check'], { stdio: 'inherit' });
+  execFileSync(process.execPath, [path.join(__dirname, 'valkyrie-data.cjs')], { stdio: 'inherit' });
   execFileSync(process.execPath, [path.join(__dirname, 'preloader.cjs')], { stdio: 'inherit' });
   execFileSync(process.execPath, [path.join(__dirname, 'boot.cjs')], { stdio: 'inherit' });
   execFileSync(process.execPath, [path.join(__dirname, 'music.cjs')], { stdio: 'inherit' });
@@ -26,7 +27,7 @@ const types = {'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-
   try {
     browser = await chromium.launch({ headless: true, ...(process.env.BROWSER_CHANNEL ? {channel:process.env.BROWSER_CHANNEL} : {}) });
     const baseURL = `http://127.0.0.1:${server.address().port}`;
-    for (const suite of ['resources', 'cinematic', 'site', 'gallery', 'i18n']) {
+    for (const suite of ['gallery', 'resources', 'cinematic', 'site', 'i18n']) {
       await require(`./${suite}.cjs`)(browser, baseURL);
       console.log(`PASS ${suite}`);
     }

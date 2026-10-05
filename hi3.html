@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#090b0c">
-    <meta name="description" content="Bernie’s Honkai Realm《崩壞3rd》角色圖鑑，支援中英文角色搜尋及圖片放大。">
+    <meta name="description" content="Bernie’s Honkai Realm《崩壞3rd》女武神檔案：按角色整理裝甲、增幅核心、艦長線、聯動及後崩壞書分支。">
     <title>角色圖鑑 // Bernie’s Honkai Realm</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="assets/inner-header.css">
@@ -51,15 +51,16 @@
     <main id="main-content" tabindex="-1">
         <section id="hi3-gallery" data-reveal>
             <div class="gallery-heading">
-                <div>
-                    <span class="gallery-kicker">DATABASE / 21 VISUAL FILES</span>
-                    <h2>女武神檔案</h2>
-                    <p>現有角色清單附有代表戰衣頭像。輸入角色英文名、中文名、slug 或戰衣名即可篩選；按角色圖片可以開啟圖片及查看來源。</p>
+                <div data-i18n-ignore>
+                    <span class="gallery-kicker">DATABASE / VALKYRIE ARCHIVE</span>
+                    <h2 id="database-title">女武神檔案</h2>
+                    <p id="database-description">按角色整理全部裝甲、增幅核心同分支。搜尋角色或裝甲名稱，開啟檔案後再切換各個形態。</p>
+                    <p id="database-summary" class="database-summary">41 個角色群組 / 115 個裝甲及玩法檔案</p>
                 </div>
                 <div class="gallery-counter" aria-hidden="true">
                     <span>DISPLAYING</span>
                     <strong id="result-count">00</strong>
-                    <small>FILES</small>
+                    <small>CHARACTERS</small>
                 </div>
             </div>
 
@@ -69,6 +70,10 @@
                     <input class="input" id="search" type="search" placeholder="輸入角色或戰衣名稱…" aria-label="搜尋角色或戰衣" aria-controls="grid" aria-describedby="search-status" autocomplete="off" data-i18n-ignore>
                     <b aria-hidden="true">⌕</b>
                 </label>
+                <div class="database-filters" data-i18n-ignore>
+                    <label for="character-filter"><span id="character-filter-label">角色</span><select id="character-filter" aria-controls="grid"><option value="all">所有角色</option></select></label>
+                    <label for="category-filter"><span id="category-filter-label">檔案分類</span><select id="category-filter" aria-controls="grid"><option value="all">所有分類</option><option value="battlesuit">一般裝甲</option><option value="augment">增幅核心</option><option value="captainverse">艦長線</option><option value="collab">聯動角色</option><option value="part2">第二部</option><option value="apho">後崩壞書</option></select></label>
+                </div>
                 <div class="search-feedback" data-i18n-ignore>
                     <p id="search-status" class="search-status" role="status" aria-atomic="true">正在載入角色檔案…</p>
                     <button id="clear-search" type="button" hidden>清除搜尋</button>
