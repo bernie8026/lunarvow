@@ -493,6 +493,9 @@ body.database-page .card .tag {
     font-size: 0.78rem;
     line-height: 1.6;
     letter-spacing: 0;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
     overflow-wrap: anywhere;
 }
 
@@ -558,6 +561,9 @@ body.database-page .valkyrie-file .lb-shell {
 }
 
 body.database-page .valkyrie-file .lb-visual {
+    position: sticky;
+    top: 0;
+    align-self: start;
     align-content: start;
     padding: 28px 20px;
     background: radial-gradient(ellipse at center top, #381322, #100911 70%);
@@ -689,7 +695,7 @@ body.database-page .valkyrie-file .suit-button small {
 @media (max-width: 700px) {
     body.database-page .valkyrie-file .lb-header { padding: 14px 12px; gap: 8px; }
     body.database-page .valkyrie-file .lb-shell { display: block; max-height: calc(100dvh - 144px); }
-    body.database-page .valkyrie-file .lb-visual { padding: 14px; }
+    body.database-page .valkyrie-file .lb-visual { position: relative; padding: 14px; }
     body.database-page .valkyrie-file .lb-img { max-width: 220px; max-height: 190px; min-height: 0; }
     body.database-page .valkyrie-file .lb-panel { padding: 18px 14px; }
     body.database-page .valkyrie-file #lb-battlesuit { font-size: 1.15rem; }

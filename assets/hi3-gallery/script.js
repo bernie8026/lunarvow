@@ -103,7 +103,7 @@
     lightbox.setAttribute('aria-describedby', 'lb-battlesuit');
     lightbox.innerHTML = '<header class="lb-header"><div><span class="lb-kicker"></span><h2 id="lb-caption"></h2></div><button class="lb-close" type="button" autofocus></button></header>' +
       '<div class="lb-shell"><div class="lb-visual"><img class="lb-img character-visual" alt=""><p class="lb-image-error" role="status" hidden></p><p id="lb-image-label" hidden></p></div>' +
-      '<div class="lb-panel"><div class="suit-detail"><p id="lb-kind"></p><h3 id="lb-battlesuit"></h3><p id="lb-note" hidden></p>' +
+      '<div class="lb-panel"><div class="suit-detail"><p id="lb-kind"></p><h3 id="lb-battlesuit" aria-live="polite" aria-atomic="true"></h3><p id="lb-note" hidden></p>' +
       '<div class="lb-links"><a id="lb-source" target="_blank" rel="noopener noreferrer"></a><a id="lb-reference" target="_blank" rel="noopener noreferrer"></a></div></div>' +
       '<h4 id="lb-branches-label"></h4><div class="suit-list" role="group" aria-labelledby="lb-branches-label"></div></div></div>';
     document.body.appendChild(lightbox);
@@ -130,7 +130,12 @@
       const img = document.createElement('img'); img.src = suit.image; img.alt = ''; img.decoding = 'async';
       const text = document.createElement('span'); text.append(document.createElement('strong'), document.createElement('small'));
       button.append(img, text);
-      button.addEventListener('click', () => { openSuit = suit; renderFile(); });
+      button.addEventListener('click', event => {
+        openSuit = suit; renderFile();
+        if (event.detail > 0 && matchMedia('(max-width: 700px)').matches) {
+          dialog.querySelector('.lb-shell').scrollTo({top:0, behavior:matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'});
+        }
+      });
       return button;
     }));
     renderFile();
