@@ -3,6 +3,8 @@
   "private": true,
   "scripts": {
     "test": "node tests/run.cjs",
+    "build:news": "node scripts/build-news.cjs",
+    "check:news": "node scripts/build-news.cjs --check",
     "build:preload": "node scripts/build-preload-manifest.cjs",
     "check:preload": "node scripts/build-preload-manifest.cjs --check"
   },

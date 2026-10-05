@@ -22,6 +22,11 @@
         'LUNAR': '月下',
         'VOW': '誓約',
         'OPEN V8.7 GUIDE': '開啟 V8.7 攻略',
+        'OPEN LUNAR GUIDE': '開啟月下攻略',
+        'NEWS CHECKED': '消息核對日期',
+        'OFFICIAL NEWS': '官方消息',
+        'OFFICIAL NEWS // HONKAI IMPACT 3RD': '官方消息 // 崩壞3rd',
+        'NEWS': '消息',
         'EXPLORE ARCHIVE': '瀏覽檔案庫',
         'THERESA // LUNAR VOW': '德麗莎 // 月下誓約',
         'CHARACTER FILE': '角色檔案',
@@ -153,6 +158,18 @@
         '月下誓約・予愛以心': 'Lunar Vow: Crimson Love',
         '記錄角色、劇情、實戰攻略，同每一個值得收藏嘅瞬間。呢度唔係百科全書，而係艦長為月下建立嘅專屬檔案庫。': 'Recording characters, stories, practical guides, and every moment worth preserving. This is not an encyclopaedia; it is the Captain’s dedicated archive for Lunar Vow.',
         '最新檔案': 'Latest Files',
+        '最新消息': 'Latest News',
+        '版本、活動、角色、裝備同月下相關消息，一次過睇晒。': 'Versions, events, characters, equipment and Lunar Vow news, all in one place.',
+        '非官方消息整理；活動時間及內容以所屬地區嘅官方公告為準。': 'An unofficial news digest; check the official announcement for your region for schedules and details.',
+        '月下核心攻略': 'Lunar Vow Core Guide',
+        '閱讀最新官方消息': 'Read the Latest Official News',
+        '消息中心：分區版本及活動': 'News Centre: Regional Versions and Events',
+        '台港澳／國際服 9.0、大陸服 9.1 嘅版本、活動、補給同劇情消息，附官方來源及核對日期。': 'Version, event, supply and story news for TW/HK/MO and Global v9.0, and CN v9.1, with official sources and a verification date.',
+        '攻略版本及月下新消息': 'Guide Version and New Lunar Vow News',
+        '本攻略保留 Ver. 8.7 星之環入門內容。大陸服 9.1 已公布長夜將明 G4 鍛造、家園補給及月下技能修正；台港澳服適用日期請核對所屬地區公告。': 'This guide preserves the Ver. 8.7 Astral Ring introduction. CN v9.1 announces G4 crafting, Dorm Supply and a Lunar Vow skill fix. Check your region for availability.',
+        '查看月下更新及官方公告 →': 'View Lunar Vow Updates and Official Sources →',
+        '劇情進度消息': 'Story Progress News',
+        '台港澳／國際服 9.0 已加入第二部終章「從此，擁抱未來」；大陸服後日談「海正用火的聲音歌唱」於 10 月 5 日開放。以下保留既有劇情整理，最新章節公告可到消息中心查閱。': 'TW/HK/MO and Global v9.0 include the Part 2 finale. The CN epilogue opens on October 5. The overview below preserves the existing story archive; see the news centre for new chapter announcements.',
         '開啟崩壞3rd完整劇情整理': 'Open the complete Honkai Impact 3rd story overview',
         '由聖芙蕾雅': 'From St. Freya',
         '去到火星': 'to Mars',
@@ -467,6 +484,12 @@
     });
 
     const PAGE_INFO = {
+        'news.html': {
+            hkTitle: '最新消息 // Bernie’s Honkai Realm',
+            enTitle: 'Latest News // Bernie’s Honkai Realm',
+            hkDescription: '《崩壞3rd》官方消息整理：台港澳、國際服及大陸服版本、活動、補給、劇情與月下更新，附日期及官方來源。',
+            enDescription: 'Honkai Impact 3rd news for TW/HK/MO, Global and CN: versions, events, supplies, story and Lunar Vow updates, with dates and official sources.'
+        },
         'index.html': {
             hkTitle: 'Bernie’s Honkai Realm // 月下誓約檔案庫',
             enTitle: 'Bernie’s Honkai Realm // Lunar Vow Archive',
