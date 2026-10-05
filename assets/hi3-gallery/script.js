@@ -175,7 +175,7 @@
     };
     const updateIndex = () => characters.forEach(character => {
       character._search = indexOf([character.en, character.zh, character.slug, ...(character.aliases || [])].join(' '));
-      character.battlesuits.forEach(suit => { suit._search = indexOf([suit.en, suit.zh, suit.slug, suit.kind, suit.variant, suit.version || '', ...(suit.aliases || [])].join(' ')); });
+      character.battlesuits.forEach(suit => { suit._search = indexOf([suit.en, suit.zh, suit.slug, suit.version || '', ...(suit.aliases || [])].join(' ')); });
     });
     const showState = (message, action, handler) => {
       if (!statePanel) { statePanel = document.createElement('div'); statePanel.className = 'empty-state'; statePanel.dataset.i18nIgnore = ''; grid.append(statePanel); }
