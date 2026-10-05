@@ -14,9 +14,21 @@ module.exports=async(browser,baseURL)=>{
   };
   const results=()=>page.locator('#news-results .news-card');
   const capture=async(locator,name)=>{
-    const style=await page.addStyleTag({content:'html{scroll-behavior:auto!important}.site-header,.site-header *,.section-rail,.skip-link,.music-console,.music-console *{visibility:hidden!important}'});
+    const style=await page.addStyleTag({content:'html{scroll-behavior:auto!important}'});
+    // Hide fixed surfaces inline: their desktop child backdrop filters can
+    // still obscure a section screenshot when only visibility is inherited.
+    await page.evaluate(()=>{
+      window.newsPreviewOverlays=[...document.querySelectorAll('.site-header,.section-rail,.skip-link,.music-console')].map(el=>[el,el.getAttribute('style')]);
+      for(const [el] of window.newsPreviewOverlays) el.style.setProperty('display','none','important');
+    });
     try { await locator.scrollIntoViewIfNeeded(); await locator.screenshot({path:path.join(dir,name),animations:'disabled'}); }
-    finally {await style.evaluate(el=>el.remove());}
+    finally {
+      await page.evaluate(()=>{
+        for(const [el,previous] of window.newsPreviewOverlays) previous===null?el.removeAttribute('style'):el.setAttribute('style',previous);
+        delete window.newsPreviewOverlays;
+      });
+      await style.evaluate(el=>el.remove());
+    }
   };
   await page.goto(baseURL+'/news.html');await ready();
   assert.equal(await results().count(),data.items.length);
