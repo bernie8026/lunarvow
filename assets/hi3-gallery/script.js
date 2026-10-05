@@ -235,7 +235,11 @@
         if (!response.ok) throw new Error('HTTP ' + response.status);
         const data = await response.json();
         if (!Array.isArray(data) || data.some(c => !c || typeof c.slug !== 'string' || typeof c.en !== 'string' || !Array.isArray(c.battlesuits) || !c.battlesuits.length || c.battlesuits.some(s => !s.slug || !s.en || !s.image))) throw new Error('Invalid Valkyrie database');
-        characters = data.map(c => ({...c, _selected:c.battlesuits.find(s => s.slug === c.default_suit) || c.battlesuits[0], _card:createCard(c)}));
+        characters = data.map(c => {
+          const character = {...c, _selected:c.battlesuits.find(s => s.slug === c.default_suit) || c.battlesuits[0]};
+          character._card = createCard(character);
+          return character;
+        });
         characterFilter.replaceChildren(characterFilter.options[0], ...characters.map(c => { const option = document.createElement('option'); option.value = c.slug; option.textContent = nameOf(c); return option; }));
         grid.replaceChildren(...characters.map(c => c._card)); statePanel = null;
         updateIndex(); state = 'ready';
