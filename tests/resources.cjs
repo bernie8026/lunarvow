@@ -35,19 +35,21 @@ module.exports = async (browser, baseURL) => {
     assert.equal(progress.loaded, progress.total);
     assert.deepEqual(progress.failed, []);
     const characters = JSON.parse(fs.readFileSync(path.join(root, 'data/characters.json')));
-    assert.equal(characters.length, 21);
-    const sizes = await page.evaluate(async characters => Promise.all(characters.map(async character => {
+    assert.equal(characters.length, 41);
+    const portraits = [...new Set(characters.flatMap(character => character.battlesuits.map(suit => suit.image)))];
+    assert.equal(portraits.length, 112);
+    const sizes = await page.evaluate(async portraits => Promise.all(portraits.map(async source => {
       const image = new Image();
-      image.src = new URL(character.image, location.href).href;
+      image.src = new URL(source, location.href).href;
       await image.decode();
       return image.naturalWidth;
-    })), characters);
+    })), portraits);
     assert.ok(sizes.every(width => width > 0));
     await page.waitForFunction(() => window.BHR_I18N);
     await page.evaluate(() => window.BHR_I18N.setLanguage('zh-CN'));
     assert.equal(await page.evaluate(() => window.OpenCC.Converter({from:'hk',to:'cn'})('乾隆乾坤乾燥')), '乾隆乾坤干燥');
     assert.deepEqual(issues, []);
-    console.log('PASS resources: real complete manifest, full audio transfer, all 21 portraits and local OpenCC');
+    console.log('PASS resources: real complete manifest, full audio transfer, all 112 archive portraits and local OpenCC');
 
     const previews = '/tmp/lunarvow-boot-preview';
     fs.mkdirSync(previews, {recursive:true});

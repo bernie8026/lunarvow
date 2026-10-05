@@ -10,7 +10,8 @@ function buildManifest(files, characters, musicSource, languageSource) {
   const urls = files.filter(file => !/^(?:\.|tests\/|scripts\/|node_modules\/)/.test(file) &&
     runtime.test(file) && !['package.json', 'package-lock.json', 'assets/preload-manifest.json'].includes(file));
   urls.push(`${musicFile}?v=${musicVersion}`);
-  urls.push(...characters.map(character => character.image).filter(Boolean));
+  urls.push(...characters.flatMap(character => [character.image,
+    ...(character.battlesuits || []).map(suit => suit.image)]).filter(Boolean));
   urls.push(...(languageSource.match(/https:\/\/cdn\.jsdelivr\.net\/[^'"\s]+/g) || []));
   return { resources: [...new Set(urls)].sort().map(url => ({ url,
     type: image.test(url.split('?')[0]) ? 'image' : 'fetch'

@@ -8,6 +8,7 @@ const types = {'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-
 
 (async () => {
   execFileSync(process.execPath, [path.join(root, 'scripts/build-preload-manifest.cjs'), '--check'], { stdio: 'inherit' });
+  execFileSync(process.execPath, [path.join(__dirname, 'valkyrie-data.cjs')], { stdio: 'inherit' });
   execFileSync(process.execPath, [path.join(__dirname, 'preloader.cjs')], { stdio: 'inherit' });
   execFileSync(process.execPath, [path.join(__dirname, 'boot.cjs')], { stdio: 'inherit' });
   execFileSync(process.execPath, [path.join(__dirname, 'music.cjs')], { stdio: 'inherit' });
