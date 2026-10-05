@@ -43,8 +43,12 @@
   const simplify = value => window.BHR_I18N?.translate(value, 'zh-CN') || value;
   const copy = () => {
     if (language() !== 'zh-CN') return languages[language()] || languages['zh-HK'];
-    return Object.fromEntries(Object.entries(languages['zh-HK']).map(([key, value]) => [key,
+    const converted = Object.fromEntries(Object.entries(languages['zh-HK']).map(([key, value]) => [key,
       typeof value === 'function' ? (...args) => simplify(value(...args)) : simplify(value)]));
+    return {...converted, search:'搜索角色或战衣', placeholder:'输入角色、装甲或分支名称…',
+      loading:'正在加载女武神档案…', offline:'数据库离线 // 无法加载角色资料', retry:'重新加载',
+      noRecords:'暂时没有角色档案', imageError:'暂时无法加载图片',
+      description:'按角色整理全部装甲、增幅核心和分支。可以搜索角色或装甲名称，打开档案后切换各个形态；舰长线、联动和后崩坏书会独立标示。'};
   };
   const nameOf = entry => language() === 'en' ? entry.en : language() === 'zh-CN' ? simplify(entry.zh || entry.en) : entry.zh || entry.en;
   const normalize = value => String(value || '').normalize('NFKD').toLowerCase()

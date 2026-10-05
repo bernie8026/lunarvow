@@ -88,6 +88,8 @@ module.exports = async function testGallery(browser, baseURL) {
     assert.equal(await page.locator('.card:visible').count(), 0, 'Character and category filters intersect');
     await page.locator('#clear-search').click();
 
+    console.log('PASS gallery: every one of 115 named variants is searchable; character and category filters intersect correctly');
+
     await page.setViewportSize({width:1440,height:900});
     for (const character of roster) {
       await page.locator('[data-character="' + character.slug + '"]').click();
@@ -103,6 +105,8 @@ module.exports = async function testGallery(browser, baseURL) {
       }
       await page.locator('.lb-close').click();
     }
+
+    console.log('PASS gallery: all 41 files and 115 form switches retain the correct image, source, selected button and augment relationship');
 
     fs.mkdirSync('/tmp/lunarvow-boot-preview',{recursive:true});
     for (const width of [320,390,768,1440]) {
