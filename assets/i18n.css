@@ -649,3 +649,14 @@ body .site-header.has-language-switcher .site-nav a span {
         padding-block: 12px;
     }
 }
+
+/* Preserve readable navigation at the narrowest desktop widths. */
+@media (min-width: 821px) and (max-width: 1000px) {
+    body.inner-page > header.site-header.has-language-switcher,
+    body.lunar-guide > header.site-header.has-language-switcher,
+    body .site-header.has-language-switcher {
+        grid-template-columns: 60px auto !important;
+    }
+    body .site-header .site-brand { padding-right: 12px; }
+    body .site-header .site-brand__copy { display: none; }
+}
