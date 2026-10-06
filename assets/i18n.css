@@ -600,7 +600,7 @@ body[data-language="en"] :is(.ui-button, .text-link) > b { flex-shrink: 0; }
     }
 }
 
-/* Larger controls need less tracking and a compact desktop gap. */
+/* Readable controls with room between each desktop route. */
 body .language-switcher button { font-size: 0.875rem; letter-spacing: 0.025em; }
 body .language-switcher::before { font-size: 0.875rem; letter-spacing: 0.05em; }
 body .site-header.has-language-switcher .site-nav a {
@@ -616,10 +616,10 @@ body .site-header.has-language-switcher .site-nav a span {
     body.inner-page .site-header.has-language-switcher .site-nav,
     body.lunar-guide .site-header.has-language-switcher .site-nav,
     body .site-header.has-language-switcher .site-nav {
-        gap: clamp(12px, 1.3vw, 24px) !important;
+        gap: clamp(18px, 1.8vw, 30px) !important;
     }
 }
-@media (min-width: 1181px) and (max-width: 1480px) {
+@media (min-width: 1281px) and (max-width: 1800px) {
     body.inner-page > header.site-header.has-language-switcher,
     body.lunar-guide > header.site-header.has-language-switcher,
     body .site-header.has-language-switcher {
@@ -629,7 +629,7 @@ body .site-header.has-language-switcher .site-nav a span {
     body.lunar-guide .site-header.has-language-switcher .site-header__status,
     body .site-header.has-language-switcher .site-header__status { display: none !important; }
 }
-@media (max-width: 1180px) and (min-width: 821px) {
+@media (max-width: 1280px) and (min-width: 821px) {
     body.inner-page > header.site-header.has-language-switcher,
     body.lunar-guide > header.site-header.has-language-switcher,
     body .site-header.has-language-switcher {
@@ -651,7 +651,7 @@ body .site-header.has-language-switcher .site-nav a span {
 }
 
 /* Preserve readable navigation at the narrowest desktop widths. */
-@media (min-width: 821px) and (max-width: 1000px) {
+@media (min-width: 821px) and (max-width: 1180px) {
     body.inner-page > header.site-header.has-language-switcher,
     body.lunar-guide > header.site-header.has-language-switcher,
     body .site-header.has-language-switcher {
@@ -659,4 +659,59 @@ body .site-header.has-language-switcher .site-nav a span {
     }
     body .site-header .site-brand { padding-right: 12px; }
     body .site-header .site-brand__copy { display: none; }
+}
+
+/* Give the angled route edges and language buttons their own breathing room. */
+@media (min-width: 821px) {
+    body.inner-page .site-header.has-language-switcher .site-nav a,
+    body.lunar-guide .site-header.has-language-switcher .site-nav a,
+    body .site-header.has-language-switcher .site-nav a {
+        flex-shrink: 0;
+        padding: 10px 16px 10px 12px !important;
+        white-space: nowrap;
+    }
+    body.inner-page .site-header.has-language-switcher .site-nav a span,
+    body.lunar-guide .site-header.has-language-switcher .site-nav a span,
+    body .site-header.has-language-switcher .site-nav a span {
+        margin-right: 8px !important;
+    }
+    body.inner-page .site-header.has-language-switcher .site-nav .site-nav__database,
+    body.lunar-guide .site-header.has-language-switcher .site-nav .site-nav__database,
+    body .site-header.has-language-switcher .site-nav .site-nav__database {
+        padding: 12px 20px !important;
+    }
+    body .site-header.has-language-switcher .language-switcher {
+        gap: 8px;
+        height: 38px !important;
+        border: 0;
+        background: transparent;
+        clip-path: none;
+        overflow: visible;
+    }
+    body.inner-page .language-switcher button,
+    body.lunar-guide .language-switcher button,
+    body .language-switcher button {
+        min-height: 36px !important;
+        padding-inline: 14px !important;
+        border: 1px solid rgba(255, 255, 255, 0.18) !important;
+    }
+}
+@media (min-width: 1281px) and (max-width: 1520px) {
+    body[data-language="en"] .site-header.has-language-switcher {
+        grid-template-columns: 60px auto auto !important;
+    }
+    body[data-language="en"] .site-header .site-brand { padding-right: 12px; }
+    body[data-language="en"] .site-header .site-brand__copy { display: none; }
+}
+@media (min-width: 821px) and (max-width: 1000px) {
+    body.inner-page .site-header.has-language-switcher .site-nav,
+    body.lunar-guide .site-header.has-language-switcher .site-nav,
+    body .site-header.has-language-switcher .site-nav {
+        gap: 10px !important;
+    }
+    body.inner-page .site-header.has-language-switcher .site-nav a,
+    body.lunar-guide .site-header.has-language-switcher .site-nav a,
+    body .site-header.has-language-switcher .site-nav a {
+        padding-inline: 8px 12px !important;
+    }
 }
