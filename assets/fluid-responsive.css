@@ -53,7 +53,7 @@ body.inner-page .page-hero h1 {
 body.inner-page .page-hero .eyebrow {
     max-width: 100%;
     flex-wrap: wrap;
-    font-size: clamp(0.55rem, calc(0.48rem + 0.35vw), 0.68rem);
+    font-size: var(--type-label, 0.875rem);
     line-height: 1.45;
     overflow-wrap: anywhere;
 }
@@ -61,7 +61,7 @@ body.inner-page .page-hero .eyebrow {
 body.inner-page .page-hero__description {
     width: min(100%, var(--fluid-reading-max));
     max-width: 100%;
-    font-size: clamp(0.82rem, calc(0.78rem + 0.3vw), 1rem);
+    font-size: var(--type-body, 1.125rem);
     line-height: 1.65;
     text-wrap: pretty;
     overflow-wrap: anywhere;
@@ -226,7 +226,7 @@ body.inner-page[data-language="en"] main li {
     }
 
     body.inner-page .update-tag {
-        font-size: 0.52rem;
+        font-size: var(--type-label, 0.875rem);
         letter-spacing: 0.08em;
     }
 }
@@ -243,6 +243,6 @@ body.inner-page[data-language="en"] main li {
     body.inner-page > main > section > p,
     body.inner-page > main > section > ul,
     body.inner-page > main > section > ol {
-        font-size: 1.02rem;
+        font-size: var(--type-body, 1.125rem);
     }
 }
