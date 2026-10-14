@@ -31,6 +31,7 @@
         'THERESA // LUNAR VOW': '德麗莎 // 月下誓約',
         'CHARACTER FILE': '角色檔案',
         'TYPE': '屬性',
+        'PSY': '異能',
         'DAMAGE': '傷害',
         'STATUS': '狀態',
         'LIGHTNING / BLEED': '雷電 / 流血',
@@ -291,7 +292,7 @@
         '稀有度：': 'Rarity:',
         'S 級': 'S-rank',
         '屬性：': 'Type:',
-        '異能（PSY）': 'PSY',
+        '異能': 'PSY',
         '武器：': 'Weapon:',
         '十字架，實戰以雙電鋸攻擊': 'Cross; fights with twin chainsaws in practice',
         '戰鬥定位': 'Combat Role',
@@ -594,7 +595,7 @@
         const simplified = '万与专业东丝丢两严丧个丰临为丽举么义乌乐乔习乡书买乱争于亚产亩亲亿仅从仑仓仪们价众优会伞伟传伤伦伪体余来侠侣侥侦侧侨仆伪尽兑儿党关兴养兽内冈册写军农冯冲决况冻净准凉减凑几凤凭凯划剧刘剑剂劲动务胜劳势勋汇区医华协单卖卢卫却厂历厉压厌县参双发变叙叶号叹吓吗听启吴员唤问哑乔单哟丧吃喷向严啰团园围国图圆圣场坏块坚坛压垒壮声处备复够梦伙奥夺奋妇妈婴学宁宝实审写宽对寻导将专属层岭岳峡岗岛崭岩帅帐带帮币干库废广厅弹强归录彦后径从复德征彻恒爱惨惯态欲忧凭怀总恋战戏户抛挟损换据挣拣挥抢摄携摆摇撑扑扩担拟拥拦搀击数敛毙断时晋昼历晓暂术朴机权条来杨极构标样树桥档检栏欧欢岁历归残杀壳毁气汉汤沟灭满滨灾为乌无炼烟烦烧营炉争爱尔墙奖独获兽现环产画当叠痕发尽监盘卢众着困瞩础礼祸离种谷积称稳穷窜竞笔范筑简签筹类粮紧纠纪约红纹纳纯纸级纷纺终组结绝统经绿维网罗罚职联圣闻聪声耸胆脸临举旧舰艳艺节范庄华万叶着药苏处虚号蚀冲补装里制复见规视觉览观触译议护丰贝贞负财责贤败账货质贪贯贵费贺赖赞赢赶赵迹践跃车轨轮辑输转轻办边辽达迁过运还这进远违连周适选遗邮乡邓郑酝释医丑厘钟铁鉴长门闭开闪间关队阶险随隐难灵静韩响页顶项顺预领头显风飞饭饮余馆马驶骇斗鱼鸟丽麦黄点齐龙龟';
         if (!simplificationMap) {
             simplificationMap = new Map([...traditional].map((char, index) => [char, simplified[index] || char]));
-            Object.entries({ '鑑': '鉴', '電': '电', '蘭': '兰', '婭': '娅', '謝': '谢', '櫻': '樱', '蘿': '萝' })
+            Object.entries({ '鑑': '鉴', '電': '电', '蘭': '兰', '婭': '娅', '謝': '谢', '櫻': '樱', '蘿': '萝', '異': '异' })
                 .forEach(([traditionalChar, simplifiedChar]) => simplificationMap.set(traditionalChar, simplifiedChar));
         }
         return [...value].map((char) => simplificationMap.get(char) || char).join('');
