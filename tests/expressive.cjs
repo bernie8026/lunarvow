@@ -74,9 +74,16 @@ module.exports=async(browser,baseURL)=>{
     for(const width of [320,390,768,1440,1920]){
       await page.setViewportSize({width,height:900});
       assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'Motion layout overflow '+width);
+      assert.ok(await page.locator('.motion-control').evaluate(el=>{
+        const a=el.getBoundingClientRect(),b=document.querySelector('.music-console').getBoundingClientRect();
+        return a.right<=b.left || a.left>=b.right || a.bottom<=b.top || a.top>=b.bottom;
+      }),'Music and motion controls have separate hit areas at '+width);
     }
     await page.setViewportSize({width:390,height:844});
     await page.goto(baseURL);await ready();
+    await page.locator('.music-console__toggle').focus();
+    assert.ok(await page.locator('.motion-control').evaluate(el=>el.getBoundingClientRect().bottom<=document.querySelector('.music-console').getBoundingClientRect().top),'Expanded mobile audio dock does not cover pause');
+    await page.locator('.motion-control').focus();
     await page.locator('.home-hero h1').waitFor({state:'visible'});
     await page.waitForFunction(()=>document.querySelector('.home-hero h1').dataset.motionState==='ready');
     await page.screenshot({path:path.join(dir,'motion-hero-mobile.png')});
