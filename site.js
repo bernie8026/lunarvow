@@ -372,6 +372,12 @@
         '.feature-transmission__visual',
         '.feature-transmission__body > *',
         '.archive-card',
+        '.archive-card__media',
+        '.news-card',
+        '.news-portrait',
+        '.news-intro',
+        '.news-versions',
+        '.news-directory > h2',
         '.profile-statement',
         '.profile-copy > *',
         '.guide-hero > div > *',
@@ -423,28 +429,77 @@
     };
 
     const getMotionFrame = (element, sequence) => {
-        if (reduceMotionQuery.matches) {
-            return { x: 0, y: 8, scale: 1, clipPath: 'inset(0 0 0 0)' };
-        }
+        const recipe = (kind, keyframes, duration = 750) => ({ kind, keyframes, duration });
+        const rest = { opacity: 1, transform: 'none' };
+        if (reduceMotionQuery.matches) return recipe('still', [rest, rest], 0);
 
-        if (element.closest('.site-header')) {
-            return { x: 0, y: -26, scale: 0.99, clipPath: 'inset(0 0 35% 0)' };
+        if (element.matches('.home-hero h1')) {
+            return recipe('hero-rise', [
+                { opacity: 0, transform: 'translateY(56px) rotate(-3deg)' },
+                { opacity: 1, transform: 'translateY(-3px) rotate(.4deg)', offset: .8 },
+                rest
+            ], 1300);
         }
-
-        if (element.matches('.archive-card, .guide-card, .story-step, .story-theme-card, .story-index > *, .photo-entry, .grid > .card')) {
-            const direction = sequence % 2 === 0 ? -1 : 1;
-            return { x: 54 * direction, y: 20, scale: 0.985, clipPath: direction > 0 ? 'inset(0 0 0 16%)' : 'inset(0 16% 0 0)' };
+        if (element.matches('.archive-card__media')) {
+            return recipe('image-unfold', [
+                { opacity: .25, clipPath: 'inset(0 100% 0 0)' },
+                { opacity: 1, clipPath: 'inset(0 0 0 0)' }
+            ], 1050);
         }
-
-        if (element.matches('a, button, .controls, .hero-panel, .profile-statement')) {
-            return { x: 0, y: 30, scale: 0.98, clipPath: 'inset(12% 0 0 0)' };
+        if (element.matches('.archive-card')) return recipe('archive-line', [{opacity:.15},{opacity:1}], 550);
+        if (element.matches('.photo-entry')) {
+            return recipe('photo-settle', [
+                { opacity: 0, transform: 'translateY(45px) rotate(' + (sequence % 2 ? 2 : -2) + 'deg)' },
+                rest
+            ], 1150);
         }
-
+        if (element.matches('.news-portrait')) {
+            return recipe('portrait-focus', [
+                { opacity: 0, transform: 'scale(.85)' },
+                rest
+            ], 1250);
+        }
+        if (element.matches('.news-card--spotlight')) return recipe('spotlight', [{opacity:0},{opacity:1}], 1050);
+        if (element.matches('.news-card')) {
+            return recipe('timeline-entry', [
+                { opacity: 0, transform: 'translateX(26px)' },
+                rest
+            ], 750);
+        }
+        if (element.matches('.story-step')) {
+            return recipe('story-line', [
+                { opacity: 0, transform: 'translateY(22px)' },
+                rest
+            ], 950);
+        }
+        if (element.matches('.guide-card, .story-theme-card')) {
+            return recipe('page-turn', [
+                { opacity: 0, transform: 'perspective(900px) rotateX(8deg) translateY(20px)' },
+                rest
+            ], 850);
+        }
+        if (element.matches('.grid > .card')) {
+            return recipe('character-turn', [
+                { opacity: 0, transform: 'perspective(1000px) rotateY(-12deg)' },
+                rest
+            ], 650);
+        }
+        if (element.matches('.profile-statement')) {
+            return recipe('quote-compose', [
+                { opacity: 0, transform: 'translateY(45px) rotate(-1.5deg)' },
+                rest
+            ], 1200);
+        }
+        if (element.matches('.hero-panel')) {
+            return recipe('file-trace', [{opacity:0,transform:'translateX(40px)'},rest], 1050);
+        }
         if (element.matches('h1, h2, h3, .eyebrow, .update-tag, .page-hero__code')) {
-            return { x: -46, y: 0, scale: 0.99, clipPath: 'inset(0 12% 0 0)' };
+            return recipe('title-track', [{opacity:0,transform:'translateY(16px)'},rest], 850);
         }
-
-        return { x: -30, y: 22, scale: 0.995, clipPath: 'inset(0 8% 0 0)' };
+        if (element.closest('.profile-copy')) {
+            return recipe('journal-copy', [{opacity:0,transform:'translateY(18px)'},rest], 1100);
+        }
+        return recipe('quiet-enter', [{opacity:0,transform:'translateY(8px)'},rest], 450);
     };
 
     const revealMotionElement = (element) => {
@@ -463,7 +518,8 @@
         element.style.visibility = 'visible';
 
         const frame = getMotionFrame(element, state.sequence);
-        const duration = reduceMotionQuery.matches ? 180 : 720;
+        const duration = frame.duration;
+        element.dataset.motionKind = frame.kind;
         const delay = getLocalDelay(element, state.sequence);
 
         if (typeof element.animate !== 'function') {
@@ -473,20 +529,7 @@
             return;
         }
 
-        state.animation = element.animate([
-            {
-                opacity: 0,
-                transform: `translate3d(${frame.x}px, ${frame.y}px, 0) scale(${frame.scale})`,
-                clipPath: frame.clipPath,
-                filter: reduceMotionQuery.matches ? 'none' : 'blur(3px)'
-            },
-            {
-                opacity: 1,
-                transform: 'translate3d(0, 0, 0) scale(1)',
-                clipPath: 'inset(0 0 0 0)',
-                filter: 'blur(0)'
-            }
-        ], {
+        state.animation = element.animate(frame.keyframes, {
             duration,
             delay,
             easing: 'cubic-bezier(.18, .82, .24, 1)',

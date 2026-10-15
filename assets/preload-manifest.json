@@ -29,6 +29,14 @@
       "type": "fetch"
     },
     {
+      "url": "assets/expressive.css",
+      "type": "fetch"
+    },
+    {
+      "url": "assets/expressive.js",
+      "type": "fetch"
+    },
+    {
       "url": "assets/fluid-responsive.css",
       "type": "fetch"
     },
