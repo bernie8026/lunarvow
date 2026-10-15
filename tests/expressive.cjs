@@ -17,7 +17,15 @@ module.exports=async(browser,baseURL)=>{
   };
   const settle=async(selector)=>{
     await page.locator(selector).scrollIntoViewIfNeeded();
-    await page.waitForFunction(selector=>[...document.querySelectorAll(selector+' [data-motion-state],'+selector+'[data-motion-state]')].filter(el=>{const r=el.getBoundingClientRect();return r.top<innerHeight && r.bottom>0;}).every(el=>el.dataset.motionState==='ready'),selector);
+    await page.waitForFunction(selector=>{
+      // Match the reveal observer's inset and threshold; an edge sliver has not entered yet.
+      const bottom=innerHeight-innerWidth*.07;
+      return [...document.querySelectorAll(selector+' [data-motion-state],'+selector+'[data-motion-state]')].filter(el=>{
+        const r=el.getBoundingClientRect(),width=Math.max(0,Math.min(innerWidth,r.right)-Math.max(0,r.left));
+        const height=Math.max(0,Math.min(bottom,r.bottom)-Math.max(0,r.top));
+        return r.width*r.height>0 && width*height/(r.width*r.height)>.08;
+      }).every(el=>el.dataset.motionState==='ready');
+    },selector);
   };
   const capture=async(selector,name)=>{
     const still=await page.addStyleTag({content:'[data-motion-state],[data-image-state]{opacity:1!important;visibility:visible!important;transform:none!important;clip-path:none!important;filter:none!important}'});
