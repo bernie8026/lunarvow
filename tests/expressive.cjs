@@ -53,6 +53,8 @@ module.exports=async(browser,baseURL)=>{
     await page.waitForFunction(previous=>getComputedStyle(document.querySelector('.hero-atmosphere')).transform!==previous,scene);
     await settle('#latest');
     await capture('#latest','motion-latest-desktop.png');
+    await page.locator('#latest .news-grid').scrollIntoViewIfNeeded();
+    await page.waitForFunction(()=>Number(getComputedStyle(document.querySelector('#latest .news-grid')).getPropertyValue('--read-progress'))>0);
     const timeline=await page.locator('#latest .news-grid').evaluate(el=>getComputedStyle(el).getPropertyValue('--read-progress'));
     assert.ok(Number(timeline)>0,'Reading line advances as news scrolls into view');
     assert.equal(await page.locator('#latest .news-grid .news-card').first().evaluate(el=>getComputedStyle(el).borderTopWidth),'0px');

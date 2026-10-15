@@ -8,7 +8,7 @@ body.home-page .home-hero {
 body.home-page .home-hero::before, body.home-page .home-hero::after, body.home-page .hero-grid { display:none; }
 body.home-page .hero-copy {
   border:0; border-left:0; background:none; clip-path:none;
-  padding:clamp(20px,3vw,44px) 0;
+  padding:clamp(20px,3vw,44px) 0; margin-top:0;
 }
 body.home-page .hero-copy::before, body.home-page .hero-copy::after { display:none; }
 body.home-page .hero-copy h1 { line-height:.94; letter-spacing:-.06em; }
@@ -23,13 +23,14 @@ body.home-page .hero-title-zh {
   background:transparent; color:#ffb7cc; line-height:1.5;
 }
 body.home-page .hero-panel {
-  position:relative; inset:auto; width:100%; max-width:620px; margin-top:28px;
+  position:relative; inset:auto; width:100%; max-width:620px; margin-top:20px;
   border:0; border-top:1px solid #ff92b545; border-bottom:1px solid #ff92b545;
   background:transparent; backdrop-filter:none; clip-path:none;
 }
 body.home-page .hero-panel::before, body.home-page .hero-panel::after { display:none; }
 body.home-page .hero-panel__head { border-bottom:0; }
-body.home-page .hero-panel dl { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px; padding:10px 0 18px; }
+body.home-page .hero-panel dl { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px; padding:10px 0 12px; }
+body.home-page .hero-actions { margin-top:24px; }
 body.home-page .hero-panel dl > div { display:flex; flex-direction:column; gap:6px; padding:0; border:0; }
 body.home-page .hero-panel dl > div::after { display:none; }
 body.home-page .hero-panel dd { font-size:.75rem; line-height:1.7; letter-spacing:0; }

@@ -4,6 +4,14 @@
   const body=document.body, reduced=matchMedia('(prefers-reduced-motion: reduce)');
   const fine=matchMedia('(hover: hover) and (pointer: fine)');
   const hero=document.querySelector('.home-hero'), figure=hero?.querySelector('.hero-figure');
+  const compact=matchMedia('(max-width: 820px)');
+  const heroInfo=hero?.querySelector('.hero-panel'), heroCopy=hero?.querySelector('.hero-copy');
+  const orderHero=()=>{
+    if(!figure || !heroInfo || !heroCopy) return;
+    if(compact.matches) figure.after(heroInfo); else heroCopy.appendChild(heroInfo);
+  };
+  orderHero();
+  compact.addEventListener('change',orderHero);
   const scenes=new Set(), awake=new Set(), wired=new WeakSet();
   let frame=0, paused=false, lastPointer={x:0,y:0};
   try { paused=localStorage.getItem('bhr-background-motion')==='paused'; } catch {}
