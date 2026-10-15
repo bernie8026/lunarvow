@@ -43,7 +43,7 @@ module.exports=async(browser,baseURL)=>{
     await page.mouse.move(1000,300);
     await page.locator('.motion-control').click();
     assert.equal(await page.locator('.motion-control').getAttribute('aria-pressed'),'true');
-    assert.equal(await page.locator('.hero-orbit').evaluate(el=>getComputedStyle(el).animationPlayState),'paused');
+    assert.ok(await page.locator('.hero-orbit').evaluateAll(elements=>elements.every(el=>getComputedStyle(el).animationPlayState==='paused')));
     await page.reload();await ready();
     assert.equal(await page.locator('.motion-control').getAttribute('aria-pressed'),'true');
     await page.locator('.motion-control').click();
