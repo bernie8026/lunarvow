@@ -79,6 +79,10 @@ a {
 .boot-screen[hidden] { display: none; }
 body.is-booting { overflow: hidden; }
 
+/* These full-page containers receive focus during loading and navigation. */
+.boot-screen:focus,
+#main-content:focus { outline: none; }
+
 .boot-screen {
     position: fixed;
     inset: 0;
@@ -1937,3 +1941,4 @@ textarea {
         transform: none;
     }
 }
+
