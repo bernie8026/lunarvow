@@ -860,13 +860,26 @@ body.is-booting { overflow: hidden; }
     color: var(--ink);
 }
 
-.signal-ticker div {
+.signal-ticker__track {
     display: flex;
     width: max-content;
     align-items: center;
-    gap: 34px;
     padding: 10px 0;
-    animation: ticker 24s linear infinite;
+    animation: ticker var(--ticker-duration, 24s) linear infinite;
+}
+
+.signal-ticker__group,
+.signal-ticker__segment {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 34px;
+    white-space: nowrap;
+}
+
+.signal-ticker__group {
+    /* Include the joining gap in each identical half of the track. */
+    padding-inline-end: 34px;
 }
 
 .signal-ticker span {
@@ -881,6 +894,7 @@ body.is-booting { overflow: hidden; }
 }
 
 @keyframes ticker {
+    from { transform: translateX(0); }
     to { transform: translateX(-50%); }
 }
 

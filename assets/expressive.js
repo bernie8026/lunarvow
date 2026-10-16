@@ -34,9 +34,58 @@
     }
     control.hidden=body.classList.contains('is-booting') || reduced.matches;
     label();
+    if(!document.hidden) scheduleTicker();
     if (paused || reduced.matches || document.hidden) {
       cancelAnimationFrame(frame); frame=0;
     } else schedule();
+  }
+  const ticker=document.querySelector('.signal-ticker');
+  const tickerTrack=ticker?.querySelector('.signal-ticker__track');
+  const [tickerGroup,tickerCopy]=ticker?.querySelectorAll('.signal-ticker__group') || [];
+  const tickerPattern=tickerGroup?.querySelector('.signal-ticker__segment');
+  let tickerFrame=0, tickerKey='', tickerWidth=0;
+  function fitTicker() {
+    tickerFrame=0;
+    if(!tickerPattern || !tickerCopy) return;
+    const gap=parseFloat(getComputedStyle(tickerGroup).columnGap) || 0;
+    const stride=tickerPattern.getBoundingClientRect().width+gap;
+    if(stride<=0) return;
+    const count=Math.max(1,Math.ceil(ticker.clientWidth/stride));
+    const key=tickerPattern.textContent+'|'+count;
+    const animation=tickerTrack.getAnimations().find(a=>a.animationName==='ticker');
+    const previousDuration=Number(animation?.effect.getComputedTiming().duration) || 0;
+    const phase=previousDuration ? Number(animation.currentTime || 0)%previousDuration : 0;
+    if(key!==tickerKey) {
+      const segments=[tickerPattern];
+      for(let i=1;i<count;i++) {
+        const segment=tickerPattern.cloneNode(true);
+        segment.dataset.i18nIgnore=''; segments.push(segment);
+      }
+      tickerGroup.replaceChildren(...segments);
+      tickerCopy.replaceChildren(...segments.map(segment=>segment.cloneNode(true)));
+      tickerKey=key;
+    }
+    const width=tickerGroup.getBoundingClientRect().width;
+    if(Math.abs(width-tickerWidth)>.01) {
+      // A fixed pixel speed keeps the position when fonts, language or width change.
+      const duration=width/48*1000;
+      tickerTrack.style.setProperty('--ticker-duration',duration+'ms');
+      const current=tickerTrack.getAnimations().find(a=>a.animationName==='ticker');
+      if(current) current.currentTime=phase%duration;
+      tickerWidth=width;
+    }
+    ticker.dataset.tickerReady='true';
+  }
+  function scheduleTicker() {
+    if(ticker && !tickerFrame) tickerFrame=requestAnimationFrame(fitTicker);
+  }
+  if(tickerPattern) {
+    if('ResizeObserver' in window) {
+      const sizes=new ResizeObserver(scheduleTicker);
+      sizes.observe(ticker); sizes.observe(tickerPattern);
+    }
+    addEventListener('resize',scheduleTicker,{passive:true});
+    document.fonts?.ready.then(scheduleTicker);
   }
   if(figure) {
     const atmosphere=document.createElement('div');
@@ -82,7 +131,7 @@
     for(const other of card.parentElement.querySelectorAll('.archive-card')) other.classList.toggle('is-active',other===card);
   }
   function register(root) {
-    const selector='.home-hero,.news-grid,.profile-statement,.story-timeline';
+    const selector='.home-hero,.signal-ticker,.news-grid,.profile-statement,.story-timeline';
     const found=[...(root.matches?.(selector)?[root]:[]),...root.querySelectorAll(selector)];
     for(const scene of found) {
       if(scenes.has(scene)) continue;
@@ -119,9 +168,9 @@
     body.style.setProperty('--exit-x',(event.clientX/innerWidth*100)+'%');
     body.style.setProperty('--exit-y',(event.clientY/innerHeight*100)+'%');
   });
-  for(const event of ['bhr:languagechange','bhr:translationsready']) addEventListener(event,label);
+  for(const event of ['bhr:languagechange','bhr:translationsready']) addEventListener(event,()=>{label();scheduleTicker();});
   document.addEventListener('visibilitychange',mode);
-  addEventListener('pagehide',()=>{cancelAnimationFrame(frame);frame=0;body.classList.add('scene-hidden');});
+  addEventListener('pagehide',()=>{cancelAnimationFrame(frame);frame=0;cancelAnimationFrame(tickerFrame);tickerFrame=0;body.classList.add('scene-hidden');});
   addEventListener('pageshow',mode);
   reduced.addEventListener('change',mode);
   window.BHR_EXPRESSIVE={get paused(){return paused;},get reduced(){return reduced.matches;}};

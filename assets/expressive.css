@@ -255,11 +255,14 @@ body.is-page-leaving .page-transition { clip-path:circle(150% at var(--exit-x,50
 body .page-transition::before, body .page-transition__grid, body .page-transition__content { display:none; }
 
 /* Only decorative, visible scenes loop. Scroll and hover never require them. */
-.hero-orbit, .hero-dust i { animation-play-state:paused; }
+.hero-orbit, .hero-dust i, .signal-ticker__track { animation-play-state:paused; }
 body:not(.is-booting) .scene-awake .hero-orbit,
-body:not(.is-booting) .scene-awake .hero-dust i { animation-play-state:running; }
+body:not(.is-booting) .scene-awake .hero-dust i,
+body:not(.is-booting) .scene-awake .signal-ticker__track { animation-play-state:running; }
 body.ambient-paused .hero-orbit, body.ambient-paused .hero-dust i,
-body.scene-hidden .hero-orbit, body.scene-hidden .hero-dust i { animation-play-state:paused!important; }
+body.ambient-paused .signal-ticker__track,
+body.scene-hidden .hero-orbit, body.scene-hidden .hero-dust i,
+body.scene-hidden .signal-ticker__track { animation-play-state:paused!important; }
 body.ambient-paused .hero-atmosphere { transform:none; transition:none; }
 body.ambient-paused .hero-copy, body.ambient-paused .hero-figure, body.ambient-paused .hero-panel { transform:none!important; }
 .motion-control {
@@ -323,7 +326,8 @@ body .site-header .language-switcher button.is-active { color:#ffabc6!important;
 }
 /* System motion preferences always take precedence over decorative effects. */
 @media (prefers-reduced-motion:reduce) {
-  body .hero-orbit, body .hero-dust i, body .profile-signature path { animation:none!important; }
+  body .hero-orbit, body .hero-dust i, body .profile-signature path,
+  body .signal-ticker__track { animation:none!important; }
   body .profile-signature path { stroke-dashoffset:0; }
   body .hero-atmosphere, body .grid > .card .thumb { transform:none!important; }
   body .archive-card--visual .archive-card__media, body .ui-button, body .news-source,
