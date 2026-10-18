@@ -377,6 +377,7 @@
         '.news-portrait',
         '.news-intro',
         '.news-versions',
+        '.news-topic__heading > *',
         '.news-directory > h2',
         '.profile-statement',
         '.profile-copy > *',
@@ -461,7 +462,7 @@
         }
         if (element.matches('.news-card--spotlight')) return recipe('spotlight', [{opacity:0},{opacity:1}], 1050);
         if (element.matches('.news-card')) {
-            return recipe('timeline-entry', [
+            return recipe('topic-entry', [
                 { opacity: 0, transform: 'translateX(26px)' },
                 rest
             ], 750);

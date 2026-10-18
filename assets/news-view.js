@@ -3,7 +3,7 @@
   'use strict';
   const labels = {
     'zh-HK': {
-      title:'最新消息', checked:'官方資料核對', note:'按地區整理官方消息。大陸服活動唔代表台港澳服同步開放；消息按以下核對日整理。',
+      title:'最新消息', checked:'官方資料核對', note:'按內容主題整理官方消息，可再按地區篩選。大陸服活動唔代表台港澳服同步開放；消息按以下核對日整理。',
       tw:'台港澳', global:'國際服', cn:'大陸服', all:'全部地區', allTypes:'全部類別',
       version:'版本', story:'劇情', event:'活動', supply:'補給', equipment:'裝備／系統', outfit:'服裝', media:'音樂',
       source:'官方來源', announced:'公告', active:'進行中', upcoming:'尚未開始', ended:'已結束', notice:'版本公告',
@@ -16,20 +16,20 @@
       stale:'核對已超過 14 日，請開啟官方來源查看後續公告。', timeNote:'主線任務期限唔代表劇情會移除。'
     },
     en: {
-      title:'Latest News', checked:'Official sources checked', note:'Official announcements by region. CN events do not confirm TW/HK/MO availability. This snapshot was checked on the date below.',
+      title:'Latest News', checked:'Official sources checked', note:'Official announcements grouped by topic, with region filters. CN events do not confirm TW/HK/MO availability. This snapshot was checked on the date below.',
       tw:'TW / HK / MO', global:'Global', cn:'Mainland CN', all:'All regions', allTypes:'All categories',
       version:'Version', story:'Story', event:'Events', supply:'Supply', equipment:'Equipment / Systems', outfit:'Outfits', media:'Music',
       source:'Official source', announced:'Announcement', active:'Ongoing', upcoming:'Upcoming', ended:'Ended', notice:'Announcement',
       period:'Period', timezone:'UTC+08:00', unknown:'Full schedule in the official announcement', focus:'Lunar Vow spotlight',
       portrait:'Lunar Vow: Crimson Love character artwork', art:'Character artwork / HoYoverse',
       region:'Region', category:'Category', search:'Search news', placeholder:'Character, event or version…',
-      count:'announcements', empty:'No matching news. Clear the search or select another region.', reset:'Reset filters',
+      count:'announcements', countOne:'announcement', empty:'No matching news. Clear the search or select another region.', reset:'Reset filters',
       browse:'View all news', archive:'Open story archive', archiveNote:'Main story & Captainverse overview (spoilers)',
       snapshot:'Versions checked on', statusNote:'Events with a verified time zone show timed status; check official sources for other schedules.',
       stale:'Last checked over 14 days ago. Open the official sources for newer announcements.', timeNote:'Story mission deadlines do not mean the story is removed.'
     },
     'zh-CN': {
-      title:'最新消息', checked:'官方资料核对', note:'按地区整理官方消息。大陆服活动不代表台港澳服同步开放；消息按以下核对日整理。',
+      title:'最新消息', checked:'官方资料核对', note:'按内容主题整理官方消息，可再按地区筛选。大陆服活动不代表台港澳服同步开放；消息按以下核对日整理。',
       tw:'台港澳', global:'国际服', cn:'大陆服', all:'全部地区', allTypes:'全部类别',
       version:'版本', story:'剧情', event:'活动', supply:'补给', equipment:'装备／系统', outfit:'服装', media:'音乐',
       source:'官方来源', announced:'公告', active:'进行中', upcoming:'尚未开始', ended:'已结束', notice:'版本公告',
@@ -42,9 +42,16 @@
       stale:'核对已超过 14 日，请打开官方来源查看后续公告。', timeNote:'主线任务期限不代表剧情会移除。'
     }
   };
+  const categories=['version','event','supply','equipment','outfit','story','media'];
+  const topicTitles={
+    'zh-HK':{version:'版本更新',event:'活動與福利',supply:'補給情報',equipment:'裝備與系統',outfit:'服裝外觀',story:'劇情內容',media:'音樂與影音'},
+    en:{version:'Version updates',event:'Events & rewards',supply:'Supply news',equipment:'Equipment & systems',outfit:'Outfits',story:'Story updates',media:'Music & media'},
+    'zh-CN':{version:'版本更新',event:'活动与福利',supply:'补给情报',equipment:'装备与系统',outfit:'服装外观',story:'剧情内容',media:'音乐与影音'}
+  };
   const language = lang => labels[lang] ? lang : 'zh-HK';
   const escape = value => String(value == null ? '' : value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
   const date = value => value.replaceAll('-', '.');
+  const count = (number,l) => number+' '+(number===1 && l.countOne ? l.countOne : l.count);
   const text = (item, lang) => item.content[language(lang)];
   function status(item, now) {
     if (item.endsAt && now >= Date.parse(item.endsAt)) return 'ended';
@@ -63,17 +70,30 @@
   }
   function card(item, lang, now, spotlight = false) {
     const l = labels[language(lang)], c = text(item,lang), state = status(item,now);
+    const heading=spotlight?'h3':'h4';
     const sources = item.sources.map((source,index) => '<a class="news-source" href="'+escape(source.url)+'" target="_blank" rel="noopener noreferrer">'+l.source+(item.sources.length>1?' '+(index+1):'')+' ↗<span class="sr-only"> — '+escape(c.title)+'</span></a>').join('');
-    return '<article class="news-card'+(spotlight?' news-card--spotlight':'')+'" id="'+(spotlight?'spotlight-':'news-')+escape(item.id)+'" data-news-id="'+escape(item.id)+'">'+
+    return '<article class="news-card'+(spotlight?' news-card--spotlight':'')+'" id="'+(spotlight?'spotlight-':'news-')+escape(item.id)+'" data-news-id="'+escape(item.id)+'" data-news-category="'+escape(item.category)+'">'+
       (spotlight?'<figure class="news-portrait"><img src="assets/hi3/characters/lunar-vow-crimson-love.webp" alt="'+l.portrait+'" width="960" height="660" loading="lazy" decoding="async"><figcaption>'+l.art+'</figcaption></figure>':'')+
       '<div class="news-card__body">'+
       (spotlight?'<p class="news-kicker">'+l.focus+'</p>':'')+
       '<div class="news-tags"><span class="news-region">'+item.regions.map(r=>l[r]).join(' / ')+'</span><span>'+l[item.category]+'</span><span>v'+escape(item.version)+'</span></div>'+
-      '<p class="news-date">'+l.announced+' <time datetime="'+escape(item.announcedOn)+'">'+date(item.announcedOn)+'</time></p>'+
-      '<h3>'+escape(c.title)+'</h3><p class="news-summary">'+escape(c.summary)+'</p>'+
+      '<'+heading+' class="news-title">'+escape(c.title)+'</'+heading+'><p class="news-summary">'+escape(c.summary)+'</p>'+
       '<div class="news-period"><span class="news-status news-status--'+state+'">'+l[state]+'</span><p>'+escape(c.period||l.unknown)+
       (item.endsAt?' <span class="news-timezone">'+l.timezone+'</span>':'')+'</p></div>'+
+      '<p class="news-date">'+l.announced+' <time datetime="'+escape(item.announcedOn)+'">'+date(item.announcedOn)+'</time></p>'+
       '<div class="news-sources">'+sources+'</div></div></article>';
+  }
+  function group(items) {
+    return categories.map(category=>({category,items:items.filter(item=>item.category===category)})).filter(topic=>topic.items.length);
+  }
+  function topics(items,lang,now,mode='directory') {
+    const l=labels[language(lang)],titles=topicTitles[language(lang)];
+    return '<div class="news-topics'+(mode==='home'?' news-topics--home':'')+'">'+group(items).map(topic=>{
+      const id='news-topic-'+mode+'-'+topic.category;
+      return '<section class="news-topic" data-news-topic="'+topic.category+'" aria-labelledby="'+id+'">'+
+        '<header class="news-topic__heading"><h3 id="'+id+'">'+titles[topic.category]+'</h3><span>'+count(topic.items.length,l)+'</span></header>'+
+        '<div class="news-grid'+(mode==='home'?' news-grid--home':'')+'">'+topic.items.map(item=>card(item,lang,now)).join('')+'</div></section>';
+    }).join('')+'</div>';
   }
   function versions(data,lang) {
     const l=labels[language(lang)];
@@ -83,26 +103,26 @@
   function controls(lang,filters) {
     const l=labels[language(lang)], options=(values,current)=>values.map(([v,label])=>'<option value="'+v+'"'+(v===current?' selected':'')+'>'+label+'</option>').join('');
     return '<form class="news-controls" role="search" aria-label="'+l.search+'">'+
-      '<label for="news-search"><span>'+l.search+'</span><input id="news-search" name="search" type="search" autocomplete="off" value="'+escape(filters.search||'')+'" placeholder="'+l.placeholder+'" aria-controls="news-results"></label>'+
+      '<label for="news-category"><span>'+l.category+'</span><select id="news-category" name="category" aria-controls="news-results">'+options([['all',l.allTypes],...categories.map(x=>[x,topicTitles[language(lang)][x]])],filters.category||'all')+'</select></label>'+
       '<label for="news-region"><span>'+l.region+'</span><select id="news-region" name="region" aria-controls="news-results">'+options([['all',l.all],['tw',l.tw],['global',l.global],['cn',l.cn]],filters.region||'all')+'</select></label>'+
-      '<label for="news-category"><span>'+l.category+'</span><select id="news-category" name="category" aria-controls="news-results">'+options([['all',l.allTypes],...['version','story','event','supply','equipment','outfit','media'].map(x=>[x,l[x]])],filters.category||'all')+'</select></label></form>';
+      '<label class="news-controls__search" for="news-search"><span>'+l.search+'</span><input id="news-search" name="search" type="search" autocomplete="off" value="'+escape(filters.search||'')+'" placeholder="'+l.placeholder+'" aria-controls="news-results"></label></form>';
   }
   function results(data,lang,filters,now) {
     const l=labels[language(lang)], items=select(data,filters,now);
-    return '<p class="news-count" role="status" aria-live="polite" aria-atomic="true">'+items.length+' '+l.count+'</p>'+
-      (items.length?'<div class="news-grid">'+items.map(item=>card(item,lang,now)).join('')+'</div>':'<div class="news-empty"><p>'+l.empty+'</p><button type="button" data-news-reset>'+l.reset+'</button></div>');
+    return '<p class="news-count" role="status" aria-live="polite" aria-atomic="true">'+count(items.length,l)+'</p>'+
+      (items.length?topics(items,lang,now):'<div class="news-empty"><p>'+l.empty+'</p><button type="button" data-news-reset>'+l.reset+'</button></div>');
   }
   function shell(data,lang,mode,filters={},now=Date.now()) {
     const l=labels[language(lang)];
     const header='<div class="news-intro"><p>'+l.note+'</p><p class="news-checked">'+l.checked+' <time datetime="'+data.checkedOn+'">'+date(data.checkedOn)+'</time></p></div>'+
       '<p class="news-stale" '+(now-Date.parse(data.checkedOn+'T23:59:59+08:00')>14*864e5?'':'hidden')+'>'+l.stale+'</p>'+
       versions(data,lang)+card(data.items.find(item=>item.id===data.spotlight),lang,now,true);
-    if(mode==='home') return header+'<div class="news-grid news-grid--home">'+data.homeItems.map(id=>card(data.items.find(item=>item.id===id),lang,now)).join('')+'</div>'+
+    if(mode==='home') return header+topics(data.homeItems.map(id=>data.items.find(item=>item.id===id)),lang,now,'home')+
       '<div class="news-bottom"><a class="news-browse" href="news.html">'+l.browse+' <span aria-hidden="true">↗</span></a><a class="news-story-link" href="story.html">'+l.archive+' →<small>'+l.archiveNote+'</small></a></div>';
     return header+'<div class="news-directory"><h2>'+l.title+'</h2><p class="news-help">'+l.statusNote+' '+l.timeNote+'</p>'+
       controls(lang,filters)+'<div id="news-results" data-news-results>'+results(data,lang,filters,now)+'</div></div>';
   }
-  const api={labels,language,status,select,card,shell,results,versions};
+  const api={labels,language,status,select,card,shell,results,versions,group};
   if(typeof module!=='undefined' && module.exports) module.exports=api;
   else scope.BHR_NEWS_VIEW=api;
 })(typeof window!=='undefined'?window:globalThis);

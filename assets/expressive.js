@@ -131,7 +131,7 @@
     for(const other of card.parentElement.querySelectorAll('.archive-card')) other.classList.toggle('is-active',other===card);
   }
   function register(root) {
-    const selector='.home-hero,.signal-ticker,.news-grid,.profile-statement,.story-timeline';
+    const selector='.home-hero,.signal-ticker,.profile-statement,.story-timeline';
     const found=[...(root.matches?.(selector)?[root]:[]),...root.querySelectorAll(selector)];
     for(const scene of found) {
       if(scenes.has(scene)) continue;
