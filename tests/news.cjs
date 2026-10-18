@@ -32,6 +32,12 @@ module.exports=async(browser,baseURL)=>{
   };
   await page.goto(baseURL+'/news.html');await ready();
   assert.equal(await results().count(),data.items.length);
+  const topics=await page.locator('#news-results .news-topic').evaluateAll(nodes=>nodes.map(node=>({category:node.dataset.newsTopic,heading:node.querySelector('h3').textContent,ids:[...node.querySelectorAll('[data-news-id]')].map(card=>card.dataset.newsId)})));
+  assert.ok(topics.length>1);
+  for(const topic of topics) {
+    assert.ok(topic.heading.trim());
+    assert.deepEqual([...topic.ids].sort(),data.items.filter(item=>item.category===topic.category).map(item=>item.id).sort(),'Every announcement belongs to its subject group');
+  }
   assert.equal(await page.locator('.news-stale').isVisible(),false);
   await page.locator('#news-region').selectOption('tw');
   assert.equal(await results().count(),data.items.filter(x=>x.regions.includes('tw')).length);
@@ -52,6 +58,8 @@ module.exports=async(browser,baseURL)=>{
     assert.equal(await page.locator('#news-search').inputValue(),'时序');
     assert.equal(await page.locator('#news-region').inputValue(),'cn');
     assert.equal(await page.locator('#news-category').inputValue(),'equipment');
+    assert.equal(await page.locator('#news-results .news-topic').count(),1);
+    assert.equal(await page.locator('#news-results .news-topic').getAttribute('data-news-topic'),'equipment');
   }
   await page.locator('#news-search').fill('');
   await page.locator('#news-region').selectOption('all');
@@ -68,10 +76,11 @@ module.exports=async(browser,baseURL)=>{
         const problems=[];
         for(const card of cards) {
           const bounds=card.getBoundingClientRect();
-          for(const el of card.querySelectorAll('h3,.news-summary,.news-period p')) {
+          for(const el of card.querySelectorAll('.news-title,.news-summary,.news-period p')) {
             const range=document.createRange();range.selectNodeContents(el);
             for(const r of range.getClientRects()) if(r.left<bounds.left+8 || r.right>bounds.right-8) problems.push(el.textContent);
           }
+          if(card.querySelector('.news-date').getBoundingClientRect().top<card.querySelector('.news-summary').getBoundingClientRect().bottom-1) problems.push('publication date must follow the news content');
           for(const a of card.querySelectorAll('a')) if(a.getBoundingClientRect().height<43) problems.push('touch target');
         }
         return problems;
@@ -100,6 +109,7 @@ module.exports=async(browser,baseURL)=>{
   await page.clock.setFixedTime(new Date('2026-10-05T05:00:00Z'));
   await page.goto(baseURL);await ready();
   assert.equal(await page.locator('#latest .news-grid .news-card').count(),4);
+  assert.equal(await page.locator('#latest .news-topic').count(),new Set(data.homeItems.map(id=>data.items.find(item=>item.id===id).category)).size);
   assert.equal(await page.locator('#latest .news-card--spotlight').count(),1);
   assert.ok(await page.locator('[data-news-checked]').textContent().then(t=>t.includes('2026.10.05')));
   for(const width of [320,390,768,1440,1920]) {
@@ -117,9 +127,10 @@ module.exports=async(browser,baseURL)=>{
   const nojs=await browser.newPage({javaScriptEnabled:false,viewport:{width:390,height:844}});
   await nojs.goto(baseURL+'/news.html');
   assert.equal(await nojs.locator('#news-results .news-card').count(),data.items.length);
+  assert.equal(await nojs.locator('#news-results .news-topic').count(),topics.length);
   assert.equal(await nojs.locator('.news-controls').isVisible(),false);
   assert.equal(await nojs.locator('.news-source').first().isVisible(),true);
   assert.ok(await nojs.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
   await nojs.close();await context.close();
-  console.log('PASS news: filters, multilingual search, language persistence, sources, expiry and upcoming boundaries, stale snapshot, responsive frames and no-JS announcements');
+  console.log('PASS news: topic groups, secondary publication dates, filters, multilingual search, language persistence, sources, time boundaries, responsive layouts and no-JS announcements');
 };

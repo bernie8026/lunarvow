@@ -61,10 +61,8 @@ module.exports=async(browser,baseURL)=>{
     await page.waitForFunction(previous=>getComputedStyle(document.querySelector('.hero-atmosphere')).transform!==previous,scene);
     await settle('#latest');
     await capture('#latest','motion-latest-desktop.png');
-    await page.locator('#latest .news-grid').scrollIntoViewIfNeeded();
-    await page.waitForFunction(()=>Number(getComputedStyle(document.querySelector('#latest .news-grid')).getPropertyValue('--read-progress'))>0);
-    const timeline=await page.locator('#latest .news-grid').evaluate(el=>getComputedStyle(el).getPropertyValue('--read-progress'));
-    assert.ok(Number(timeline)>0,'Reading line advances as news scrolls into view');
+    await settle('#latest .news-topic:first-child');
+    assert.ok(await page.locator('#latest .news-topic').count()>1,'Home news has distinct subject groups');
     assert.equal(await page.locator('#latest .news-grid .news-card').first().evaluate(el=>getComputedStyle(el).borderTopWidth),'0px');
     await settle('#archive');
     const cards=page.locator('.archive-card');
@@ -80,7 +78,7 @@ module.exports=async(browser,baseURL)=>{
     assert.equal(await page.locator('.profile-signature path').count(),1);
     await capture('#profile','motion-profile-desktop.png');
     const kinds=await page.locator('[data-motion-kind]').evaluateAll(nodes=>[...new Set(nodes.map(n=>n.dataset.motionKind))]);
-    for(const kind of ['hero-rise','image-unfold','portrait-focus','timeline-entry','title-track']) assert.ok(kinds.includes(kind),'Distinct reveal: '+kind);
+    for(const kind of ['hero-rise','image-unfold','portrait-focus','topic-entry','title-track']) assert.ok(kinds.includes(kind),'Distinct reveal: '+kind);
     for(const width of [320,390,768,1440,1920]){
       await page.setViewportSize({width,height:900});
       assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'Motion layout overflow '+width);
@@ -120,5 +118,5 @@ module.exports=async(browser,baseURL)=>{
   assert.equal(await reduced.locator('.hero-orbit').first().evaluate(el=>getComputedStyle(el).animationName),'none');
   assert.equal(await reduced.locator('.archive-card__media').first().evaluate(el=>getComputedStyle(el).transitionDuration),'0s');
   await reduced.close();
-  console.log('PASS expressive: distinct scene motion, reading progress, pointer/keyboard archive expansion, pause persistence, full photos, responsive layouts and reduced motion');
+  console.log('PASS expressive: distinct scene motion, topic groups, pointer/keyboard archive expansion, pause persistence, full photos, responsive layouts and reduced motion');
 };
