@@ -23,7 +23,7 @@
       period:'Period', timezone:'UTC+08:00', unknown:'Full schedule in the official announcement', focus:'Lunar Vow spotlight',
       portrait:'Lunar Vow: Crimson Love character artwork', art:'Character artwork / HoYoverse',
       region:'Region', category:'Category', search:'Search news', placeholder:'Character, event or version…',
-      count:'announcements', empty:'No matching news. Clear the search or select another region.', reset:'Reset filters',
+      count:'announcements', countOne:'announcement', empty:'No matching news. Clear the search or select another region.', reset:'Reset filters',
       browse:'View all news', archive:'Open story archive', archiveNote:'Main story & Captainverse overview (spoilers)',
       snapshot:'Versions checked on', statusNote:'Events with a verified time zone show timed status; check official sources for other schedules.',
       stale:'Last checked over 14 days ago. Open the official sources for newer announcements.', timeNote:'Story mission deadlines do not mean the story is removed.'
@@ -51,6 +51,7 @@
   const language = lang => labels[lang] ? lang : 'zh-HK';
   const escape = value => String(value == null ? '' : value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
   const date = value => value.replaceAll('-', '.');
+  const count = (number,l) => number+' '+(number===1 && l.countOne ? l.countOne : l.count);
   const text = (item, lang) => item.content[language(lang)];
   function status(item, now) {
     if (item.endsAt && now >= Date.parse(item.endsAt)) return 'ended';
@@ -90,7 +91,7 @@
     return '<div class="news-topics'+(mode==='home'?' news-topics--home':'')+'">'+group(items).map(topic=>{
       const id='news-topic-'+mode+'-'+topic.category;
       return '<section class="news-topic" data-news-topic="'+topic.category+'" aria-labelledby="'+id+'">'+
-        '<header class="news-topic__heading"><h3 id="'+id+'">'+titles[topic.category]+'</h3><span>'+topic.items.length+' '+l.count+'</span></header>'+
+        '<header class="news-topic__heading"><h3 id="'+id+'">'+titles[topic.category]+'</h3><span>'+count(topic.items.length,l)+'</span></header>'+
         '<div class="news-grid'+(mode==='home'?' news-grid--home':'')+'">'+topic.items.map(item=>card(item,lang,now)).join('')+'</div></section>';
     }).join('')+'</div>';
   }
@@ -108,7 +109,7 @@
   }
   function results(data,lang,filters,now) {
     const l=labels[language(lang)], items=select(data,filters,now);
-    return '<p class="news-count" role="status" aria-live="polite" aria-atomic="true">'+items.length+' '+l.count+'</p>'+
+    return '<p class="news-count" role="status" aria-live="polite" aria-atomic="true">'+count(items.length,l)+'</p>'+
       (items.length?topics(items,lang,now):'<div class="news-empty"><p>'+l.empty+'</p><button type="button" data-news-reset>'+l.reset+'</button></div>');
   }
   function shell(data,lang,mode,filters={},now=Date.now()) {
