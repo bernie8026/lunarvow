@@ -692,9 +692,9 @@
                 const item = document.createElement('li');
                 const detail = progress.errors?.find(error => error.url === url);
                 const reasons = {
-                    'zh-HK': { timeout: '下載逾時（60 秒）', http: '伺服器回應', image: '圖片無法載入或解碼', network: '連線失敗或請求被阻擋', manifest: '資源清單格式錯誤' },
-                    'zh-CN': { timeout: '下载超时（60 秒）', http: '服务器响应', image: '图片无法加载或解码', network: '连接失败或请求被阻挡', manifest: '资源清单格式错误' },
-                    en: { timeout: 'Download timed out (60 seconds)', http: 'Server response', image: 'Image could not load or decode', network: 'Connection failed or request blocked', manifest: 'Invalid resource list' }
+                    'zh-HK': { timeout: '下載逾時（60 秒）', http: '伺服器回應', image: '圖片無法載入或解碼', network: '連線失敗或請求被阻擋', manifest: '資源清單格式錯誤', stylesheet: '版面樣式未能套用，請重試' },
+                    'zh-CN': { timeout: '下载超时（60 秒）', http: '服务器响应', image: '图片无法加载或解码', network: '连接失败或请求被阻挡', manifest: '资源清单格式错误', stylesheet: '页面样式未能应用，请重试' },
+                    en: { timeout: 'Download timed out (60 seconds)', http: 'Server response', image: 'Image could not load or decode', network: 'Connection failed or request blocked', manifest: 'Invalid resource list', stylesheet: 'Page styles could not apply. Please retry.' }
                 };
                 const reason = (reasons[language] || reasons['zh-HK'])[detail?.code];
                 item.textContent = `${url}${reason ? ` — ${reason}${detail.status ? ` (HTTP ${detail.status})` : ''}` : ''}`;

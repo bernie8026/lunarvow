@@ -10,7 +10,8 @@ function setup(resources) {
   const requests = [], images = [], timers = new Map(), updates = [];
   let id = 0, manifestFails = false;
   const window = {};
-  const context = { window, URL, AbortController, document: {currentScript:{src:'https://example.test/lunarvow/assets/preloader.js'}},
+  const context = { window, URL, AbortController, document: {currentScript:{src:'https://example.test/lunarvow/assets/preloader.js'},
+    readyState:'complete', querySelectorAll:()=>[]},
     setTimeout(fn) { timers.set(++id,fn); return id; }, clearTimeout(id) {timers.delete(id);},
     async fetch(url, options) {
       if (url.href.endsWith('preload-manifest.json')) {
