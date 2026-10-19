@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "checkedOn": "2026-10-05",
+  "checkedOn": "2026-10-20",
   "regions": [
     {
       "id": "tw",
@@ -20,12 +20,174 @@
   ],
   "spotlight": "cn-luna-login",
   "homeItems": [
-    "cn-epilogue",
-    "cn-ost",
-    "cn-luna-system",
-    "tw-version-90"
+    "global-maintenance-91",
+    "cn-divine-trial",
+    "cn-winter-wish-outfit",
+    "cn-celebration-battlesuits"
   ],
   "items": [
+    {
+      "id": "global-maintenance-91",
+      "regions": [
+        "global"
+      ],
+      "category": "version",
+      "version": "9.1",
+      "announcedOn": "2026-10-14",
+      "content": {
+        "zh-HK": {
+          "title": "國際服 9.1 維護預告：10 月 22 日",
+          "summary": "預定更新時序之律者，本期角色補給首次十連免費；更新前達 9 級可領取維護補償 600 水晶。維護時段會按伺服器區分，實際結束時間可能調整。",
+          "period": "SEA：10.22 10:00–16:00（UTC+8）；美服：10.21 23:00–10.22 05:00（UTC−5）；歐服：10.22 05:00–11:00（UTC+1）"
+        },
+        "en": {
+          "title": "Global v9.1 maintenance preview — OCT 22",
+          "summary": "Herrscher of Time is scheduled to arrive, with a free first 10x in her Battlesuit Supply. Captains reaching Lv. 9 before the update qualify for 600 Crystals. Maintenance timings may change.",
+          "period": "SEA: OCT 22 10:00–16:00 (UTC+8); Americas: OCT 21 23:00–OCT 22 05:00 (UTC−5); Europe: OCT 22 05:00–11:00 (UTC+1)"
+        },
+        "zh-CN": {
+          "title": "国际服 9.1 维护预告：10 月 22 日",
+          "summary": "预定更新时序之律者，本期角色补给首次十连免费；更新前达 9 级可领取维护补偿 600 水晶。维护时段按服务器区分，实际结束时间可能调整。",
+          "period": "SEA：10.22 10:00–16:00（UTC+8）；美服：10.21 23:00–10.22 05:00（UTC−5）；欧服：10.22 05:00–11:00（UTC+1）"
+        }
+      },
+      "sources": [
+        {
+          "url": "https://www.hoyolab.com/article/47081097",
+          "label": "Honkai Impact 3rd 官方 HoYoLAB"
+        }
+      ]
+    },
+    {
+      "id": "global-autumn-login",
+      "regions": [
+        "global"
+      ],
+      "category": "event",
+      "version": "9.1",
+      "announcedOn": "2026-10-12",
+      "content": {
+        "zh-HK": {
+          "title": "國際服秋日登入：10 張裝備補給卡",
+          "summary": "10 月 16 日起累計登入可領裝備補給卡×10、棱鏡聖痕直升券×1；10 月 22 日及 29 日另有聖痕、角色卡等登入獎勵，選項及截止時間以各服遊戲公告為準。",
+          "period": "10.16／10.22／10.29 分批開啟"
+        },
+        "en": {
+          "title": "Global autumn login rewards",
+          "summary": "From OCT 16, accumulated logins award 10 Equipment Supply Cards and one Prism Stigma Direct Level-Up Coupon. More stigma and battlesuit login rewards start OCT 22 and 29; check your server for choices and deadlines.",
+          "period": "Starts in stages: OCT 16, OCT 22 and OCT 29"
+        },
+        "zh-CN": {
+          "title": "国际服秋日登录：10 张装备补给卡",
+          "summary": "10 月 16 日起累计登录可领装备补给卡×10、棱镜圣痕直升券×1；10 月 22 日及 29 日另有圣痕、角色卡等登录奖励，选项及截止时间以各服游戏公告为准。",
+          "period": "10.16／10.22／10.29 分批开启"
+        }
+      },
+      "sources": [
+        {
+          "url": "https://www.hoyolab.com/article/47055245",
+          "label": "Honkai Impact 3rd 官方 HoYoLAB"
+        }
+      ]
+    },
+    {
+      "id": "global-events-91",
+      "regions": [
+        "global"
+      ],
+      "category": "event",
+      "version": "9.1",
+      "announcedOn": "2026-10-12",
+      "content": {
+        "zh-HK": {
+          "title": "國際服 9.1：小店、福利商店與累消預告",
+          "summary": "10 月 22 日起預定開放玩具小店、福利商店及抽獎。版本累消達 30,000 水晶或等值補給卡，可獲咚！熾願吉星服裝「月詠星謠」；實際規則以國際服公告為準。",
+          "period": "預定 10.22 起；各活動截止日期見遊戲公告"
+        },
+        "en": {
+          "title": "Global v9.1 events and spend bonuses",
+          "summary": "The toy-shop event, reward store and prize draw are scheduled for OCT 22. Spending 30,000 Crystals or equivalent Supply Cards during the bonuses event unlocks a Ba-Dum! Fiery Wishing Star outfit. Check Global announcements for full rules.",
+          "period": "Scheduled from OCT 22; individual deadlines in-game"
+        },
+        "zh-CN": {
+          "title": "国际服 9.1：小店、福利商店与累消预告",
+          "summary": "10 月 22 日起预定开放玩具小店、福利商店及抽奖。版本累消达 30,000 水晶或等值补给卡，可获咚！炽愿吉星服装「月咏星谣」；实际规则以国际服公告为准。",
+          "period": "预定 10.22 起；各活动截止日期见游戏公告"
+        }
+      },
+      "sources": [
+        {
+          "url": "https://www.hoyolab.com/article/47055245",
+          "label": "Honkai Impact 3rd 官方 HoYoLAB"
+        }
+      ]
+    },
+    {
+      "id": "global-afterstory-91",
+      "regions": [
+        "global"
+      ],
+      "category": "story",
+      "version": "9.1",
+      "announcedOn": "2026-10-12",
+      "content": {
+        "zh-HK": {
+          "title": "國際服第二部後日談：11 月 2 日預告",
+          "summary": "官方預告「海正用火的聲音歌唱」於 11 月 2 日推出，可獲水晶、根源棱鏡及逆熵・虛數核心等獎勵。呢個係國際服日程，大陸服已於 10 月 5 日開放。",
+          "period": "預定 11.02；具體時間以所屬伺服器公告為準"
+        },
+        "en": {
+          "title": "Global Part 2 afterstory — NOV 2 preview",
+          "summary": "The Sea Sings With the Voice of Fire is scheduled for NOV 2, with Crystals, Source Prisms and AE Imaginons among its rewards. This is the Global schedule; CN opened its afterstory on OCT 5.",
+          "period": "Scheduled for NOV 2; exact times in your server's announcement"
+        },
+        "zh-CN": {
+          "title": "国际服第二部后日谈：11 月 2 日预告",
+          "summary": "官方预告「海正用火的声音歌唱」于 11 月 2 日推出，可获水晶、根源棱镜及逆熵・虚数核心等奖励。这是国际服日程，大陆服已于 10 月 5 日开放。",
+          "period": "预定 11.02；具体时间以所属服务器公告为准"
+        }
+      },
+      "sources": [
+        {
+          "url": "https://www.hoyolab.com/article/47055245",
+          "label": "Honkai Impact 3rd 官方 HoYoLAB"
+        }
+      ]
+    },
+    {
+      "id": "cn-winter-wish-outfit",
+      "regions": [
+        "cn"
+      ],
+      "category": "outfit",
+      "version": "9.1",
+      "announcedOn": "2026-10-14",
+      "content": {
+        "zh-HK": {
+          "title": "冬祈新願服裝復刻：首抽免費",
+          "summary": "15 級起可參與咚！熾願吉星服裝補給，首抽免費，完成十次補給可取得「冬祈新願」及全部獎勵。後續抽取消耗遞增，詳細數量見官方補給表。",
+          "period": "10.16 12:00 – 10.30 12:00"
+        },
+        "en": {
+          "title": "CN outfit rerun: 冬祈新愿",
+          "summary": "The Ba-Dum! Fiery Wishing Star outfit returns for Lv. 15+. The first pull is free; ten pulls guarantee the outfit and every supply reward. Later pulls cost progressively more tokens; see the official reward table.",
+          "period": "OCT 16 12:00 – OCT 30 12:00"
+        },
+        "zh-CN": {
+          "title": "冬祈新愿服装复刻：首抽免费",
+          "summary": "15 级起可参与咚！炽愿吉星服装补给，首抽免费，完成十次补给可取得「冬祈新愿」及全部奖励。后续抽取消耗递增，详细数量见官方补给表。",
+          "period": "10.16 12:00 – 10.30 12:00"
+        }
+      },
+      "sources": [
+        {
+          "url": "https://www.taptap.cn/moment/859452633658687584?group_id=17",
+          "label": "崩壞3 官方 TapTap"
+        }
+      ],
+      "startsAt": "2026-10-16T12:00:00+08:00",
+      "endsAt": "2026-10-30T12:00:00+08:00"
+    },
     {
       "id": "cn-ost",
       "regions": [
@@ -497,30 +659,32 @@
       ],
       "category": "event",
       "version": "9.1",
-      "announcedOn": "2026-09-24",
+      "announcedOn": "2026-10-10",
       "content": {
         "zh-HK": {
-          "title": "英雄遠征：神諭試煉",
-          "summary": "放置卡牌抵禦敵人；完成任務可獲水晶等獎勵。",
-          "period": "版本預告；開放時間見公告"
+          "title": "英雄遠征：神諭試煉，三章已開放",
+          "summary": "30 級起可放置卡牌抵禦敵人，完成任務可領水晶、根源棱鏡等獎勵。三章分別於 10 月 12、14、16 日開放，現可挑戰全部章節。",
+          "period": "10.12 10:00 – 11.26 04:00"
         },
         "en": {
-          "title": "「英雄远征：神谕试炼」 preview",
-          "summary": "Defend with cards and complete missions for Crystals.",
-          "period": "Version preview; schedule in the announcement"
+          "title": "CN card challenge: all three chapters open",
+          "summary": "Lv. 30+ Captains place cards to defend against enemies and earn Crystals, Source Prisms and other mission rewards. Chapters open on OCT 12, 14 and 16; all three are now available.",
+          "period": "OCT 12 10:00 – NOV 26 04:00"
         },
         "zh-CN": {
-          "title": "英雄远征：神谕试炼",
-          "summary": "放置卡牌抵御敌人；完成任务可获水晶等奖励。",
-          "period": "版本预告；开放时间见公告"
+          "title": "英雄远征：神谕试炼，三章已开放",
+          "summary": "30 级起可放置卡牌抵御敌人，完成任务可领水晶、根源棱镜等奖励。三章分别于 10 月 12、14、16 日开放，现可挑战全部章节。",
+          "period": "10.12 10:00 – 11.26 04:00"
         }
       },
       "sources": [
         {
-          "url": "https://www.taptap.cn/moment/852131358120609445?group_id=17",
+          "url": "https://www.taptap.cn/moment/857945740603818978?group_id=17",
           "label": "崩壞3 官方 TapTap"
         }
-      ]
+      ],
+      "startsAt": "2026-10-12T10:00:00+08:00",
+      "endsAt": "2026-11-26T04:00:00+08:00"
     },
     {
       "id": "cn-homu-rerun",

@@ -16,7 +16,7 @@ for(const item of data.items) {
   for(const source of item.sources) {
     const url=new URL(source.url);
     assert.equal(url.protocol,'https:');
-    assert.ok(['www.taptap.cn','apps.apple.com','steamcommunity.com'].includes(url.hostname),'Audited official platform');
+    assert.ok(['www.taptap.cn','apps.apple.com','steamcommunity.com','www.hoyolab.com'].includes(url.hostname),'Audited official platform');
   }
   for(const key of ['startsAt','endsAt']) if(item[key]) {
     assert.ok(/(?:Z|[+-]\d{2}:\d{2})$/.test(item[key]),'Timed status needs an explicit zone');
@@ -35,6 +35,17 @@ assert.equal(view.select(data,{search:'时序',category:'equipment'}).length,1,'
 assert.equal(view.select(data,{search:'lunar vow',category:'event'}).length,1);
 assert.equal(view.select(data,{region:'tw'}).find(x=>x.category==='version').version,'9.0');
 assert.equal(view.select(data,{region:'cn'}).find(x=>x.category==='version').version,'9.1');
+assert.equal(data.regions.find(region=>region.id==='global').version,'9.0','A 9.1 preview does not change the verified live version');
+const trial=data.items.find(item=>item.id==='cn-divine-trial');
+assert.equal(view.status(trial,Date.parse('2026-10-12T10:00:00+08:00')-1),'upcoming');
+assert.equal(view.status(trial,Date.parse('2026-10-12T10:00:00+08:00')),'active');
+assert.equal(view.status(trial,Date.parse('2026-11-26T04:00:00+08:00')),'ended');
+assert.equal(view.status(data.items.find(item=>item.id==='cn-winter-wish-outfit'),snapshot),'active');
+assert.equal(view.status(data.items.find(item=>item.id==='cn-dawnbreak-outfit'),snapshot),'ended');
+assert.equal(view.status(data.items.find(item=>item.id==='global-maintenance-91'),snapshot),'notice','Different server zones are retained as an announcement');
+for(const file of ['guide.html','lunar-vow-guide.html','story.html','honkai-info.html']) {
+  assert.ok(fs.readFileSync(path.join(root,file),'utf8').includes(data.checkedOn+' // OFFICIAL NEWS'),'Shared verification date: '+file);
+}
 const login=data.items.find(x=>x.id==='cn-luna-login');
 assert.equal(view.status(login,Date.parse('2026-09-30T20:00:00Z')-1),'upcoming');
 assert.equal(view.status(login,Date.parse('2026-09-30T20:00:00Z')),'active');

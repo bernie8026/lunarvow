@@ -22,7 +22,7 @@ npm test
 
 預載涵蓋網站子頁，並非 Git 分支或外部參考文章。112 張圖鑑角色圖片及 OpenCC 繁簡轉換程式均隨網站儲存，無需 Fandom 圖片跳轉或 jsDelivr 連線。每個角色保留圖片快照來源及原 Wiki 參考連結；素材權利屬原權利持有人。繁簡轉換來源和授權見 assets/vendor/opencc/NOTICE.md。失敗清單會區分 HTTP 錯誤、下載逾時、圖片載入／解碼失敗和連線受阻。瀏覽器可重用 HTTP 快取，但預載不保證離線存取，也不會預先執行其他頁面的程式。
 
-官方消息以 data/news.json 為來源，按台港澳／國際服／大陸服分開整理。更新後執行 npm run build:news，生成首頁重點、完整消息頁及三語資料；npm run check:news 會檢查靜態頁是否過期。人工核對日期及來源見 [data/NEWS_SOURCES.md](data/NEWS_SOURCES.md)。
+官方消息以 data/news.json 為來源，按台港澳／國際服／大陸服分開整理，區分現行版本與未上線預告。更新後執行 npm run build:news，生成首頁重點、完整消息頁及三語資料，並同步攻略、劇情及綜合資料頁的官方消息核對日期；npm run check:news 會檢查靜態頁是否過期。人工核對日期及來源見 [data/NEWS_SOURCES.md](data/NEWS_SOURCES.md)。
 
 新增／移除頁面或資源、修改角色圖片網址或音樂版本後，執行 `npm run build:preload` 並一併提交 `assets/preload-manifest.json`。`npm run check:preload`（亦包含於 `npm test`）會檢查清單是否過期。
 
