@@ -4,6 +4,45 @@
     const timeoutMs = 60000;
     const failure = (code, status) => Object.assign(new Error(code), { code, status });
     const details = error => ({ code: error.code || 'network', ...(error.status ? { status: error.status } : {}) });
+    let styleRetry = 0;
+
+    // A successful fetch does not prove that the browser applied its stylesheet.
+    const stylesApplied = link => {
+        try { return !!link.sheet?.cssRules.length; } catch { return false; }
+    };
+    const waitForDocument = signal => new Promise((resolve, reject) => {
+        if (document.readyState === 'complete') { resolve(); return; }
+        const cleanup = () => {
+            clearTimeout(timer);
+            window.removeEventListener('load', loaded);
+            signal.removeEventListener('abort', cancel);
+        };
+        const loaded = () => { cleanup(); resolve(); };
+        const cancel = () => { cleanup(); reject(failure('stylesheet')); };
+        const timer = setTimeout(cancel, timeoutMs);
+        window.addEventListener('load', loaded, { once: true });
+        signal.addEventListener('abort', cancel, { once: true });
+        if (signal.aborted) cancel();
+    });
+    const reloadStylesheet = (link, source, signal) => new Promise((resolve, reject) => {
+        const cleanup = () => {
+            clearTimeout(timer);
+            link.removeEventListener('load', loaded);
+            link.removeEventListener('error', failed);
+            signal.removeEventListener('abort', failed);
+        };
+        const failed = () => { cleanup(); reject(failure('stylesheet')); };
+        const loaded = () => { if (!stylesApplied(link)) { failed(); return; } cleanup(); resolve(); };
+        const timer = setTimeout(failed, timeoutMs);
+        link.addEventListener('load', loaded, { once: true });
+        link.addEventListener('error', failed, { once: true });
+        signal.addEventListener('abort', failed, { once: true });
+        if (signal.aborted) { failed(); return; }
+        const retryURL = new URL(source);
+        retryURL.searchParams.set('_bhr_style_retry', `${Date.now()}-${++styleRetry}`);
+        // Keep the same element and cascade position; bypass only its stale URL.
+        link.href = retryURL.href;
+    });
 
     // Read the entire response, not just its headers. Images must also decode.
     async function loadResource(resource, signal) {
@@ -109,13 +148,34 @@
                         if (!controller.signal.aborted) report();
                     }
                 }));
+                // Include styles injected by the language system before the load event.
+                try {
+                    await waitForDocument(controller.signal);
+                    const links = [...document.querySelectorAll('link[rel~="stylesheet"][href]')];
+                    await Promise.all(links.map(async link => {
+                        const source = new URL(link.href);
+                        source.searchParams.delete('_bhr_style_retry');
+                        if (!source.href.startsWith(root.href) || link.disabled || stylesApplied(link)) return;
+                        const url = source.href.slice(root.href.length);
+                        try {
+                            await reloadStylesheet(link, source, controller.signal);
+                        } catch (error) {
+                            if (!controller.signal.aborted) {
+                                complete.delete(url);
+                                failures.set(url, details(error));
+                            }
+                        }
+                    }));
+                } catch (error) {
+                    if (!controller.signal.aborted) failures.set('Current page / stylesheets', details(error));
+                }
             } catch (error) {
                 if (!controller.signal.aborted) failures.set('assets/preload-manifest.json', details(error));
             } finally {
                 running = false;
                 if (!controller.signal.aborted) report();
             }
-            return !controller.signal.aborted && resources !== null && complete.size === resources.length;
+            return !controller.signal.aborted && resources !== null && complete.size === resources.length && !failures.size;
         }
         return { run, cancel: () => controller.abort() };
     }
