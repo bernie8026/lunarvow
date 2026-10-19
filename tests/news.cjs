@@ -3,7 +3,8 @@ const data=require('../data/news.json');
 module.exports=async(browser,baseURL)=>{
   const context=await browser.newContext({reducedMotion:'reduce',viewport:{width:1440,height:1000}});
   const page=await context.newPage(), errors=[];
-  await page.clock.setFixedTime(new Date('2026-10-05T05:00:00Z'));
+  const snapshot=new Date(data.checkedOn+'T12:00:00+08:00');
+  await page.clock.setFixedTime(snapshot);
   await require('./preload-fixture.cjs').configure(page);
   page.on('pageerror',e=>errors.push(e.message));
   const dir='/tmp/lunarvow-boot-preview'; fs.mkdirSync(dir,{recursive:true});
@@ -106,12 +107,12 @@ module.exports=async(browser,baseURL)=>{
   await page.clock.setFixedTime(new Date('2026-09-30T12:00:00+08:00'));
   await page.reload();await ready();
   assert.equal(await page.locator('#spotlight-cn-luna-login .news-status').textContent(),'尚未開始');
-  await page.clock.setFixedTime(new Date('2026-10-05T05:00:00Z'));
+  await page.clock.setFixedTime(snapshot);
   await page.goto(baseURL);await ready();
   assert.equal(await page.locator('#latest .news-grid .news-card').count(),4);
   assert.equal(await page.locator('#latest .news-topic').count(),new Set(data.homeItems.map(id=>data.items.find(item=>item.id===id).category)).size);
   assert.equal(await page.locator('#latest .news-card--spotlight').count(),1);
-  assert.ok(await page.locator('[data-news-checked]').textContent().then(t=>t.includes('2026.10.05')));
+  assert.ok(await page.locator('[data-news-checked]').textContent().then(t=>t.includes(data.checkedOn.replaceAll('-','.'))));
   for(const width of [320,390,768,1440,1920]) {
     await page.setViewportSize({width,height:900});
     for(const lang of ['en','zh-CN','zh-HK']) {

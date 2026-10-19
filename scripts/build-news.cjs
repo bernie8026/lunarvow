@@ -14,6 +14,13 @@ for(const [file,mode] of [['index.html','home'],['news.html','archive']]) {
   if(file==='index.html') updated=updated.replace(/<time data-news-checked datetime="[^"]+">[^<]+<\/time>/,'<time data-news-checked datetime="'+data.checkedOn+'">'+data.checkedOn.replaceAll('-','.')+'</time>');
   targets.set(file,updated);
 }
+// Related guides and story pages show the same verification date as the feed.
+for (const file of fs.readdirSync(root).filter(file=>file.endsWith('.html'))) {
+  const source=targets.get(file) || fs.readFileSync(path.join(root,file),'utf8');
+  const updated=source.replace(/(<span class="update-tag">)\d{4}-\d{2}-\d{2}( \/\/ OFFICIAL NEWS<\/span>)/g,
+    (_,before,after)=>before+data.checkedOn+after);
+  if(updated!==source) targets.set(file,updated);
+}
 for(const [file,content] of targets) {
   const target=path.join(root,file);
   if(process.argv.includes('--check')) {
