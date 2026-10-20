@@ -1,0 +1,59 @@
+name: Deploy encrypted archive
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+concurrency:
+  group: encrypted-pages
+  cancel-in-progress: false
+jobs:
+  build:
+    if: github.event.repository.private == true || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Require private source and the main branch
+        env:
+          SOURCE_PRIVATE: ${{ github.event.repository.private }}
+          SOURCE_REF: ${{ github.ref }}
+        run: |
+          if [ "$SOURCE_PRIVATE" != "true" ] || [ "$SOURCE_REF" != "refs/heads/main" ]; then
+            echo 'Encrypted deployment requires a private source repository and the main branch. See docs/ENCRYPTED_DEPLOYMENT.md.'
+            exit 1
+          fi
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify content and cryptographic packaging
+        run: |
+          npm run check:news
+          npm run check:preload
+          npm run test:vault:unit
+      - name: Encrypt the complete site
+        env:
+          LUNAR_VAULT_PASSWORD: ${{ secrets.LUNAR_VAULT_PASSWORD }}
+          VAULT_BASE_PATH: /lunarvow/
+        run: npm run build:encrypted
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: .encrypted-dist
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publish encrypted files only
+        id: deployment
+        uses: actions/deploy-pages@v4

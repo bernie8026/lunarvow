@@ -2,7 +2,9 @@
 
 Bernie's Honkai Realm：以月下誓約為主題的靜態網站，包含攻略、劇情、角色圖鑑和圖片收藏。
 
-網站可直接部署到 GitHub Pages，無需建置。開發時請用本機 HTTP 伺服器預覽；角色圖鑑需要透過 HTTP 讀取 `data/characters.json`。
+開發時請用本機 HTTP 伺服器預覽原始碼；角色圖鑑需要透過 HTTP 讀取 `data/characters.json`。正式發佈密碼入站版本前，必須先加密建置。
+
+正式網站請使用[完整檔案加密部署](docs/ENCRYPTED_DEPLOYMENT.md)。它會先加密分頁、程式、資料、圖片及音樂，只發佈密碼入口和密文；必須先設定私人原始碼倉庫、GitHub Secret 及 Actions 發佈來源。合併代碼本身不會保護仍然公開的原始碼或目前已發佈的網站。
 
 ## 驗證網站
 

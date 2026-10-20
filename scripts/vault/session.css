@@ -1,0 +1,5 @@
+html[data-vault-pending] { visibility:hidden!important; }
+.vault-session-lock { position:fixed; bottom:5rem; left:1rem; z-index:85; border:1px solid #eb98b17a; background:#190f1ee8; color:#ffdae6; border-radius:999px; padding:.65rem .95rem; font:500 .7rem system-ui,sans-serif; cursor:pointer; backdrop-filter:blur(12px); }
+.vault-session-lock:hover { background:#54243b; }
+.vault-session-lock:focus-visible { outline:2px solid #f68ca9; outline-offset:4px; }
+@media(max-width:600px) { .vault-session-lock { bottom:calc(4.6rem + env(safe-area-inset-bottom)); left:.75rem; font-size:.65rem; padding:.6rem .8rem; } }
