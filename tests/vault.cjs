@@ -12,12 +12,16 @@ const types = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '
 
 async function ready(page) {
   await page.locator('html[data-vault-content]').waitFor({ state: 'attached' });
-  await page.waitForFunction(() => !document.documentElement.hasAttribute('data-vault-pending'));
+  await page.waitForFunction(() => document.readyState === 'complete' && window.BHR_I18N &&
+    !document.documentElement.hasAttribute('data-vault-pending'));
   await page.locator('.boot-screen').waitFor({ state: 'hidden', timeout: 35000 });
 }
 async function gate(page) {
   await page.locator('html[data-vault-gate]').waitFor({ state: 'attached' });
-  await page.waitForFunction(() => !document.querySelector('[data-vault-submit]')?.disabled);
+  await page.waitForFunction(() => {
+    const submit = document.querySelector('[data-vault-submit]');
+    return submit && !submit.disabled;
+  });
 }
 async function unlock(page) {
   await gate(page);
@@ -164,6 +168,8 @@ async function unlock(page) {
     });
     const mobile = await mobileContext.newPage();
     await mobile.goto(base); await unlock(mobile);
+    assert.equal(await mobile.locator('.boot-screen').count(), 0);
+    assert.equal(await mobile.locator('#main-content').evaluate(element => element.inert), false);
     await mobile.screenshot({ path: `${previews}/vault-unlocked-mobile-390.png` });
     assert(await mobile.locator('.vault-session-lock').isVisible());
     await mobile.locator('.vault-session-lock').click(); await gate(mobile);
