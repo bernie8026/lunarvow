@@ -1,276 +1,47 @@
-<!DOCTYPE html>
-<html lang="zh-HK">
+<!doctype html>
+<html lang="zh-HK" data-vault-gate>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#090b0c">
-    <meta name="description" content="Bernie’s Honkai Realm：以月下誓約・予愛以心為核心的《崩壞3rd》角色攻略、劇情、資料庫與影像收藏。">
-    <title>Bernie’s Honkai Realm // Lunar Vow Archive</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="assets/music-player.css">
-    <link id="crimson-rose-theme" rel="stylesheet" href="assets/red-pink-theme.css">
-    <link rel="stylesheet" href="assets/archive-visuals.css">
-    <link rel="stylesheet" href="assets/news.css">
-    <script src="assets/preloader.js" defer></script>
-    <script src="site.js" defer></script>
-    <script src="assets/music-player.js" defer></script>
-    <script src="assets/news-data.js" defer></script>
-    <script src="assets/news-view.js" defer></script>
-    <script src="assets/news.js" defer></script>
-    <link rel="stylesheet" href="assets/expressive.css">
-    <script src="assets/expressive.js" defer></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; worker-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>月下檔案已封存 // Lunar Vow</title>
+  <link rel="stylesheet" href="/lunarvow/_vault/gate.css">
+  <script src="/lunarvow/_vault/runtime.js" defer></script>
 </head>
-<body class="home-page">
-    <a class="skip-link" href="#main-content">跳至主要內容</a>
-    <header class="site-header" data-header>
-        <a class="site-brand" href="#home" aria-label="返回首頁">
-            <span class="site-brand__mark">BR</span>
-            <span class="site-brand__copy">
-                <strong>HONKAI REALM</strong>
-                <small>PERSONAL ARCHIVE / 2026</small>
-            </span>
-        </a>
-
-        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation" data-menu-toggle>
-            <span></span><span></span>
-            <span class="sr-only">開啟導覽選單</span>
-        </button>
-
-        <nav class="site-nav" id="primary-navigation" aria-label="主要導覽" data-menu>
-            <a href="#home" data-nav-link><span>01</span>HOME</a>
-            <a href="#latest" data-nav-link><span>02</span>LATEST</a>
-            <a href="#archive" data-nav-link><span>03</span>ARCHIVE</a>
-            <a href="#profile" data-nav-link><span>04</span>PROFILE</a>
-            <a class="site-nav__database" href="hi3.html">DATABASE ↗</a>
-        </nav>
-
-        <div class="site-header__status" aria-hidden="true">
-            <span class="status-light"></span>
-            SYSTEM ONLINE
+<body>
+  <header class="vault-header">
+    <a href="/lunarvow/" class="vault-wordmark">BR <span>LUNAR VOW ARCHIVE</span></a>
+    <nav class="vault-languages" data-vault-languages aria-label="選擇語言">
+      <button type="button" data-vault-language="zh-HK" aria-pressed="true">繁</button>
+      <button type="button" data-vault-language="en" aria-pressed="false">EN</button>
+      <button type="button" data-vault-language="zh-CN" aria-pressed="false">简</button>
+    </nav>
+  </header>
+  <main class="vault-entrance">
+    <div class="vault-moon" aria-hidden="true"><div class="vault-moon-disc"></div><span class="vault-orbit"></span><span class="vault-orbit vault-orbit-second"></span></div>
+    <section class="vault-intro" aria-labelledby="vault-title">
+      <p class="vault-kicker">A PRIVATE CONSTELLATION</p>
+      <h1 id="vault-title" data-vault-text="title">月下檔案已封存</h1>
+      <p class="vault-description" data-vault-text="intro">輸入密碼，解鎖完整檔案庫。</p>
+      <div class="vault-signature" aria-hidden="true">Lunar Vow<span>CRIMSON LOVE</span></div>
+    </section>
+    <section class="vault-access" aria-label="Unlock archive">
+      <p class="vault-eyebrow">CAPTAIN ACCESS</p>
+      <form method="post" data-vault-form>
+        <label for="vault-password" data-vault-text="password">入站密碼</label>
+        <div class="vault-password-row">
+          <input id="vault-password" data-vault-password type="password" autocomplete="current-password" autocapitalize="off" spellcheck="false" required disabled aria-describedby="vault-status">
+          <button type="button" class="vault-show" data-vault-show aria-pressed="false">顯示密碼</button>
         </div>
-    </header>
-
-    <aside class="section-rail" aria-label="頁面區段">
-        <span class="section-rail__label">SECTION</span>
-        <a href="#home" class="is-active" data-rail-link="home">01</a>
-        <a href="#latest" data-rail-link="latest">02</a>
-        <a href="#archive" data-rail-link="archive">03</a>
-        <a href="#profile" data-rail-link="profile">04</a>
-    </aside>
-
-    <main class="home-main" id="main-content" tabindex="-1">
-        <section class="home-hero tracked-section" id="home" data-section="home">
-            <div class="hero-grid" aria-hidden="true"></div>
-            <div class="hero-code" aria-hidden="true">
-                <span>LV-CRIMSON/異能</span>
-                <span>COORD 22.3193°N / 114.1694°E</span>
-            </div>
-
-            <div class="hero-copy" data-parallax="-0.35">
-                <p class="eyebrow"><span></span>CAPTAIN'S PERSONAL DATABASE</p>
-                <h1>
-                    <span>LUNAR</span>
-                    <span class="hero-title-accent">VOW</span>
-                </h1>
-                <p class="hero-title-zh">月下誓約・予愛以心</p>
-                <p class="hero-intro">記錄角色、劇情、實戰攻略，同每一個值得收藏嘅瞬間。呢度唔係百科全書，而係艦長為月下建立嘅專屬檔案庫。</p>
-
-                <div class="hero-actions">
-                    <a class="ui-button ui-button--primary" href="lunar-vow-guide.html">
-                        <span>OPEN LUNAR GUIDE</span>
-                        <b>↗</b>
-                    </a>
-                    <a class="ui-button ui-button--ghost" href="#archive">EXPLORE ARCHIVE</a>
-                </div>
-                <div class="hero-panel">
-                    <div class="hero-panel__head">
-                        <span>CHARACTER FILE</span>
-                        <b>LV-001</b>
-                    </div>
-                    <dl>
-                        <div><dt>TYPE</dt><dd>異能</dd></div>
-                        <div><dt>DAMAGE</dt><dd>LIGHTNING / BLEED</dd></div>
-                        <div><dt>STATUS</dt><dd class="online-text">ASTRAL RING READY</dd></div>
-                    </dl>
-                    <div class="signal-bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
-                </div>
-            </div>
-
-            <div class="hero-figure" data-parallax="0.28" aria-hidden="true">
-                <div class="hero-figure__halo"></div>
-                <div class="hero-figure__designation">THERESA // LUNAR VOW</div>
-                <img src="assets/hi3/characters/lunar-vow-crimson-love.webp" alt="" width="960" height="660" fetchpriority="high" decoding="async">
-            </div>
-
-            <div class="hero-footer">
-                <a class="scroll-prompt" href="#latest">
-                    <span class="scroll-prompt__line"></span>
-                    SCROLL TO ACCESS
-                </a>
-                <div class="hero-footer__version">
-                    <span>NEWS CHECKED</span>
-                    <strong><time data-news-checked datetime="2026-10-20">2026.10.20</time> / OFFICIAL NEWS</strong>
-                </div>
-            </div>
-        </section>
-
-        <div class="signal-ticker" aria-hidden="true">
-            <div class="signal-ticker__track">
-                <div class="signal-ticker__group">
-                    <div class="signal-ticker__segment">
-                        <span>BERNIE'S HONKAI REALM</span><i>◆</i>
-                        <span>LUNAR VOW ARCHIVE</span><i>◆</i>
-                        <span>STORY DATABASE</span><i>◆</i>
-                        <span>CAPTAIN LINE RECORDS</span><i>◆</i>
-                    </div>
-                </div>
-                <div class="signal-ticker__group" data-i18n-ignore>
-                    <div class="signal-ticker__segment">
-                        <span>BERNIE'S HONKAI REALM</span><i>◆</i>
-                        <span>LUNAR VOW ARCHIVE</span><i>◆</i>
-                        <span>STORY DATABASE</span><i>◆</i>
-                        <span>CAPTAIN LINE RECORDS</span><i>◆</i>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <section class="content-section tracked-section" id="latest" data-section="latest">
-            <header class="section-heading" data-reveal>
-                <div>
-                    <span class="section-index">02</span>
-                    <p>LATEST TRANSMISSION</p>
-                </div>
-                <h2>最新消息</h2>
-                <span class="section-heading__line"></span>
-            </header>
-
-            <!-- NEWS:START -->
-<div data-news-root data-news-mode="home" data-i18n-ignore>
-<div class="news-intro"><p>按內容主題整理官方消息，可再按地區篩選。大陸服活動唔代表台港澳服同步開放；消息按以下核對日整理。</p><p class="news-checked">官方資料核對 <time datetime="2026-10-20">2026.10.20</time></p></div><p class="news-stale" hidden>核對已超過 14 日，請開啟官方來源查看後續公告。</p><div class="news-versions" aria-label="版本資料截至 2026.10.20"><a class="news-version" href="https://apps.apple.com/tw/app/%E5%B4%A9%E5%A3%9E3rd/id1233055283" target="_blank" rel="noopener noreferrer"><span>台港澳</span><strong>v9.0</strong><small>官方來源 ↗</small></a><a class="news-version" href="https://steamcommunity.com/app/1671200/allnews/?l=english" target="_blank" rel="noopener noreferrer"><span>國際服</span><strong>v9.0</strong><small>官方來源 ↗</small></a><a class="news-version" href="https://steamcommunity.com/app/1668940/allnews/" target="_blank" rel="noopener noreferrer"><span>大陸服</span><strong>v9.1</strong><small>官方來源 ↗</small></a></div><article class="news-card news-card--spotlight" id="spotlight-cn-luna-login" data-news-id="cn-luna-login" data-news-category="event"><figure class="news-portrait"><img src="assets/hi3/characters/lunar-vow-crimson-love.webp" alt="月下誓約・予愛以心角色立繪" width="960" height="660" loading="lazy" decoding="async"><figcaption>角色立繪／HoYoverse</figcaption></figure><div class="news-card__body"><p class="news-kicker">月下重點</p><div class="news-tags"><span class="news-region">大陸服</span><span>活動</span><span>v9.1</span></div><h3 class="news-title">溯夢之行：自選月下角色卡</h3><p class="news-summary">20 級起，第 1 日可自選月下或深空定錨角色卡／晉升印章；第 3、5、7 日各有補給卡或 1200 水晶自選獎勵。</p><div class="news-period"><span class="news-status news-status--active">進行中</span><p>10.01 04:00 – 11.26 04:00 <span class="news-timezone">UTC+08:00</span></p></div><p class="news-date">公告 <time datetime="2026-09-29">2026.09.29</time></p><div class="news-sources"><a class="news-source" href="https://www.taptap.cn/moment/853681631158863654?group_id=17" target="_blank" rel="noopener noreferrer">官方來源 ↗<span class="sr-only"> — 溯夢之行：自選月下角色卡</span></a></div></div></article><div class="news-topics news-topics--home"><section class="news-topic" data-news-topic="version" aria-labelledby="news-topic-home-version"><header class="news-topic__heading"><h3 id="news-topic-home-version">版本更新</h3><span>1 則消息</span></header><div class="news-grid news-grid--home"><article class="news-card" id="news-global-maintenance-91" data-news-id="global-maintenance-91" data-news-category="version"><div class="news-card__body"><div class="news-tags"><span class="news-region">國際服</span><span>版本</span><span>v9.1</span></div><h4 class="news-title">國際服 9.1 維護預告：10 月 22 日</h4><p class="news-summary">預定更新時序之律者，本期角色補給首次十連免費；更新前達 9 級可領取維護補償 600 水晶。維護時段會按伺服器區分，實際結束時間可能調整。</p><div class="news-period"><span class="news-status news-status--notice">版本公告</span><p>SEA：10.22 10:00–16:00（UTC+8）；美服：10.21 23:00–10.22 05:00（UTC−5）；歐服：10.22 05:00–11:00（UTC+1）</p></div><p class="news-date">公告 <time datetime="2026-10-14">2026.10.14</time></p><div class="news-sources"><a class="news-source" href="https://www.hoyolab.com/article/47081097" target="_blank" rel="noopener noreferrer">官方來源 ↗<span class="sr-only"> — 國際服 9.1 維護預告：10 月 22 日</span></a></div></div></article></div></section><section class="news-topic" data-news-topic="event" aria-labelledby="news-topic-home-event"><header class="news-topic__heading"><h3 id="news-topic-home-event">活動與福利</h3><span>1 則消息</span></header><div class="news-grid news-grid--home"><article class="news-card" id="news-cn-divine-trial" data-news-id="cn-divine-trial" data-news-category="event"><div class="news-card__body"><div class="news-tags"><span class="news-region">大陸服</span><span>活動</span><span>v9.1</span></div><h4 class="news-title">英雄遠征：神諭試煉，三章已開放</h4><p class="news-summary">30 級起可放置卡牌抵禦敵人，完成任務可領水晶、根源棱鏡等獎勵。三章分別於 10 月 12、14、16 日開放，現可挑戰全部章節。</p><div class="news-period"><span class="news-status news-status--active">進行中</span><p>10.12 10:00 – 11.26 04:00 <span class="news-timezone">UTC+08:00</span></p></div><p class="news-date">公告 <time datetime="2026-10-10">2026.10.10</time></p><div class="news-sources"><a class="news-source" href="https://www.taptap.cn/moment/857945740603818978?group_id=17" target="_blank" rel="noopener noreferrer">官方來源 ↗<span class="sr-only"> — 英雄遠征：神諭試煉，三章已開放</span></a></div></div></article></div></section><section class="news-topic" data-news-topic="supply" aria-labelledby="news-topic-home-supply"><header class="news-topic__heading"><h3 id="news-topic-home-supply">補給情報</h3><span>1 則消息</span></header><div class="news-grid news-grid--home"><article class="news-card" id="news-cn-celebration-battlesuits" data-news-id="cn-celebration-battlesuits" data-news-category="supply"><div class="news-card__body"><div class="news-tags"><span class="news-region">大陸服</span><span>補給</span><span>v9.1</span></div><h4 class="news-title">慶典角色補給及免費二十連</h4><p class="news-summary">鎮×偃月叩曉等四個目標輪替提升；登入「華歲雋禮」可領取兩張慶典十連券，角色 A／B 補給進度互通。</p><div class="news-period"><span class="news-status news-status--active">進行中</span><p>10.01 12:00 – 10.22 12:00 <span class="news-timezone">UTC+08:00</span></p></div><p class="news-date">公告 <time datetime="2026-09-29">2026.09.29</time></p><div class="news-sources"><a class="news-source" href="https://www.taptap.cn/moment/853661306786417581?group_id=17" target="_blank" rel="noopener noreferrer">官方來源 ↗<span class="sr-only"> — 慶典角色補給及免費二十連</span></a></div></div></article></div></section><section class="news-topic" data-news-topic="outfit" aria-labelledby="news-topic-home-outfit"><header class="news-topic__heading"><h3 id="news-topic-home-outfit">服裝外觀</h3><span>1 則消息</span></header><div class="news-grid news-grid--home"><article class="news-card" id="news-cn-winter-wish-outfit" data-news-id="cn-winter-wish-outfit" data-news-category="outfit"><div class="news-card__body"><div class="news-tags"><span class="news-region">大陸服</span><span>服裝</span><span>v9.1</span></div><h4 class="news-title">冬祈新願服裝復刻：首抽免費</h4><p class="news-summary">15 級起可參與咚！熾願吉星服裝補給，首抽免費，完成十次補給可取得「冬祈新願」及全部獎勵。後續抽取消耗遞增，詳細數量見官方補給表。</p><div class="news-period"><span class="news-status news-status--active">進行中</span><p>10.16 12:00 – 10.30 12:00 <span class="news-timezone">UTC+08:00</span></p></div><p class="news-date">公告 <time datetime="2026-10-14">2026.10.14</time></p><div class="news-sources"><a class="news-source" href="https://www.taptap.cn/moment/859452633658687584?group_id=17" target="_blank" rel="noopener noreferrer">官方來源 ↗<span class="sr-only"> — 冬祈新願服裝復刻：首抽免費</span></a></div></div></article></div></section></div><div class="news-bottom"><a class="news-browse" href="news.html">查看全部消息 <span aria-hidden="true">↗</span></a><a class="news-story-link" href="story.html">返回劇情檔案 →<small>主線同艦長線整理（含劇透）</small></a></div>
-</div>
-<!-- NEWS:END -->
-        </section>
-
-        <section class="content-section content-section--archive tracked-section" id="archive" data-section="archive">
-            <header class="section-heading section-heading--light" data-reveal>
-                <div>
-                    <span class="section-index">03</span>
-                    <p>ARCHIVE DIRECTORY</p>
-                </div>
-                <h2>資料區域</h2>
-                <span class="section-heading__line"></span>
-            </header>
-
-            <div class="archive-grid">
-                <a class="archive-card archive-card--featured archive-card--visual" href="guide.html" data-reveal>
-                    <span class="archive-card__number">A-01</span>
-                    <span class="archive-card__media" aria-hidden="true"><img src="assets/lunar-collection/crimson-vow-desktop.webp" alt="" width="1080" height="608" loading="lazy" decoding="async"></span>
-                    <div class="archive-card__copy">
-                        <p>TACTICAL RECORD</p>
-                        <h3>攻略專區</h3>
-                        <span>角色操作、裝備、配隊及模式筆記。</span>
-                    </div>
-                    <b>↗</b>
-                </a>
-
-                <a class="archive-card archive-card--visual" href="hi3.html" data-reveal>
-                    <span class="archive-card__number">A-02</span>
-                    <span class="archive-card__media archive-card__media--portraits" aria-hidden="true">
-                        <img src="assets/hi3/portraits/kiana-kaslana.png" alt="" width="208" height="184" loading="lazy" decoding="async">
-                        <img src="assets/hi3/portraits/raiden-mei.png" alt="" width="172" height="148" loading="lazy" decoding="async">
-                        <img src="assets/hi3/portraits/bronya-zaychik.png" alt="" width="172" height="148" loading="lazy" decoding="async">
-                    </span>
-                    <div class="archive-card__copy">
-                        <p>CHARACTER DATABASE</p>
-                        <h3>角色圖鑑</h3>
-                        <span>快速瀏覽《崩壞3rd》角色檔案。</span>
-                    </div>
-                    <b>↗</b>
-                </a>
-
-                <a class="archive-card archive-card--visual" href="gallery.html" data-reveal>
-                    <span class="archive-card__number">A-03</span>
-                    <span class="archive-card__media" aria-hidden="true"><img src="assets/lunar-collection/moonlight-desktop.webp" alt="" width="1080" height="608" loading="lazy" decoding="async"></span>
-                    <div class="archive-card__copy">
-                        <p>VISUAL STORAGE</p>
-                        <h3>相片庫</h3>
-                        <span>月下圖片、收藏同攝影記錄。</span>
-                    </div>
-                    <b>↗</b>
-                </a>
-
-                <a class="archive-card archive-card--visual" href="story.html" data-reveal>
-                    <span class="archive-card__number">A-04</span>
-                    <span class="archive-card__media archive-card__media--character" aria-hidden="true"><img src="assets/hi3/characters/kiana-kaslana.webp" alt="" width="552" height="660" loading="lazy" decoding="async"></span>
-                    <div class="archive-card__copy">
-                        <p>STORY ARCHIVE</p>
-                        <h3>遊戲劇情</h3>
-                        <span>主線、火星第二部及月下艦長線整理。</span>
-                    </div>
-                    <b>↗</b>
-                </a>
-
-                <a class="archive-card archive-card--visual" href="captain-line.html" data-reveal>
-                    <span class="archive-card__number">A-05</span>
-                    <span class="archive-card__media" aria-hidden="true"><img src="assets/lunar-collection/theresa-crimson-love.webp" alt="" width="1080" height="608" loading="lazy" decoding="async"></span>
-                    <div class="archive-card__copy">
-                        <p>NARRATIVE LOG</p>
-                        <h3>艦長線</h3>
-                        <span>艦長宇宙相關劇情及角色紀錄。</span>
-                    </div>
-                    <b>↗</b>
-                </a>
-
-                <a class="archive-card archive-card--visual" href="honkai-info.html" data-reveal>
-                    <span class="archive-card__number">A-06</span>
-                    <span class="archive-card__media" aria-hidden="true"><img src="assets/lunar-collection/lunar-vow-official-banner.webp" alt="" width="1920" height="1080" loading="lazy" decoding="async"></span>
-                    <div class="archive-card__copy">
-                        <p>GENERAL DATABASE</p>
-                        <h3>崩壞三資料</h3>
-                        <span>世界觀、系統、角色同基礎資料索引。</span>
-                    </div>
-                    <b>↗</b>
-                </a>
-            </div>
-        </section>
-
-        <section class="profile-section tracked-section" id="profile" data-section="profile">
-            <div class="profile-section__grid" aria-hidden="true"></div>
-            <header class="section-heading section-heading--light" data-reveal>
-                <div>
-                    <span class="section-index">04</span>
-                    <p>ADMINISTRATOR PROFILE</p>
-                </div>
-                <h2>關於艦長</h2>
-                <span class="section-heading__line"></span>
-            </header>
-
-            <div class="profile-layout">
-                <div class="profile-statement" data-reveal>
-                    <span class="profile-statement__mark">“</span>
-                    <p>白天被 assignment 追殺，晚上返艦橋整理月下檔案。</p>
-                </div>
-                <div class="profile-copy" data-reveal>
-                    <p>我係 Bernie。呢個網站係一個持續更新嘅私人《崩壞3rd》資料庫：內容會偏向實戰、角色感受、劇情同視覺收藏，而唔係純粹堆數值。</p>
-                    <p>月下誓約・予愛以心係成個網站嘅核心。每次版本更新、裝備變動或者有新收藏，檔案都會繼續擴張。</p>
-                    <div class="profile-meta">
-                        <span><small>PRIMARY SUBJECT</small>LUNAR VOW</span>
-                        <span><small>LANGUAGE</small>ZH-HK / EN</span>
-                        <span><small>PLATFORM</small>GITHUB PAGES</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer class="site-footer">
-        <a class="site-brand site-brand--footer" href="#home">
-            <span class="site-brand__mark">BR</span>
-            <span class="site-brand__copy"><strong>HONKAI REALM</strong><small>CAPTAIN'S PERSONAL ARCHIVE</small></span>
-        </a>
-        <p>Fan-made personal archive. Game titles and character rights belong to their respective owners.</p>
-        <span>© <b data-current-year>2026</b> BERNIE LEUNG</span>
-    </footer>
+        <p id="vault-status" class="vault-status" data-vault-status role="status" aria-live="polite">正在準備入口…</p>
+        <button type="submit" class="vault-submit" data-vault-submit disabled>解鎖檔案</button>
+      </form>
+      <p class="vault-note" data-vault-text="note">解鎖後可隨時按「鎖定檔案」關閉存取。</p>
+      <noscript><p class="vault-status is-error">需要啟用 JavaScript 先可以解鎖。 JavaScript is required to unlock this archive.</p></noscript>
+    </section>
+  </main>
+  <footer class="vault-footer"><span>BERNIE'S HONKAI REALM</span><span>PRIVATE ARCHIVE / LV-001</span></footer>
 </body>
 </html>

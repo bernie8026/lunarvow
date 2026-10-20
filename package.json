@@ -1,15 +1,14 @@
 {
-  "name": "lunarvow-site-checks",
+  "name": "lunarvow-protected-archive",
   "private": true,
   "scripts": {
-    "test": "node tests/run.cjs",
-    "build:news": "node scripts/build-news.cjs",
-    "check:news": "node scripts/build-news.cjs --check",
-    "build:preload": "node scripts/build-preload-manifest.cjs",
-    "check:preload": "node scripts/build-preload-manifest.cjs --check",
-    "build:encrypted": "node scripts/build-vault.cjs",
+    "test": "node tests/vault-publication.cjs && node tests/vault-runtime.cjs",
     "test:vault:unit": "node tests/vault-unit.cjs",
-    "test:vault": "node tests/vault.cjs"
+    "test:vault": "node tests/vault-runtime.cjs",
+    "test:source": "node .private/source/tests/run.cjs",
+    "build:encrypted": "node scripts/build-vault.cjs",
+    "prepare:publish": "node scripts/prepare-publication.cjs",
+    "recover:source": "node scripts/build-vault.cjs --recover"
   },
   "devDependencies": {
     "playwright": "1.62.1"
