@@ -6,7 +6,10 @@
     "build:news": "node scripts/build-news.cjs",
     "check:news": "node scripts/build-news.cjs --check",
     "build:preload": "node scripts/build-preload-manifest.cjs",
-    "check:preload": "node scripts/build-preload-manifest.cjs --check"
+    "check:preload": "node scripts/build-preload-manifest.cjs --check",
+    "build:encrypted": "node scripts/build-vault.cjs",
+    "test:vault:unit": "node tests/vault-unit.cjs",
+    "test:vault": "node tests/vault.cjs"
   },
   "devDependencies": {
     "playwright": "1.62.1"

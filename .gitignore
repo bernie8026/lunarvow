@@ -1,2 +1,4 @@
 node_modules/
 test-results/
+.encrypted-dist/
+.encrypted-build-*/
