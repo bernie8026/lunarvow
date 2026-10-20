@@ -84,7 +84,7 @@
   });
 
   async function worker() {
-    if (!window.isSecureContext || !navigator.serviceWorker || !crypto.subtle) throw new Error('unsupported');
+    if (!window.isSecureContext || !navigator.serviceWorker || !crypto.subtle || !window.DecompressionStream) throw new Error('unsupported');
     const registration = await navigator.serviceWorker.register(new URL('vault-sw.js', root), { scope: root.pathname, updateViaCache: 'none' });
     await navigator.serviceWorker.ready;
     if (registration.installing) await new Promise((resolve, reject) => {
@@ -153,7 +153,7 @@
       const response = await fetch(new URL('_vault/config.json', root), { cache: 'no-cache', signal: AbortSignal.timeout(30000) });
       if (!response.ok) throw new Error('network');
       settings = await response.json();
-      if (settings.format !== 'lunarvow-vault-v1' || settings.build !== BUILD || settings.iterations !== 600000 || !/^[A-Za-z0-9+/]{43}=$/.test(settings.salt)) throw new Error('changed');
+      if (settings.format !== 'lunarvow-vault-v2' || settings.build !== BUILD || settings.compression !== 'gzip' || settings.iterations !== 600000 || !/^[A-Za-z0-9+/]{43}=$/.test(settings.salt)) throw new Error('changed');
       const saved = readKey();
       if (saved) {
         const result = await request('VAULT_UNLOCK', saved);

@@ -1,5 +1,5 @@
 'use strict';
-const FORMAT = 'lunarvow-vault-v1';
+const FORMAT = 'lunarvow-vault-v2';
 const BUILD = '@@BUILD@@';
 const ROOT = new URL(self.registration.scope);
 const encoder = new TextEncoder();
@@ -26,9 +26,9 @@ async function download(url) {
 async function config() {
   if (!configPromise) configPromise = download('_vault/config.json').then(buffer => {
     const value = JSON.parse(decoder.decode(buffer));
-    if (value.format !== FORMAT || value.build !== BUILD || value.iterations !== 600000 ||
-        !/^[A-Za-z0-9+/]{43}=$/.test(value.salt) || !/^[a-f0-9]{48}\.bin$/.test(value.manifest?.file) ||
-        !/^[A-Za-z0-9+/]{16}$/.test(value.manifest?.iv)) throw new Error('changed');
+    if (value.format !== FORMAT || value.build !== BUILD || value.compression !== 'gzip' || value.iterations !== 600000 ||
+        !/^[A-Za-z0-9+/]{43}=$/.test(value.salt) || !/^[a-f0-9]{48}\.bin$/.test(value.archive?.file) ||
+        !/^[A-Za-z0-9+/]{16}$/.test(value.archive?.iv)) throw new Error('changed');
     return value;
   }).catch(error => { configPromise = null; throw error; });
   return configPromise;
@@ -44,7 +44,11 @@ async function unlock(rawKey, build) {
   const settings = await config();
   const key = await crypto.subtle.importKey('raw', bytes(rawKey), 'AES-GCM', false, ['decrypt']);
   let index;
-  try { index = JSON.parse(decoder.decode(await decrypt(key, settings.manifest, '@manifest'))); }
+  try {
+    const compressed = await decrypt(key, settings.archive, '@archive');
+    const stream = new Blob([compressed]).stream().pipeThrough(new DecompressionStream('gzip'));
+    index = JSON.parse(await new Response(stream).text());
+  }
   catch (error) { throw new Error(error.name === 'OperationError' ? 'password' : 'network'); }
   if (index.format !== FORMAT || index.build !== BUILD || !index.files?.['index.html'] || attempt !== epoch) throw new Error('locked');
   session = { key, files: index.files };
@@ -91,7 +95,17 @@ async function serve(request, name) {
   const current = session;
   const record = Object.hasOwn(current.files, name) && current.files[name];
   if (!record) return new Response('Not found', { status: 404, headers: headers('text/plain', 9) });
-  if (!decrypted.has(name)) decrypted.set(name, decrypt(current.key, record, name).catch(error => { decrypted.delete(name); throw error; }));
+  if (!decrypted.has(name)) decrypted.set(name, Promise.resolve().then(() => {
+    let body = bytes(record.body);
+    if (body.byteLength !== record.bytes) throw new Error('invalid');
+    if (name.endsWith('.html')) {
+      let html = decoder.decode(body).replace(/<html\b/i, '<html data-vault-content data-vault-pending');
+      const bootstrap = `<link rel="stylesheet" href="${ROOT.pathname}_vault/session.css"><script src="${ROOT.pathname}_vault/runtime.js" defer></script>`;
+      html = html.replace(/<head\b[^>]*>/i, match => match + bootstrap);
+      body = encoder.encode(html);
+    }
+    return body.buffer;
+  }).catch(error => { decrypted.delete(name); throw error; }));
   const body = await decrypted.get(name);
   if (current !== session) return new Response('Locked', { status: 403, headers: headers('text/plain', 6) });
   const responseHeaders = headers(record.type, body.byteLength);

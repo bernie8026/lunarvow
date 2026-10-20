@@ -1,35 +1,37 @@
-# 月下誓約檔案庫
+# 月下誓約檔案庫：密碼加密版
 
-Bernie's Honkai Realm：以月下誓約為主題的靜態網站，包含攻略、劇情、角色圖鑑和圖片收藏。
+GitHub Pages 保留現有 `main / (root)` 發佈方式及 `/lunarvow/` 網址。公開倉庫只保留密碼入口、少量解鎖／建置程式、測試及一份加密封包，不需要 Private 倉庫、GitHub Pro 或 Actions Secret。
 
-開發時請用本機 HTTP 伺服器預覽原始碼；角色圖鑑需要透過 HTTP 讀取 `data/characters.json`。正式發佈密碼入站版本前，必須先加密建置。
+**合併本次加密發佈後，等待原有 Pages build and deployment 成功才會上鎖。** 正式密碼另存於私人密碼檔，沒有寫入 Git、URL、程式或建置日誌。
 
-正式網站請使用[完整檔案加密部署](docs/ENCRYPTED_DEPLOYMENT.md)。它會先加密分頁、程式、資料、圖片及音樂，只發佈密碼入口和密文；必須先設定私人原始碼倉庫、GitHub Secret 及 Actions 發佈來源。合併代碼本身不會保護仍然公開的原始碼或目前已發佈的網站。
+## 密碼與可編輯原始碼
 
-## 驗證網站
+本機 `.private/access-password.txt` 為一行入站密碼（至少 16 字元）。可用 `LUNAR_VAULT_PASSWORD_FILE` 指向另一個私人檔案，或在私人環境注入 `LUNAR_VAULT_PASSWORD`。請保管交付的密碼檔；密碼不會由網站傳到伺服器。
 
-需要 Node.js 20 或更新版本：
+`.private/source/` 是完整可編輯備份，全部原始網站檔案、資料、圖片、音樂、舊建置程式及測試也可從加密封包還原。`.private/` 與 `.encrypted-dist/` 均排除於 Git。恢復到另一台電腦時，先把密碼檔放到上述位置，再執行：
 
 ```sh
-npm install
-npx playwright install chromium
+npm run recover:source
+```
+
+還原只接受全新目錄，不會覆蓋已有原始碼。請在 `.private/source/` 修改網站；內容／素材更新後，在該目錄執行原有 `scripts/build-news.cjs` 及 `scripts/build-preload-manifest.cjs`，再於倉庫根目錄執行：
+
+```sh
+npm run build:encrypted
+npm run prepare:publish
 npm test
 ```
 
-測試會啟動並關閉自己的本機伺服器，檢查所有頁面的手機及桌面排版、鍵盤導覽、減少動態效果模式、無 JavaScript 的導覽、完整女武神及分支搜尋、消息篩選及日期狀態、三語切換、儲存受限時的行為，以及音樂播放狀態。測試用的 Playwright 不會載入到正式網站。
+檢查通過後只提交公開加密輸出及建置程式。密碼或原始碼缺失、素材不齊、完整性驗證失敗時不會改成發佈明文。更改私人密碼檔後重新建置與提交，即可更改新部署的入站密碼。
 
-若電腦已有 Microsoft Edge，可設定 `BROWSER_CHANNEL=msedge` 使用它執行測試。
+## 保護範圍
 
-載入畫面會預載全部頁面，包括最新消息頁，以及清單內的圖片、資料、樣式、程式和完整背景音樂。首次入站至少展示十秒，全部資源成功後才可 Skip 或自動進入。進度按成功完成的資源數計算（不是位元組百分比），並等待目前頁面及字型準備好才自動退場。圖片必須完成解碼，其他檔案必須完整讀取；單項下載超過 60 秒會列為失敗，提供重試。失敗項目不會計作成功，亦不會自動略過或由 Escape 關閉；只有全部成功才進入。減少動態效果模式保留相同載入檢查。
+完整原始碼先 gzip 壓縮，再用 AES-256-GCM 加密；PBKDF2-HMAC-SHA-256 使用 600,000 次迭代、每次建置獨立的 256-bit salt 及 96-bit IV，並將建置編號納入 AAD。瀏覽器先驗證完整密文，再在記憶體解壓與提供原有網址；JSON、圖片、音樂及分頁在未解鎖時均無明文公開副本。
 
-預載涵蓋網站子頁，並非 Git 分支或外部參考文章。112 張圖鑑角色圖片及 OpenCC 繁簡轉換程式均隨網站儲存，無需 Fandom 圖片跳轉或 jsDelivr 連線。每個角色保留圖片快照來源及原 Wiki 參考連結；素材權利屬原權利持有人。繁簡轉換來源和授權見 assets/vendor/opencc/NOTICE.md。失敗清單會區分 HTTP 錯誤、下載逾時、圖片載入／解碼失敗和連線受阻。瀏覽器可重用 HTTP 快取，但預載不保證離線存取，也不會預先執行其他頁面的程式。
+需要 HTTPS／localhost、JavaScript、Web Crypto、Service Worker 及 gzip DecompressionStream。原有三語、十秒入站及只在按掣後播放音樂的行為保留。按「鎖定檔案」會清除已開啟分頁的暫存金鑰並返回入口。金鑰可暫存在已解鎖分頁的 sessionStorage，以恢復被瀏覽器回收的背景程序；密碼本身及明文檔案不會寫入 CacheStorage 或 IndexedDB。
 
-官方消息以 data/news.json 為來源，按台港澳／國際服／大陸服分開整理，區分現行版本與未上線預告。更新後執行 npm run build:news，生成首頁重點、完整消息頁及三語資料，並同步攻略、劇情及綜合資料頁的官方消息核對日期；npm run check:news 會檢查靜態頁是否過期。人工核對日期及來源見 [data/NEWS_SOURCES.md](data/NEWS_SOURCES.md)。
+持有密碼者仍可檢視、保存及分享解鎖後的內容與代碼。此為共用密碼加密，不是逐人帳戶。已公開的歷史提交、舊副本及第三方快取不能靠新部署收回；此更新不改寫 Git 歷史。素材與遊戲相關權利屬原權利人。
 
-新增／移除頁面或資源、修改角色圖片網址或音樂版本後，執行 `npm run build:preload` 並一併提交 `assets/preload-manifest.json`。`npm run check:preload`（亦包含於 `npm test`）會檢查清單是否過期。
+## 檢查
 
-音樂會在預載階段下載，但仍然只會在按播放後播放；音量及播放位置會在瀏覽器允許時儲存在本機。繁簡轉換設有內建後備字表，轉換程式意外失敗時仍可切換語言。
-
-視覺動態由 assets/expressive.css、assets/expressive.js 及 site.js 的分區入場動畫組成：紅月軌道與飄散粒子、按主題整理的消息分區、滑過／鍵盤選取展開的圖片列、相片落位、劇情閱讀線及簽名描繪。首頁與內頁採用開放式排版，資料不依賴動畫才可閱讀。頁面角落可暫停背景動態；設定會在瀏覽器允許時保留。系統「減少動態效果」優先，離開視窗或場景捲離畫面後會暫停裝飾動畫；新動畫不增加入站等候時間。
-
-手機音樂播放器預設只顯示播放按鈕，取得焦點後展開曲名及音量控制；移開焦點後收起。頁尾保留播放器所需空間。
+公開 CI 只驗證發佈目錄、加密／還原及使用測試內容的瀏覽器流程，不會讀取正式密碼或上傳解密後的網站畫面。完整原網站回歸可在本機有私人備份時執行 `npm run test:source`。
