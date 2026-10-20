@@ -183,6 +183,8 @@
     render();
     window.addEventListener('bhr:languagechange', event => { language = event.detail?.language || language; if (!strings[language]) language = 'zh-HK'; render(); });
     window.addEventListener('pageshow', () => verifyContent());
+    // A history snapshot must remain hidden until its session is checked again.
+    window.addEventListener('pagehide', () => document.documentElement.setAttribute('data-vault-pending', ''));
     navigator.serviceWorker.addEventListener('controllerchange', () => verifyContent());
     worker().then(verifyContent).catch(closeContent);
   } else openGate();

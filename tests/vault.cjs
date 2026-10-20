@@ -151,6 +151,9 @@ async function unlock(page) {
       assert.equal(await tab.evaluate(() => Object.keys(sessionStorage).filter(key => key.startsWith('lunar-vault:')).length), 0);
       assert.equal(await tab.evaluate(async () => (await fetch(new URL('data/characters.json', document.querySelector('script[src]').src.replace('_vault/runtime.js', '')))).status), 403);
     }
+    await page.evaluate(() => history.back());
+    await page.waitForURL('**/honkai-info.html'); await gate(page);
+    assert.equal(await page.locator('[data-vault-content]').count(), 0, 'Back navigation after locking must stay locked');
     assert.deepEqual(errors, []);
     await context.close();
     console.log('PASS vault logout: all open pages and original-image tabs return to the locked entrance');
