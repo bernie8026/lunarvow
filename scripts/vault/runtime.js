@@ -7,17 +7,17 @@
   const strings = {
     'zh-HK': { title: '月下檔案已封存', intro: '輸入密碼，解鎖完整檔案庫。', password: '入站密碼',
       unlock: '解鎖檔案', show: '顯示密碼', hide: '隱藏密碼', ready: '等待艦長解鎖', preparing: '正在準備入口…',
-      busy: '正在驗證…', passwordError: '密碼唔正確，請再試一次。', network: '暫時讀取唔到加密檔案，請檢查連線後再試。',
+      busy: '正在驗證…', passwordError: '密碼唔正確，或加密檔案驗證失敗。請再試一次。', network: '暫時讀取唔到加密檔案，請檢查連線後再試。',
       changed: '檔案已更新，請重新載入並輸入密碼。', unsupported: '請用支援 Service Worker 嘅瀏覽器，透過 HTTPS 開啟網站。',
       note: '解鎖後可隨時按「鎖定檔案」關閉存取。', lock: '鎖定檔案', language: '選擇語言' },
     en: { title: 'An archive under seal', intro: 'Enter the password to unlock the complete archive.', password: 'Archive password',
       unlock: 'Unlock archive', show: 'Show password', hide: 'Hide password', ready: 'Awaiting the Captain', preparing: 'Preparing the entrance…',
-      busy: 'Verifying…', passwordError: 'Incorrect password. Please try again.', network: 'The encrypted files could not be loaded. Check your connection and try again.',
+      busy: 'Verifying…', passwordError: 'The password is incorrect or the encrypted files failed verification. Please try again.', network: 'The encrypted files could not be loaded. Check your connection and try again.',
       changed: 'The archive has changed. Reload and enter the password again.', unsupported: 'Open this site over HTTPS in a browser that supports service workers.',
       note: 'Use “Lock archive” whenever you want to close access.', lock: 'Lock archive', language: 'Choose a language' },
     'zh-CN': { title: '月下档案已封存', intro: '输入密码，解锁完整档案库。', password: '入站密码',
       unlock: '解锁档案', show: '显示密码', hide: '隐藏密码', ready: '等待舰长解锁', preparing: '正在准备入口…',
-      busy: '正在验证…', passwordError: '密码不正确，请重试。', network: '暂时无法读取加密文件，请检查连接后重试。',
+      busy: '正在验证…', passwordError: '密码不正确，或加密文件验证失败。请重试。', network: '暂时无法读取加密文件，请检查连接后重试。',
       changed: '档案已更新，请重新加载并输入密码。', unsupported: '请用支持 Service Worker 的浏览器，通过 HTTPS 打开网站。',
       note: '解锁后可随时按“锁定档案”关闭访问。', lock: '锁定档案', language: '选择语言' }
   };
