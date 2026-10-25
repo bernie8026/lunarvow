@@ -179,7 +179,20 @@
       catch { await (await navigator.serviceWorker.getRegistration(root.href))?.unregister(); }
       location.reload();
     });
-    document.body.append(lock);
+    // Keep late-created music and motion controls with the lock, in normal flow.
+    const controls = document.createElement('div');
+    controls.className = 'vault-session-controls';
+    document.body.append(controls);
+    controls.append(lock);
+    const arrangeControls = () => {
+      for (const selector of ['.music-console', '.motion-control']) {
+        const element = document.querySelector(selector);
+        if (element && element.parentElement !== controls) controls.append(element);
+      }
+    };
+    const controlsObserver = new MutationObserver(arrangeControls);
+    controlsObserver.observe(document.body, { childList: true });
+    arrangeControls();
     render();
     window.addEventListener('bhr:languagechange', event => { language = event.detail?.language || language; if (!strings[language]) language = 'zh-HK'; render(); });
     window.addEventListener('pageshow', () => verifyContent());
