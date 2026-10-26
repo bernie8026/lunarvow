@@ -1,6 +1,6 @@
 'use strict';
 const FORMAT = 'lunarvow-vault-v2';
-const BUILD = '7795c0a2f1d23c838791e4af8e704bca';
+const BUILD = 'd3fce1f3ca60a981314e9de1b197fc66';
 const ROOT = new URL(self.registration.scope);
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
