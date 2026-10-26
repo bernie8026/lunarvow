@@ -5,7 +5,7 @@ const path = require('node:path');
 const {buildVault,readArchive,recover,ITERATIONS}=require('../scripts/build-vault.cjs');
 const PASSWORD='fixture-only-not-a-production-password';
 function fixture() {
-  const root=fs.mkdtempSync(path.join(os.tmpdir(),'lunar-public-vault-'));
+  const root=fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(),'lunar-public-vault-')));
   const files={
     'index.html':'<!doctype html><html lang="zh-HK"><head><title>PRIVATE FIXTURE</title></head><body><main id="main-content">PRIVATE_LUNAR_CONTENT</main><script src="site.js" defer></script></body></html>',
     'guide.html':'<!doctype html><html lang="zh-HK"><head><title>PRIVATE GUIDE</title></head><body><main id="main-content">PRIVATE_GUIDE_CONTENT</main><script src="site.js" defer></script></body></html>',

@@ -30,8 +30,13 @@ async function unlock(page){await gate(page);await page.locator('[data-vault-pas
     browser=await chromium.launch({headless:true});const context=await browser.newContext({viewport:{width:390,height:844},reducedMotion:'reduce'});
     const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));await page.goto(base);await gate(page);
     for(const width of [320,390,1440]){await page.setViewportSize({width,height:844});assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));}
-    await page.locator('[data-vault-language="en"]').click();assert.equal(await page.locator('h1').textContent(),'An archive under seal');
-    await page.locator('[data-vault-language="zh-HK"]').click();
+    for(const language of ['zh-HK','en','zh-CN','ja','ko','th','ru']) {
+      await page.locator('[data-vault-language-select]').selectOption(language);
+      assert.equal(await page.locator('html').getAttribute('lang'),language);
+      for(const width of [320,390,820,1280,1440]) {await page.setViewportSize({width,height:844});assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'gate fits '+language+' at '+width);}
+    }
+    await page.locator('[data-vault-language-select]').selectOption('en');assert.equal(await page.locator('h1').textContent(),'An archive under seal');
+    await page.locator('[data-vault-language-select]').selectOption('zh-HK');
     assert.equal(await page.evaluate(async()=> (await fetch('data/characters.json')).status),403);
     await page.locator('[data-vault-password]').fill(PASSWORD+'-wrong');await page.locator('[data-vault-submit]').click();
     await page.waitForFunction(()=>document.querySelector('[data-vault-status]').classList.contains('is-error'));
@@ -48,6 +53,14 @@ async function unlock(page){await gate(page);await page.locator('[data-vault-pas
     await page.evaluate(()=>history.back());await page.waitForURL(base);await gate(page);
     assert.equal(await page.evaluate(async()=> (await fetch('data/characters.json')).status),403);
     assert.deepEqual(errors,[]);assert(!requests.some(r=>r.includes(PASSWORD)));await context.close();
+    for(const [language,label] of [['ja','アーカイブをロック'],['ko','기록실 잠금'],['th','ล็อกคลังข้อมูล'],['ru','Закрыть архив']]) {
+      const localized=await browser.newContext({viewport:{width:390,height:844}}),p=await localized.newPage();
+      await p.goto(base);await gate(p);await p.locator('[data-vault-language-select]').selectOption(language);await unlock(p);
+      assert.equal(await p.locator('.vault-session-lock').textContent(),label);
+      await p.goto(base+'guide.html');await unlocked(p);assert.equal(await p.locator('.vault-session-lock').textContent(),label);
+      await p.locator('.vault-session-lock').click();await gate(p);assert.equal(await p.locator('[data-vault-language-select]').inputValue(),language);
+      await localized.close();
+    }
     const restricted=await browser.newContext();await restricted.addInitScript(()=>Object.defineProperty(window,'sessionStorage',{get(){throw new DOMException('Blocked','SecurityError');}}));
     const restrictedPage=await restricted.newPage();await restrictedPage.goto(base);await unlock(restrictedPage);await restrictedPage.locator('.vault-session-lock').click();await gate(restrictedPage);await restricted.close();
     const corrupt=await browser.newContext(),corruptPage=await corrupt.newPage();await corruptPage.goto(base);await gate(corruptPage);damaged=true;

@@ -1,6 +1,6 @@
 'use strict';
 const FORMAT = 'lunarvow-vault-v2';
-const BUILD = '56e9819923090848d62737d0a6e63627';
+const BUILD = '7795c0a2f1d23c838791e4af8e704bca';
 const ROOT = new URL(self.registration.scope);
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
@@ -100,7 +100,7 @@ async function serve(request, name) {
     if (body.byteLength !== record.bytes) throw new Error('invalid');
     if (name.endsWith('.html')) {
       let html = decoder.decode(body).replace(/<html\b/i, '<html data-vault-content data-vault-pending');
-      const bootstrap = `<link rel="stylesheet" href="${ROOT.pathname}_vault/session.css?v=layout-20261026"><script src="${ROOT.pathname}_vault/runtime.js?v=layout-20261026" defer></script>`;
+      const bootstrap = `<link rel="stylesheet" href="${ROOT.pathname}_vault/session.css?v=${BUILD}"><script src="${ROOT.pathname}_vault/runtime.js?v=${BUILD}" defer></script>`;
       html = html.replace(/<head\b[^>]*>/i, match => match + bootstrap);
       body = encoder.encode(html);
     }
