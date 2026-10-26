@@ -1,26 +1,137 @@
 (() => {
   'use strict';
-  const BUILD = '56e9819923090848d62737d0a6e63627';
+  const BUILD = 'd3fce1f3ca60a981314e9de1b197fc66';
   const root = new URL('../', document.currentScript.src);
   const storageKey = `lunar-vault:${root.pathname}`;
   const isContent = document.documentElement.hasAttribute('data-vault-content');
   const strings = {
-    'zh-HK': { title: '月下檔案已封存', intro: '輸入密碼，解鎖完整檔案庫。', password: '入站密碼',
-      unlock: '解鎖檔案', show: '顯示密碼', hide: '隱藏密碼', ready: '等待艦長解鎖', preparing: '正在準備入口…',
-      busy: '正在驗證…', passwordError: '密碼唔正確，或加密檔案驗證失敗。請再試一次。', network: '暫時讀取唔到加密檔案，請檢查連線後再試。',
-      changed: '檔案已更新，請重新載入並輸入密碼。', unsupported: '請用支援 Service Worker 嘅瀏覽器，透過 HTTPS 開啟網站。',
-      note: '解鎖後可隨時按「鎖定檔案」關閉存取。', lock: '鎖定檔案', language: '選擇語言' },
-    en: { title: 'An archive under seal', intro: 'Enter the password to unlock the complete archive.', password: 'Archive password',
-      unlock: 'Unlock archive', show: 'Show password', hide: 'Hide password', ready: 'Awaiting the Captain', preparing: 'Preparing the entrance…',
-      busy: 'Verifying…', passwordError: 'The password is incorrect or the encrypted files failed verification. Please try again.', network: 'The encrypted files could not be loaded. Check your connection and try again.',
-      changed: 'The archive has changed. Reload and enter the password again.', unsupported: 'Open this site over HTTPS in a browser that supports service workers.',
-      note: 'Use “Lock archive” whenever you want to close access.', lock: 'Lock archive', language: 'Choose a language' },
-    'zh-CN': { title: '月下档案已封存', intro: '输入密码，解锁完整档案库。', password: '入站密码',
-      unlock: '解锁档案', show: '显示密码', hide: '隐藏密码', ready: '等待舰长解锁', preparing: '正在准备入口…',
-      busy: '正在验证…', passwordError: '密码不正确，或加密文件验证失败。请重试。', network: '暂时无法读取加密文件，请检查连接后重试。',
-      changed: '档案已更新，请重新加载并输入密码。', unsupported: '请用支持 Service Worker 的浏览器，通过 HTTPS 打开网站。',
-      note: '解锁后可随时按“锁定档案”关闭访问。', lock: '锁定档案', language: '选择语言' }
-  };
+  "zh-HK": {
+    "title": "月下檔案已封存",
+    "intro": "輸入密碼，解鎖完整檔案庫。",
+    "password": "入站密碼",
+    "unlock": "解鎖檔案",
+    "show": "顯示密碼",
+    "hide": "隱藏密碼",
+    "ready": "等待艦長解鎖",
+    "preparing": "正在準備入口…",
+    "busy": "正在驗證…",
+    "passwordError": "密碼唔正確，或加密檔案驗證失敗。請再試一次。",
+    "network": "暫時讀取唔到加密檔案，請檢查連線後再試。",
+    "changed": "檔案已更新，請重新載入並輸入密碼。",
+    "unsupported": "請用支援 Service Worker 嘅瀏覽器，透過 HTTPS 開啟網站。",
+    "note": "解鎖後可隨時按「鎖定檔案」關閉存取。",
+    "lock": "鎖定檔案",
+    "language": "選擇語言"
+  },
+  "en": {
+    "title": "An archive under seal",
+    "intro": "Enter the password to unlock the complete archive.",
+    "password": "Archive password",
+    "unlock": "Unlock archive",
+    "show": "Show password",
+    "hide": "Hide password",
+    "ready": "Awaiting the Captain",
+    "preparing": "Preparing the entrance…",
+    "busy": "Verifying…",
+    "passwordError": "The password is incorrect or the encrypted files failed verification. Please try again.",
+    "network": "The encrypted files could not be loaded. Check your connection and try again.",
+    "changed": "The archive has changed. Reload and enter the password again.",
+    "unsupported": "Open this site over HTTPS in a browser that supports service workers.",
+    "note": "Use “Lock archive” whenever you want to close access.",
+    "lock": "Lock archive",
+    "language": "Choose a language"
+  },
+  "zh-CN": {
+    "title": "月下档案已封存",
+    "intro": "输入密码，解锁完整档案库。",
+    "password": "入站密码",
+    "unlock": "解锁档案",
+    "show": "显示密码",
+    "hide": "隐藏密码",
+    "ready": "等待舰长解锁",
+    "preparing": "正在准备入口…",
+    "busy": "正在验证…",
+    "passwordError": "密码不正确，或加密文件验证失败。请重试。",
+    "network": "暂时无法读取加密文件，请检查连接后重试。",
+    "changed": "档案已更新，请重新加载并输入密码。",
+    "unsupported": "请用支持 Service Worker 的浏览器，通过 HTTPS 打开网站。",
+    "note": "解锁后可随时按“锁定档案”关闭访问。",
+    "lock": "锁定档案",
+    "language": "选择语言"
+  },
+  "ja": {
+    "title": "封印された月下アーカイブ",
+    "intro": "パスワードを入力してアーカイブ全体を開きます。",
+    "password": "入場パスワード",
+    "unlock": "アーカイブを開く",
+    "show": "パスワードを表示",
+    "hide": "パスワードを隠す",
+    "ready": "艦長の到着を待機中",
+    "preparing": "入口を準備中…",
+    "busy": "確認中…",
+    "passwordError": "パスワードが違うか、暗号化ファイルを検証できません。もう一度お試しください。",
+    "network": "暗号化ファイルを読み込めません。接続を確認して再試行してください。",
+    "changed": "アーカイブが更新されました。再読み込みしてパスワードを入力してください。",
+    "unsupported": "Service Worker対応ブラウザーでHTTPS経由で開いてください。",
+    "note": "閲覧を終えるときは「アーカイブをロック」を押してください。",
+    "lock": "アーカイブをロック",
+    "language": "言語を選択"
+  },
+  "ko": {
+    "title": "봉인된 월하 기록실",
+    "intro": "비밀번호를 입력해 전체 기록실을 여세요.",
+    "password": "입장 비밀번호",
+    "unlock": "기록실 잠금 해제",
+    "show": "비밀번호 표시",
+    "hide": "비밀번호 숨기기",
+    "ready": "함장 입장 대기 중",
+    "preparing": "입구 준비 중…",
+    "busy": "확인 중…",
+    "passwordError": "비밀번호가 틀리거나 암호화 파일 검증에 실패했습니다. 다시 시도하세요.",
+    "network": "암호화 파일을 불러올 수 없습니다. 연결을 확인하고 다시 시도하세요.",
+    "changed": "기록실이 업데이트됐습니다. 새로고침 후 비밀번호를 다시 입력하세요.",
+    "unsupported": "Service Worker 지원 브라우저에서 HTTPS로 열어 주세요.",
+    "note": "열람을 끝내려면 ‘기록실 잠금’을 누르세요.",
+    "lock": "기록실 잠금",
+    "language": "언어 선택"
+  },
+  "th": {
+    "title": "คลัง Lunar Vow ที่ถูกผนึก",
+    "intro": "ใส่รหัสผ่านเพื่อปลดล็อกคลังข้อมูลทั้งหมด",
+    "password": "รหัสผ่านคลังข้อมูล",
+    "unlock": "ปลดล็อกคลังข้อมูล",
+    "show": "แสดงรหัสผ่าน",
+    "hide": "ซ่อนรหัสผ่าน",
+    "ready": "รอกัปตันปลดล็อก",
+    "preparing": "กำลังเตรียมทางเข้า…",
+    "busy": "กำลังตรวจสอบ…",
+    "passwordError": "รหัสผ่านไม่ถูกต้องหรือยืนยันไฟล์เข้ารหัสไม่สำเร็จ โปรดลองอีกครั้ง",
+    "network": "โหลดไฟล์เข้ารหัสไม่ได้ ตรวจสอบการเชื่อมต่อแล้วลองใหม่",
+    "changed": "คลังข้อมูลอัปเดตแล้ว โหลดหน้าใหม่และใส่รหัสผ่านอีกครั้ง",
+    "unsupported": "เปิดผ่าน HTTPS ด้วยเบราว์เซอร์ที่รองรับ Service Worker",
+    "note": "กด “ล็อกคลังข้อมูล” เมื่อต้องการปิดการเข้าถึง",
+    "lock": "ล็อกคลังข้อมูล",
+    "language": "เลือกภาษา"
+  },
+  "ru": {
+    "title": "Запечатанный архив Lunar Vow",
+    "intro": "Введите пароль, чтобы открыть весь архив.",
+    "password": "Пароль архива",
+    "unlock": "Открыть архив",
+    "show": "Показать пароль",
+    "hide": "Скрыть пароль",
+    "ready": "Ожидаем Капитана",
+    "preparing": "Подготовка входа…",
+    "busy": "Проверка…",
+    "passwordError": "Неверный пароль или ошибка проверки зашифрованных файлов. Попробуйте снова.",
+    "network": "Не удалось загрузить зашифрованные файлы. Проверьте соединение и повторите попытку.",
+    "changed": "Архив обновился. Перезагрузите страницу и снова введите пароль.",
+    "unsupported": "Откройте сайт через HTTPS в браузере с поддержкой Service Worker.",
+    "note": "Чтобы закрыть доступ, нажмите «Закрыть архив».",
+    "lock": "Закрыть архив",
+    "language": "Выбрать язык"
+  }
+};
   let language = 'zh-HK';
   let memoryKey = null;
   let statusName = 'preparing';
@@ -57,8 +168,10 @@
       document.title = `${copy.title} // Lunar Vow`;
     }
     for (const element of document.querySelectorAll('[data-vault-text]')) element.textContent = copy[element.dataset.vaultText];
+    const languageSelect=document.querySelector('[data-vault-language-select]');if(languageSelect)languageSelect.value=language;
     for (const button of document.querySelectorAll('[data-vault-language]')) button.setAttribute('aria-pressed', String(button.dataset.vaultLanguage === language));
     document.querySelector('[data-vault-languages]')?.setAttribute('aria-label', copy.language);
+    document.querySelector('[data-vault-language-select]')?.setAttribute('aria-label',copy.language);
     const status = document.querySelector('[data-vault-status]');
     if (status) {
       status.textContent = copy[statusName] || copy.network;
@@ -147,6 +260,7 @@
       try { localStorage.setItem('bhr-language', language); } catch {}
       render();
     });
+    document.querySelector('[data-vault-language-select]')?.addEventListener('change',event=>{language=event.target.value;try{localStorage.setItem('bhr-language',language);}catch{}render();});
     render();
     try {
       await worker();

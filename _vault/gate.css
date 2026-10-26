@@ -51,3 +51,7 @@ h1 { margin:0; max-width:9em; font-family:Georgia,"Songti TC",serif; font-weight
   .vault-footer { padding:1.25rem 8vw; gap:1rem; font-size:.5rem; }
 }
 @media(prefers-reduced-motion:reduce) { *,*::before,*::after { animation:none!important; transition:none!important; } }
+.vault-languages select { min-height:44px; max-width:100%; border:1px solid #eb98b17a; border-radius:6px; padding:8px 12px; background:#1b111c; color:#ffdae6; font:inherit; font-size:.9rem; }
+@media(max-width:600px) { .vault-header { flex-wrap:wrap; gap:12px; } .vault-languages { max-width:100%; } }
+html[lang="th"] .vault-intro h1 { line-height:1.5; }
+.vault-intro h1,.vault-description,.vault-note,.vault-submit { overflow-wrap:anywhere; }
