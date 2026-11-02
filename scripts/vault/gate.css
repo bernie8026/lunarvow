@@ -1,6 +1,7 @@
 :root { color-scheme:dark; --paper:#fae8ee; --muted:#b7a2ad; --rose:#f68ca9; --ink:#110c14; }
+html { overflow-x:clip; }
 * { box-sizing:border-box; }
-body { margin:0; min-height:100svh; color:var(--paper); background:radial-gradient(ellipse at 23% 48%,#58263855,transparent 52%),radial-gradient(ellipse at 84% 70%,#5c21452e,transparent 42%),var(--ink); font-family:system-ui,-apple-system,"PingFang HK","Microsoft JhengHei",sans-serif; }
+body { overflow-x:clip; margin:0; min-height:100svh; color:var(--paper); background:radial-gradient(ellipse at 23% 48%,#58263855,transparent 52%),radial-gradient(ellipse at 84% 70%,#5c21452e,transparent 42%),var(--ink); font-family:system-ui,-apple-system,"PingFang HK","Microsoft JhengHei",sans-serif; }
 button,input { font:inherit; }
 button,a { -webkit-tap-highlight-color:transparent; }
 button { cursor:pointer; }
@@ -14,7 +15,6 @@ button:disabled { cursor:wait; opacity:.5; }
 .vault-languages button[aria-pressed="true"] { color:var(--rose); text-decoration:underline; text-underline-offset:.5rem; }
 .vault-entrance { position:relative; isolation:isolate; display:grid; grid-template-columns:minmax(0,1.3fr) minmax(0,1fr); align-items:center; gap:clamp(3rem,9vw,9rem); min-height:calc(100svh - 176px); max-width:1320px; padding:5rem 5vw; margin:auto; }
 .vault-intro,.vault-access { position:relative; min-width:0; }
-.vault-entrance { overflow:clip; }
 .vault-kicker,.vault-eyebrow { color:var(--rose); font-size:.68rem; letter-spacing:.26em; margin:0 0 2.25rem; }
 h1 { margin:0; max-width:9em; font-family:Georgia,"Songti TC",serif; font-weight:400; font-size:clamp(2.5rem,5vw,4.6rem); letter-spacing:.04em; line-height:1.28; overflow-wrap:anywhere; text-wrap:balance; }
 .vault-description { color:var(--muted); margin:1.5rem 0; line-height:1.9; font-size:.95rem; }
