@@ -27,7 +27,7 @@ async function unlock(page){await gate(page);await page.locator('[data-vault-pas
   await new Promise(r=>server.listen(0,'127.0.0.1',r));const base=`http://127.0.0.1:${server.address().port}/lunarvow/`;
   try{
     for(const file of ['site.js','style.css','assets/photo.svg','assets/audio.mp3','data/characters.json','source-notes.md'])assert.equal((await fetch(base+file)).status,404);
-    browser=await chromium.launch({headless:true});const context=await browser.newContext({viewport:{width:390,height:844},reducedMotion:'reduce'});
+    browser=await chromium.launch({headless:true,channel:process.env.PLAYWRIGHT_CHANNEL||undefined});const context=await browser.newContext({viewport:{width:390,height:844},reducedMotion:'reduce'});
     const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));await page.goto(base);await gate(page);
     for(const width of [320,390,1440]){await page.setViewportSize({width,height:844});assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));}
     for(const language of ['zh-HK','en','zh-CN','ja','ko','th','ru']) {

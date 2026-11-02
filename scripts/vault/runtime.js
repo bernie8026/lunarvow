@@ -136,6 +136,42 @@
   let memoryKey = null;
   let statusName = 'preparing';
   let busy = false;
+  let gateReady = false;
+  let setupToken = '';
+  try {
+    const fragment=new URLSearchParams(location.hash.slice(1));
+    if(fragment.has('passkey-setup')){
+      const token=fragment.get('passkey-setup');
+      if(/^[A-Za-z0-9_-]{32,256}$/.test(token||''))setupToken=token;
+      history.replaceState(null,'',location.pathname+location.search);
+    }
+  }catch{}
+  const passkeyButton=document.querySelector('[data-vault-passkey]');
+  const registerButton=document.querySelector('[data-vault-passkey-register]');
+  const setupPanel=document.querySelector('[data-vault-passkey-setup]');
+  const passkeySupported=!!(window.PublicKeyCredential&&navigator.credentials?.get&&navigator.credentials?.create);
+  const passkeyCopy={
+    'zh-HK':{passkey:'使用通行密鑰',passkeyHint:'使用 Face ID、Touch ID，或選擇另一部裝置。',passkeyUnavailable:'呢個瀏覽器未能使用通行密鑰，請使用密碼解鎖。',setupTitle:'新增你嘅通行密鑰',setupHelp:'呢個係擁有人提供嘅一次性登記邀請。確認後，通行密鑰會由你嘅裝置或密碼管理工具保存。',registerPasskey:'新增通行密鑰',passkeyWaiting:'請喺裝置確認通行密鑰…',registering:'請喺裝置確認新增通行密鑰…',passkeyCancelled:'已取消通行密鑰操作，或者操作已逾時。你可以重新開始，或使用密碼。',passkeyRejected:'通行密鑰未能通過驗證。請重試或使用密碼。',passkeyRegistered:'通行密鑰已新增。撳「使用通行密鑰」即可解鎖。',inviteInvalid:'登記邀請已失效或已使用，請向擁有人取得新邀請。',passkeyDuplicate:'呢部裝置已有登記嘅通行密鑰，請使用佢登入。',passkeyThrottled:'通行密鑰請求太頻密，請稍後再試。'},
+    en:{passkey:'Use a passkey',passkeyHint:'Use Face ID, Touch ID, or choose another device.',passkeyUnavailable:'Passkeys are unavailable in this browser. Use the password to unlock.',setupTitle:'Add your passkey',setupHelp:'This is a one-time invitation from the owner. Your device or password manager will save the passkey after you confirm.',registerPasskey:'Add a passkey',passkeyWaiting:'Confirm the passkey on your device…',registering:'Confirm the new passkey on your device…',passkeyCancelled:'The passkey request was cancelled or timed out. Try again or use the password.',passkeyRejected:'The passkey could not be verified. Try again or use the password.',passkeyRegistered:'Passkey added. Choose “Use a passkey” to unlock.',inviteInvalid:'The invitation has expired or was already used. Ask the owner for a new invitation.',passkeyDuplicate:'A passkey is already registered on this device. Use it to sign in.',passkeyThrottled:'Too many passkey requests. Please try again shortly.'},
+    'zh-CN':{passkey:'使用通行密钥',passkeyHint:'使用 Face ID、Touch ID，或选择另一台设备。',passkeyUnavailable:'此浏览器无法使用通行密钥，请使用密码解锁。',setupTitle:'新增你的通行密钥',setupHelp:'这是网站所有者提供的一次性登记邀请。确认后，通行密钥由你的设备或密码管理工具保存。',registerPasskey:'新增通行密钥',passkeyWaiting:'请在设备上确认通行密钥…',registering:'请在设备上确认新增通行密钥…',passkeyCancelled:'通行密钥操作已取消或超时。请重试或使用密码。',passkeyRejected:'通行密钥未能通过验证。请重试或使用密码。',passkeyRegistered:'通行密钥已新增。点击“使用通行密钥”即可解锁。',inviteInvalid:'登记邀请已失效或已使用，请向网站所有者获取新邀请。',passkeyDuplicate:'此设备已有登记的通行密钥，请使用它登录。',passkeyThrottled:'通行密钥请求过于频繁，请稍后重试。'},
+    ja:{passkey:'パスキーを使う',passkeyHint:'Face ID、Touch ID、または別のデバイスを選択します。',passkeyUnavailable:'このブラウザーではパスキーを利用できません。パスワードを使ってください。',setupTitle:'パスキーを追加',setupHelp:'管理者からの一度限りの登録招待です。確認後、デバイスまたはパスワード管理ツールがパスキーを保存します。',registerPasskey:'パスキーを追加',passkeyWaiting:'デバイスでパスキーを確認してください…',registering:'デバイスで新しいパスキーを確認してください…',passkeyCancelled:'操作がキャンセルされたか、時間切れになりました。再試行するかパスワードを使ってください。',passkeyRejected:'パスキーを確認できませんでした。再試行するかパスワードを使ってください。',passkeyRegistered:'パスキーを追加しました。「パスキーを使う」でロックを解除できます。',inviteInvalid:'招待は期限切れか使用済みです。管理者に新しい招待を依頼してください。',passkeyDuplicate:'このデバイスには登録済みのパスキーがあります。それを使ってログインしてください。',passkeyThrottled:'パスキーの要求が多すぎます。しばらくしてから再試行してください。'},
+    ko:{passkey:'패스키 사용',passkeyHint:'Face ID, Touch ID 또는 다른 기기를 선택하세요.',passkeyUnavailable:'이 브라우저에서 패스키를 사용할 수 없습니다. 비밀번호로 잠금을 해제하세요.',setupTitle:'패스키 추가',setupHelp:'관리자가 보낸 일회용 등록 초대입니다. 확인 후 기기나 비밀번호 관리자가 패스키를 저장합니다.',registerPasskey:'패스키 추가',passkeyWaiting:'기기에서 패스키를 확인해 주세요…',registering:'기기에서 새 패스키를 확인해 주세요…',passkeyCancelled:'패스키 요청을 취소했거나 시간이 초과되었습니다. 다시 시도하거나 비밀번호를 사용하세요.',passkeyRejected:'패스키를 확인하지 못했습니다. 다시 시도하거나 비밀번호를 사용하세요.',passkeyRegistered:'패스키를 추가했습니다. “패스키 사용”을 선택하여 잠금을 해제하세요.',inviteInvalid:'초대가 만료되었거나 이미 사용되었습니다. 관리자에게 새 초대를 요청하세요.',passkeyDuplicate:'이 기기에 등록된 패스키가 있습니다. 해당 패스키로 로그인하세요.',passkeyThrottled:'패스키 요청이 너무 많습니다. 잠시 후 다시 시도하세요.'},
+    th:{passkey:'ใช้พาสคีย์',passkeyHint:'ใช้ Face ID, Touch ID หรือเลือกอุปกรณ์อื่น',passkeyUnavailable:'เบราว์เซอร์นี้ใช้พาสคีย์ไม่ได้ โปรดใช้รหัสผ่านเพื่อปลดล็อก',setupTitle:'เพิ่มพาสคีย์ของคุณ',setupHelp:'นี่คือคำเชิญลงทะเบียนแบบใช้ครั้งเดียวจากเจ้าของเว็บไซต์ หลังยืนยัน อุปกรณ์หรือแอปจัดการรหัสผ่านจะบันทึกพาสคีย์',registerPasskey:'เพิ่มพาสคีย์',passkeyWaiting:'โปรดยืนยันพาสคีย์บนอุปกรณ์ของคุณ…',registering:'โปรดยืนยันพาสคีย์ใหม่บนอุปกรณ์ของคุณ…',passkeyCancelled:'ยกเลิกคำขอพาสคีย์หรือหมดเวลาแล้ว ลองอีกครั้งหรือใช้รหัสผ่าน',passkeyRejected:'ตรวจสอบพาสคีย์ไม่สำเร็จ โปรดลองอีกครั้งหรือใช้รหัสผ่าน',passkeyRegistered:'เพิ่มพาสคีย์แล้ว เลือก “ใช้พาสคีย์” เพื่อปลดล็อก',inviteInvalid:'คำเชิญหมดอายุหรือถูกใช้แล้ว โปรดขอคำเชิญใหม่จากเจ้าของเว็บไซต์',passkeyDuplicate:'อุปกรณ์นี้มีพาสคีย์ที่ลงทะเบียนแล้ว โปรดใช้พาสคีย์นั้นเข้าสู่ระบบ',passkeyThrottled:'มีคำขอพาสคีย์มากเกินไป โปรดลองอีกครั้งภายหลัง'},
+    ru:{passkey:'Войти с ключом доступа',passkeyHint:'Используйте Face ID, Touch ID или выберите другое устройство.',passkeyUnavailable:'В этом браузере ключи доступа недоступны. Используйте пароль.',setupTitle:'Добавить ключ доступа',setupHelp:'Это одноразовое приглашение от владельца. После подтверждения устройство или менеджер паролей сохранит ключ доступа.',registerPasskey:'Добавить ключ доступа',passkeyWaiting:'Подтвердите ключ доступа на устройстве…',registering:'Подтвердите новый ключ доступа на устройстве…',passkeyCancelled:'Запрос отменён или время ожидания истекло. Повторите попытку или используйте пароль.',passkeyRejected:'Не удалось проверить ключ доступа. Повторите попытку или используйте пароль.',passkeyRegistered:'Ключ доступа добавлен. Выберите «Войти с ключом доступа» для разблокировки.',inviteInvalid:'Приглашение истекло или уже использовано. Запросите новое у владельца.',passkeyDuplicate:'На этом устройстве уже есть зарегистрированный ключ доступа. Используйте его для входа.',passkeyThrottled:'Слишком много запросов ключа доступа. Попробуйте позже.'}
+  };
+
+  for(const locale of Object.keys(passkeyCopy))Object.assign(strings[locale],passkeyCopy[locale]);
+  const noPasskeys={
+    'zh-HK':'目前未登記通行密鑰。請使用密碼，或用擁有人提供嘅邀請登記。',
+    en:'No passkey is registered yet. Use the password, or register with an invitation from the owner.',
+    'zh-CN':'目前尚未登记通行密钥。请使用密码，或通过网站所有者提供的邀请登记。',
+    ja:'パスキーはまだ登録されていません。パスワードを使うか、管理者からの招待で登録してください。',
+    ko:'등록된 패스키가 없습니다. 비밀번호를 사용하거나 관리자의 초대로 등록하세요.',
+    th:'ยังไม่มีพาสคีย์ที่ลงทะเบียน โปรดใช้รหัสผ่านหรือลงทะเบียนผ่านคำเชิญจากเจ้าของเว็บไซต์',
+    ru:'Ключ доступа ещё не зарегистрирован. Используйте пароль или зарегистрируйте ключ по приглашению владельца.'
+  };
+
+  for(const locale of Object.keys(noPasskeys))strings[locale].noPasskeys=noPasskeys[locale];
   let checking = null;
   try { language = localStorage.getItem('bhr-language') || language; } catch {}
   if (!strings[language]) language = 'zh-HK';
@@ -151,6 +187,48 @@
   const clearKey = () => { memoryKey = null; try { sessionStorage.removeItem(storageKey); } catch {} };
   const encode = buffer => btoa(String.fromCharCode(...new Uint8Array(buffer)));
   const decode = value => Uint8Array.from(atob(value), char => char.charCodeAt(0));
+  const bytes = decode;
+  function webauthnBytes(value){
+    if(typeof value!=='string'||value.length>65536||!/^[A-Za-z0-9_-]+$/.test(value))throw new Error('Invalid credential data');
+    return bytes(value.replace(/-/g,'+').replace(/_/g,'/')+'='.repeat((4-value.length%4)%4));
+  }
+  function webauthnBase64(value){
+    if(!(value instanceof ArrayBuffer)&&!ArrayBuffer.isView(value))throw new Error('Invalid credential data');
+    const data=value instanceof ArrayBuffer?new Uint8Array(value):new Uint8Array(value.buffer,value.byteOffset,value.byteLength);
+    if(data.length>65536)throw new Error('Credential data too large');
+    let binary='';for(const byte of data)binary+=String.fromCharCode(byte);
+    return btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+  }
+  function credentialOptions(options,registration){
+    if(!options||typeof options!=='object')throw new Error('Missing credential options');
+    const next={...options,challenge:webauthnBytes(options.challenge)};
+    if(registration){
+      next.user={...options.user,id:webauthnBytes(options.user?.id)};
+      next.authenticatorSelection={...options.authenticatorSelection,residentKey:'required',userVerification:'required'};
+    }else next.userVerification='required';
+    for(const field of ['allowCredentials','excludeCredentials'])if(next[field]){
+      if(!Array.isArray(next[field])||next[field].length>100)throw new Error('Invalid credential list');
+      next[field]=next[field].map(item=>({...item,id:webauthnBytes(item.id)}));
+    }
+    return next;
+  }
+  function credentialJSON(credential,registration){
+    if(!credential||credential.type!=='public-key')throw new Error('Missing credential');
+    const data=credential.response;
+    const response={clientDataJSON:webauthnBase64(data.clientDataJSON)};
+    if(registration){
+      response.attestationObject=webauthnBase64(data.attestationObject);
+      if(typeof data.getTransports==='function')response.transports=data.getTransports();
+    }else{
+      response.authenticatorData=webauthnBase64(data.authenticatorData);
+      response.signature=webauthnBase64(data.signature);
+      response.userHandle=data.userHandle?webauthnBase64(data.userHandle):null;
+    }
+    return {id:credential.id,rawId:webauthnBase64(credential.rawId),type:credential.type,response,
+      clientExtensionResults:credential.getClientExtensionResults(),
+      ...(credential.authenticatorAttachment?{authenticatorAttachment:credential.authenticatorAttachment}:{})};
+  }
+
   const request = (type, data = {}) => new Promise((resolve, reject) => {
     const controller = navigator.serviceWorker.controller;
     if (!controller) { reject(new Error('network')); return; }
@@ -175,12 +253,17 @@
     const status = document.querySelector('[data-vault-status]');
     if (status) {
       status.textContent = copy[statusName] || copy.network;
-      status.classList.toggle('is-error', ['passwordError', 'network', 'changed', 'unsupported'].includes(statusName));
+      status.classList.toggle('is-error', ['passwordError', 'network', 'changed', 'unsupported','passkeyRejected','inviteInvalid','passkeyThrottled','passkeyDuplicate'].includes(statusName));
     }
     const show = document.querySelector('[data-vault-show]');
     if (show) show.textContent = document.querySelector('[data-vault-password]').type === 'password' ? copy.show : copy.hide;
     const submit = document.querySelector('[data-vault-submit]');
-    if (submit) submit.textContent = busy ? copy.busy : copy.unlock;
+    if (submit) {submit.textContent = busy ? copy.busy : copy.unlock;submit.disabled=busy||!gateReady;}
+    if(passkeyButton){passkeyButton.textContent=copy.passkey;passkeyButton.disabled=busy||!gateReady||!passkeySupported;}
+    if(registerButton){registerButton.textContent=copy.registerPasskey;registerButton.disabled=busy||!gateReady||!passkeySupported||!setupToken;}
+    const note=document.querySelector('[data-vault-passkey-note]');
+    if(note)note.textContent=passkeySupported?copy.passkeyHint:copy.passkeyUnavailable;
+    for(const element of document.querySelectorAll('[data-passkey-text]'))element.textContent=copy[element.dataset.passkeyText]||'';
   }
   function closeContent() {
     clearKey();
@@ -232,6 +315,57 @@
     const input = document.querySelector('[data-vault-password]');
     const submit = document.querySelector('[data-vault-submit]');
     let settings;
+    const enter=()=>location.pathname===new URL('unlock.html',root).pathname?location.replace(root.href):location.reload();
+    async function openWithKey(key){
+      const result=await request('VAULT_UNLOCK',{key,build:BUILD});
+      if(!result.ok)throw Error(result.error);
+      saveKey(key);input.value='';enter();
+    }
+    async function accessRequest(path,body){
+      const bridge=settings.passkeys,origin=new URL(bridge.authOrigin);
+      if(origin.protocol!=='https:'||origin.origin!==bridge.authOrigin||!origin.hostname.endsWith('.workers.dev'))throw Error('Invalid authentication origin');
+      const response=await fetch(new URL(path,origin),{method:'POST',mode:'cors',credentials:'omit',cache:'no-store',redirect:'error',referrerPolicy:'no-referrer',signal:AbortSignal.timeout(20000),headers:{'Content-Type':'application/json'},body:JSON.stringify({...body,archiveId:bridge.archiveId})});
+      const reply=await response.json();
+      if(!response.ok||reply.ok!==true){const error=Error('Passkey access denied');error.accessCode=reply.code;throw error;}
+      return reply;
+    }
+    function failPasskey(error){
+      busy=false;
+      statusName=['NotAllowedError','AbortError'].includes(error.name)?'passkeyCancelled':error.name==='InvalidStateError'?'passkeyDuplicate':
+        ['invalid_invitation','invitation_expired','invitation_used','invite_invalid'].includes(error.accessCode)?'inviteInvalid':
+        error.accessCode==='no_passkeys'?'noPasskeys':
+        ['rate_limited','passkey_rate_limited','passkey_rate_limit','passkey_busy'].includes(error.accessCode)?'passkeyThrottled':'passkeyRejected';
+      render();
+    }
+    passkeyButton?.addEventListener('click',async()=>{
+      if(busy||!gateReady||!settings.passkeys||!passkeySupported)return;
+      busy=true;statusName='passkeyWaiting';render();
+      try{
+        const bridge=settings.passkeys;
+        const start=await accessRequest('/v1/passkeys/auth/options',{});
+        const credential=await navigator.credentials.get({publicKey:credentialOptions(start.options,false)});
+        const access=await accessRequest('/v1/passkeys/auth/verify',{flowId:start.flowId,response:credentialJSON(credential,false)});
+        if(access.archiveId!==bridge.archiveId)throw Error('Archive mismatch');
+        const raw=decode(access.key);access.key='';if(raw.length!==32){raw.fill(0);throw Error('Invalid key');}
+        let wrappingKey;try{wrappingKey=await crypto.subtle.importKey('raw',raw,'AES-GCM',false,['decrypt']);}finally{raw.fill(0);}
+        const iv=decode(bridge.iv),wrapped=decode(bridge.wrappedKey);
+        if(bridge.version!==1||iv.length!==12||wrapped.length!==48)throw Error('Invalid bridge');
+        const aad=new TextEncoder().encode(`lunarvow-passkey-bridge-v1:${BUILD}:${bridge.archiveId}:${root.pathname}`);
+        const archiveKey=new Uint8Array(await crypto.subtle.decrypt({name:'AES-GCM',iv,additionalData:aad},wrappingKey,wrapped));
+        try{if(archiveKey.length!==32)throw Error('Invalid archive key');await openWithKey(encode(archiveKey));}finally{archiveKey.fill(0);}
+      }catch(error){failPasskey(error);}
+    });
+    registerButton?.addEventListener('click',async()=>{
+      if(busy||!gateReady||!setupToken||!settings.passkeys||!passkeySupported)return;
+      busy=true;statusName='registering';render();
+      try{
+        const start=await accessRequest('/v1/passkeys/register/options',{token:setupToken});
+        const credential=await navigator.credentials.create({publicKey:credentialOptions(start.options,true)});
+        const result=await accessRequest('/v1/passkeys/register/verify',{flowId:start.flowId,response:credentialJSON(credential,true)});
+        if(result.registered!==true)throw Error('Registration incomplete');
+        setupToken='';setupPanel.hidden=true;busy=false;statusName='passkeyRegistered';render();passkeyButton.focus();
+      }catch(error){failPasskey(error);}
+    });
     form.addEventListener('submit', async event => {
       event.preventDefault();
       if (busy || !settings || !input.value) return;
@@ -241,10 +375,7 @@
         input.value = '';
         const material = await crypto.subtle.importKey('raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveBits']);
         const key = encode(await crypto.subtle.deriveBits({ name: 'PBKDF2', salt: decode(settings.salt), iterations: settings.iterations, hash: 'SHA-256' }, material, 256));
-        const result = await request('VAULT_UNLOCK', { key, build: BUILD });
-        if (!result.ok) throw new Error(result.error);
-        saveKey(key);
-        location.reload();
+        await openWithKey(key);
       } catch (error) {
         clearKey(); statusName = error.message === 'password' ? 'passwordError' : error.message === 'changed' ? 'changed' : 'network';
         busy = false; submit.disabled = false; render(); input.focus();
@@ -269,15 +400,19 @@
       settings = await response.json();
       if (settings.format !== 'lunarvow-vault-v2' || settings.build !== BUILD || settings.compression !== 'gzip' || settings.iterations !== 600000 || !/^[A-Za-z0-9+/]{43}=$/.test(settings.salt)) throw new Error('changed');
       const saved = readKey();
-      if (saved) {
+      if (!setupToken && saved) {
         const result = await request('VAULT_UNLOCK', saved);
-        if (result.ok) { location.reload(); return; }
+        if (result.ok) { enter(); return; }
         clearKey();
-      } else {
+      } else if(!setupToken) {
         const state = await request('VAULT_STATUS');
-        if (state.ok && state.build === BUILD) { location.reload(); return; }
+        if (state.ok && state.build === BUILD) { enter(); return; }
       }
-      input.disabled = false; submit.disabled = false;
+      if(settings.passkeys){
+        document.querySelector('[data-vault-passkeys]').hidden=false;
+        setupPanel.hidden=!setupToken;
+      }
+      gateReady=true;input.disabled = false; submit.disabled = false;
       statusName = 'ready'; render();
     } catch (error) { statusName = ['unsupported', 'changed'].includes(error.message) ? error.message : 'network'; render(); }
   }

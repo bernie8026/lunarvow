@@ -1,5 +1,15 @@
 # 月下誓約檔案庫：密碼加密版
 
+## 通行密鑰（Passkey）
+
+入口亦支援 Face ID／Touch ID 或其他 WebAuthn 通行密鑰。Passkey 與個人作品集共用擁有人嘅 Cloudflare 驗證服務及 `bernie8026.github.io` RP ID，已登記嘅通行密鑰可以解鎖兩個網站。新增通行密鑰只限擁有人發出嘅一次性邀請；`unlock.html#passkey-setup=…` 係專用登記入口，邀請會立即從網址移除。
+
+月下原有密碼及加密封包保持不變。公開設定只多一份以驗證服務金鑰加密、綁定網站路徑／建置版本嘅 AES-256-GCM 密鑰封套。瀏覽器完成伺服器 WebAuthn 簽署、來源、RP ID 及使用者驗證後，先可以解開封套，再解密原網站。公開檔案不包含密碼、原始解密金鑰、擁有人憑證或私人通行密鑰。原有密碼仍由本機驗證；新增 Passkey 不會將舊密碼流程改成 IP 次數鎖定。
+
+本機 `.private/passkey-config-path.txt` 保存私人驗證服務設定檔路徑，亦可以用 `LUNAR_PASSKEY_ACCESS_FILE` 指定。設定檔含服務金鑰，必須留喺 Git 以外。只更新入口及 Passkey 封套、保留現有密文時可執行 `npm run setup:passkeys`；此指令會先驗證私人密碼可以解開現有封包。完整重新建置會自動重新建立封套；已有 Passkey 設定而私人設定缺失時，建置會停止，避免意外移除 Passkey。
+
+新增檢查 `tests/passkey-bridge.cjs` 驗證正確解包、錯誤金鑰、跨網站路徑、篡改拒絕及公開資料無私人憑證。瀏覽器 WebAuthn 整合另外以本機真實驗證 Worker、SQLite 同 Chrome 虛擬認證器驗證；實體 Face ID／Touch ID、iCloud 同步及其他裝置 QR 提示需要由使用者喺裝置確認。
+
 GitHub Pages 保留現有 `main / (root)` 發佈方式及 `/lunarvow/` 網址。公開倉庫只保留密碼入口、少量解鎖／建置程式、測試及一份加密封包，不需要 Private 倉庫、GitHub Pro 或 Actions Secret。
 
 **合併本次加密發佈後，等待原有 Pages build and deployment 成功才會上鎖。** 正式密碼另存於私人密碼檔，沒有寫入 Git、URL、程式或建置日誌。

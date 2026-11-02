@@ -1,4 +1,5 @@
 node_modules/
+.wrangler/
 test-results/
 .private/
 .encrypted-dist/

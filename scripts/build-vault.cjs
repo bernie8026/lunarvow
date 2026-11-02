@@ -43,7 +43,7 @@ function collect(root) {
   if (!names.has('index.html') || fs.readFileSync(path.join(root,'index.html'),'utf8').includes('data-vault-gate')) throw new Error('Editable original source is required, not an already encrypted publication.');
   return {files:files.sort(),pages:[...new Set(manifest.resources.map(r=>r.url.split('?')[0]).filter(n=>n.endsWith('.html')))]};
 }
-function buildVault({root=path.join(project,'.private/source'),password,basePath='/lunarvow/',output=path.join(project,'.encrypted-dist')}={}) {
+function buildVault({root=path.join(project,'.private/source'),password,access,basePath='/lunarvow/',output=path.join(project,'.encrypted-dist')}={}) {
   validPassword(password);
   if (!/^\/(?:[A-Za-z0-9_-]+\/)*$/.test(basePath)) throw new Error('VAULT_BASE_PATH must be an absolute directory path.');
   root = fs.realpathSync(root); output = path.resolve(output);
@@ -68,10 +68,12 @@ function buildVault({root=path.join(project,'.private/source'),password,basePath
     const file = `${crypto.randomBytes(24).toString('hex')}.bin`;
     write(`_vault/data/${file}`,ciphertext);
     const config = {format:FORMAT,build,compression:'gzip',iterations:ITERATIONS,salt:salt.toString('base64'),archive:{file,iv:iv.toString('base64')}};
-    const template = name => fs.readFileSync(path.join(__dirname,'vault',name),'utf8').replaceAll('@@ROOT@@',basePath).replaceAll('@@BUILD@@',build);
+    if(access)config.passkeys=require('./passkey-bridge.cjs').createBridge(config,password,access,basePath);
+    const template = name => fs.readFileSync(path.join(__dirname,'vault',name),'utf8').replaceAll('@@ROOT@@',basePath).replaceAll('@@BUILD@@',build).replaceAll('@@AUTH_ORIGIN@@',config.passkeys?.authOrigin||'');
     const gate = template('gate.html');
     for (const name of source.pages) write(name,gate);
     write('404.html',gate);
+    write('unlock.html',gate);
     write('_vault/config.json',JSON.stringify(config)+'\n');
     for (const name of ['gate.css','session.css','runtime.js']) write(`_vault/${name}`,template(name));
     write('vault-sw.js',template('sw.js'));
@@ -116,7 +118,13 @@ if (require.main===module) {
   try {
     const password=readPassword();
     if (process.argv.includes('--recover')) console.log(`Recovered ${recover({password})} original source files into .private/source/.`);
-    else {const result=buildVault({password,basePath:process.env.VAULT_BASE_PATH||'/lunarvow/'});console.log(`Encrypted ${result.count} source files. Publish only the verified .encrypted-dist/ output.`);}
+    else {const access=readPasskeyAccess();const result=buildVault({password,access,basePath:process.env.VAULT_BASE_PATH||'/lunarvow/'});console.log(`Encrypted ${result.count} source files. Publish only the verified .encrypted-dist/ output.`);}
   } catch(error) {console.error(error.code==='ENOENT'?'Private password or editable source is missing. See README.md.':error.message);process.exitCode=1;}
 }
-module.exports={buildVault,readArchive,recover,readPassword,FORMAT,ITERATIONS};
+function readPasskeyAccess(){
+  const pointer=path.join(project,'.private/passkey-config-path.txt');
+  const file=process.env.LUNAR_PASSKEY_ACCESS_FILE||(fs.existsSync(pointer)?fs.readFileSync(pointer,'utf8').trim():null);
+  if(file)return JSON.parse(fs.readFileSync(file,'utf8'));
+  if(fs.existsSync(path.join(project,'_vault/config.json'))&&JSON.parse(fs.readFileSync(path.join(project,'_vault/config.json'),'utf8')).passkeys)throw Error('Private passkey configuration is required to preserve existing passkey access.');
+}
+module.exports={buildVault,readArchive,recover,readPassword,readPasskeyAccess,FORMAT,ITERATIONS};

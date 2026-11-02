@@ -4,7 +4,7 @@ const BUILD = '@@BUILD@@';
 const ROOT = new URL(self.registration.scope);
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
-const publicFiles = new Set(['vault-sw.js', '_vault/config.json', '_vault/runtime.js', '_vault/gate.css', '_vault/session.css']);
+const publicFiles = new Set(['vault-sw.js', 'unlock.html', '_vault/config.json', '_vault/runtime.js', '_vault/gate.css', '_vault/session.css']);
 let configPromise;
 let session = null;
 let recovering = null;
@@ -100,7 +100,7 @@ async function serve(request, name) {
     if (body.byteLength !== record.bytes) throw new Error('invalid');
     if (name.endsWith('.html')) {
       let html = decoder.decode(body).replace(/<html\b/i, '<html data-vault-content data-vault-pending');
-      const bootstrap = `<link rel="stylesheet" href="${ROOT.pathname}_vault/session.css?v=${BUILD}"><script src="${ROOT.pathname}_vault/runtime.js?v=${BUILD}" defer></script>`;
+      const bootstrap = `<link rel="stylesheet" href="${ROOT.pathname}_vault/session.css?v=${BUILD}-passkeys-1"><script src="${ROOT.pathname}_vault/runtime.js?v=${BUILD}-passkeys-1" defer></script>`;
       html = html.replace(/<head\b[^>]*>/i, match => match + bootstrap);
       body = encoder.encode(html);
     }

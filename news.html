@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow, noarchive">
   <meta name="referrer" content="no-referrer">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; worker-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self' https://lunarvow-access.bernie-lunarvow.workers.dev; worker-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'none'">
   <title>月下檔案已封存 // Lunar Vow</title>
-  <link rel="stylesheet" href="/lunarvow/_vault/gate.css?v=7795c0a2f1d23c838791e4af8e704bca">
-  <script src="/lunarvow/_vault/runtime.js?v=7795c0a2f1d23c838791e4af8e704bca" defer></script>
+  <link rel="stylesheet" href="/lunarvow/_vault/gate.css?v=7795c0a2f1d23c838791e4af8e704bca-passkeys-1">
+  <script src="/lunarvow/_vault/runtime.js?v=7795c0a2f1d23c838791e4af8e704bca-passkeys-1" defer></script>
 </head>
 <body>
   <header class="vault-header">
@@ -36,6 +36,15 @@
         <p id="vault-status" class="vault-status" data-vault-status role="status" aria-live="polite">正在準備入口…</p>
         <button type="submit" class="vault-submit" data-vault-submit disabled>解鎖檔案</button>
       </form>
+      <div class="vault-passkey-controls" data-vault-passkeys hidden>
+        <button type="button" class="vault-submit vault-passkey" data-vault-passkey disabled>使用通行密鑰</button>
+        <p class="vault-note" data-vault-passkey-note></p>
+        <section class="vault-passkey-setup" data-vault-passkey-setup hidden aria-labelledby="vault-passkey-heading">
+          <h2 id="vault-passkey-heading" data-passkey-text="setupTitle">新增你的通行密鑰</h2>
+          <p class="vault-note" data-passkey-text="setupHelp"></p>
+          <button type="button" class="vault-submit" data-vault-passkey-register disabled>新增通行密鑰</button>
+        </section>
+      </div>
       <p class="vault-note" data-vault-text="note">解鎖後可隨時按「鎖定檔案」關閉存取。</p>
       <noscript><p class="vault-status is-error">需要啟用 JavaScript 先可以解鎖。 JavaScript is required to unlock this archive.</p></noscript>
     </section>

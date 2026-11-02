@@ -55,3 +55,9 @@ h1 { margin:0; max-width:9em; font-family:Georgia,"Songti TC",serif; font-weight
 @media(max-width:600px) { .vault-header { flex-wrap:wrap; gap:12px; } .vault-languages { max-width:100%; } }
 html[lang="th"] .vault-intro h1 { line-height:1.5; }
 .vault-intro h1,.vault-description,.vault-note,.vault-submit { overflow-wrap:anywhere; }
+.vault-passkey-controls { margin-top:1rem; }
+.vault-passkey-controls[hidden],.vault-passkey-setup[hidden] { display:none; }
+.vault-passkey { border-radius:12px; background:#edb5ca12; letter-spacing:.02em; }
+.vault-passkey-setup { margin-top:1.5rem; padding-top:1.5rem; border-top:1px solid #bb6d8740; }
+.vault-passkey-setup h2 { font-size:1.1rem; font-weight:500; }
+.vault-passkey-setup .vault-submit { margin-top:1rem; }
