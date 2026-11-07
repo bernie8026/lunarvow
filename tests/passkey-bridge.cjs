@@ -1,21 +1,34 @@
 'use strict';
-const assert=require('node:assert/strict'),crypto=require('node:crypto');
-const {createBridge,AAD}=require('../scripts/passkey-bridge.cjs');
-const config={build:crypto.randomBytes(16).toString('hex'),salt:crypto.randomBytes(32).toString('base64'),iterations:600000};
-const password=crypto.randomBytes(32).toString('base64url'),key=crypto.randomBytes(32);
-const access={archiveId:crypto.randomUUID(),archiveKeyB64:key.toString('base64'),authOrigin:'https://fixture.workers.dev',adminToken:'private-owner-token'};
-const bridge=createBridge(config,password,access);
-function unwrap(rootKey=key,basePath='/lunarvow/',wrapped=Buffer.from(bridge.wrappedKey,'base64')){
- const decipher=crypto.createDecipheriv('aes-256-gcm',rootKey,Buffer.from(bridge.iv,'base64'));
- decipher.setAAD(Buffer.from(AAD(config,access.archiveId,basePath)));decipher.setAuthTag(wrapped.subarray(-16));
- return Buffer.concat([decipher.update(wrapped.subarray(0,-16)),decipher.final()]);
+const assert = require('node:assert/strict');
+const crypto = require('node:crypto');
+const { createBridge, unwrapBridge } = require('../scripts/passkey-bridge.cjs');
+
+const config = { build: crypto.randomBytes(16).toString('hex') };
+const archiveKey = crypto.randomBytes(32);
+const access = {
+  archiveId: crypto.randomUUID(),
+  archiveKeyB64: crypto.randomBytes(32).toString('base64'),
+  authOrigin: 'https://fixture.workers.dev',
+  adminToken: 'private-owner-token',
+};
+const bridge = createBridge(config, archiveKey, access);
+const publication = { ...config, passkeys: bridge };
+
+assert.deepEqual(unwrapBridge(publication, access), archiveKey);
+assert.throws(() => unwrapBridge(publication, { ...access, archiveKeyB64: crypto.randomBytes(32).toString('base64') }));
+assert.throws(() => unwrapBridge(publication, { ...access, archiveId: crypto.randomUUID() }));
+assert.throws(() => unwrapBridge(publication, access, '/other/'));
+assert.throws(() => unwrapBridge({ ...publication, build: crypto.randomBytes(16).toString('hex') }, access));
+
+const corrupt = Buffer.from(bridge.wrappedKey, 'base64');
+corrupt[0] ^= 1;
+assert.throws(() => unwrapBridge({ ...config, passkeys: { ...bridge, wrappedKey: corrupt.toString('base64') } }, access));
+assert.notEqual(createBridge(config, archiveKey, access).iv, bridge.iv);
+assert.throws(() => createBridge(config, archiveKey, { ...access, authOrigin: 'http://fixture.workers.dev' }));
+assert.throws(() => createBridge(config, Buffer.alloc(31), access));
+
+for (const secret of [archiveKey.toString('base64'), access.archiveKeyB64, access.adminToken]) {
+  assert(!JSON.stringify(publication).includes(secret));
 }
-const expected=crypto.pbkdf2Sync(password,Buffer.from(config.salt,'base64'),600000,32,'sha256');
-assert.deepEqual(unwrap(),expected);
-assert.throws(()=>unwrap(crypto.randomBytes(32)));assert.throws(()=>unwrap(key,'/other/'));
-const corrupt=Buffer.from(bridge.wrappedKey,'base64');corrupt[0]^=1;assert.throws(()=>unwrap(key,'/lunarvow/',corrupt));
-assert.notEqual(createBridge(config,password,access).wrappedKey,bridge.wrappedKey);
-for(const secret of [password,expected.toString('base64'),access.archiveKeyB64,access.adminToken])assert(!JSON.stringify(bridge).includes(secret));
-assert.throws(()=>createBridge(config,password,{...access,authOrigin:'http://fixture.workers.dev'}));
-expected.fill(0);key.fill(0);
-console.log('PASS passkey bridge: authenticated unwrap, wrong key, wrong site, tampering, independent IVs and no public credentials');
+archiveKey.fill(0);
+console.log('PASS passkey bridge: authenticated unwrap, wrong key and archive, wrong site or build, tampering, independent IVs and no public credentials');

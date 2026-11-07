@@ -2,7 +2,9 @@ const fs = require('node:fs');
 const path = require('node:path');
 const crypto = require('node:crypto');
 const zlib = require('node:zlib');
-const FORMAT = 'lunarvow-vault-v2';
+const {createBridge,unwrapBridge,validateAccess} = require('./passkey-bridge.cjs');
+const FORMAT = 'lunarvow-vault-v3';
+const LEGACY_FORMAT = 'lunarvow-vault-v2';
 const ITERATIONS = 600000;
 const project = path.resolve(__dirname, '..');
 const TYPES = { '.html':'text/html; charset=utf-8', '.css':'text/css; charset=utf-8', '.js':'text/javascript; charset=utf-8',
@@ -43,8 +45,8 @@ function collect(root) {
   if (!names.has('index.html') || fs.readFileSync(path.join(root,'index.html'),'utf8').includes('data-vault-gate')) throw new Error('Editable original source is required, not an already encrypted publication.');
   return {files:files.sort(),pages:[...new Set(manifest.resources.map(r=>r.url.split('?')[0]).filter(n=>n.endsWith('.html')))]};
 }
-function buildVault({root=path.join(project,'.private/source'),password,access,basePath='/lunarvow/',output=path.join(project,'.encrypted-dist')}={}) {
-  validPassword(password);
+function buildVault({root=path.join(project,'.private/source'),access,basePath='/lunarvow/',output=path.join(project,'.encrypted-dist')}={}) {
+  validateAccess(access);
   if (!/^\/(?:[A-Za-z0-9_-]+\/)*$/.test(basePath)) throw new Error('VAULT_BASE_PATH must be an absolute directory path.');
   root = fs.realpathSync(root); output = path.resolve(output);
   if (output === root || root.startsWith(output+path.sep)) throw new Error('Output must not replace its editable source.');
@@ -52,8 +54,8 @@ function buildVault({root=path.join(project,'.private/source'),password,access,b
   const source = collect(root);
   fs.mkdirSync(path.dirname(output),{recursive:true});
   const staging = fs.mkdtempSync(path.join(path.dirname(output),'.encrypted-build-'));
-  const build = crypto.randomBytes(16).toString('hex'), salt = crypto.randomBytes(32), iv = crypto.randomBytes(12);
-  const key = crypto.pbkdf2Sync(password.normalize('NFC'),salt,ITERATIONS,32,'sha256');
+  const build = crypto.randomBytes(16).toString('hex'), iv = crypto.randomBytes(12);
+  const key = crypto.randomBytes(32);
   const write = (name,value) => { const file=path.join(staging,name); fs.mkdirSync(path.dirname(file),{recursive:true}); fs.writeFileSync(file,value); };
   try {
     const files = Object.create(null);
@@ -67,9 +69,9 @@ function buildVault({root=path.join(project,'.private/source'),password,access,b
     const ciphertext = Buffer.concat([cipher.update(compressed),cipher.final(),cipher.getAuthTag()]);
     const file = `${crypto.randomBytes(24).toString('hex')}.bin`;
     write(`_vault/data/${file}`,ciphertext);
-    const config = {format:FORMAT,build,compression:'gzip',iterations:ITERATIONS,salt:salt.toString('base64'),archive:{file,iv:iv.toString('base64')}};
-    if(access)config.passkeys=require('./passkey-bridge.cjs').createBridge(config,password,access,basePath);
-    const template = name => fs.readFileSync(path.join(__dirname,'vault',name),'utf8').replaceAll('@@ROOT@@',basePath).replaceAll('@@BUILD@@',build).replaceAll('@@AUTH_ORIGIN@@',config.passkeys?.authOrigin||'');
+    const config = {format:FORMAT,build,compression:'gzip',archive:{file,iv:iv.toString('base64')}};
+    config.passkeys = createBridge(config,key,access,basePath);
+    const template = name => fs.readFileSync(path.join(__dirname,'vault',name),'utf8').replaceAll('@@ROOT@@',basePath).replaceAll('@@BUILD@@',build).replaceAll('@@AUTH_ORIGIN@@',config.passkeys.authOrigin);
     const gate = template('gate.html');
     for (const name of source.pages) write(name,gate);
     write('404.html',gate);
@@ -82,25 +84,37 @@ function buildVault({root=path.join(project,'.private/source'),password,access,b
     return {output,count:source.files.length,pages:source.pages,config};
   } finally {key.fill(0); fs.rmSync(staging,{recursive:true,force:true});}
 }
-function readArchive(encryptedRoot,password) {
-  validPassword(password);
-  const config = JSON.parse(fs.readFileSync(path.join(encryptedRoot,'_vault/config.json'),'utf8'));
-  if (config.format!==FORMAT || config.compression!=='gzip' || config.iterations!==ITERATIONS || !/^[a-f0-9]{48}\.bin$/.test(config.archive?.file)) throw new Error('Invalid archive format.');
-  const salt=Buffer.from(config.salt,'base64'),iv=Buffer.from(config.archive.iv,'base64');
-  if (salt.length!==32 || iv.length!==12) throw new Error('Invalid cryptographic parameters.');
-  const key=crypto.pbkdf2Sync(password.normalize('NFC'),salt,ITERATIONS,32,'sha256');
+function archiveConfig(encryptedRoot) {
+  return JSON.parse(fs.readFileSync(path.join(encryptedRoot,'_vault/config.json'),'utf8'));
+}
+function readArchive(encryptedRoot,{access,password,basePath='/lunarvow/'}={}) {
+  const config = archiveConfig(encryptedRoot);
+  if (![FORMAT, LEGACY_FORMAT].includes(config.format) || config.compression!=='gzip' ||
+      !/^[a-f0-9]{32}$/.test(config.build) || !/^[a-f0-9]{48}\.bin$/.test(config.archive?.file)) throw new Error('Invalid archive format.');
+  const iv = Buffer.from(config.archive.iv,'base64');
+  if (iv.length !== 12) throw new Error('Invalid archive IV.');
+  let key;
+  if (config.format === FORMAT) {
+    if ('salt' in config || 'iterations' in config) throw new Error('Unexpected password parameters in a passkey archive.');
+    key = unwrapBridge(config,access,basePath);
+  } else {
+    validPassword(password);
+    const salt = Buffer.from(config.salt,'base64');
+    if (salt.length !== 32 || config.iterations !== ITERATIONS) throw new Error('Invalid legacy cryptographic parameters.');
+    key = crypto.pbkdf2Sync(password.normalize('NFC'),salt,ITERATIONS,32,'sha256');
+  }
   try {
     const ciphertext=fs.readFileSync(path.join(encryptedRoot,'_vault/data',config.archive.file));
     const decipher=crypto.createDecipheriv('aes-256-gcm',key,iv);
-    decipher.setAAD(Buffer.from(`${FORMAT}:${config.build}:@archive`)); decipher.setAuthTag(ciphertext.subarray(-16));
+    decipher.setAAD(Buffer.from(`${config.format}:${config.build}:@archive`)); decipher.setAuthTag(ciphertext.subarray(-16));
     const compressed=Buffer.concat([decipher.update(ciphertext.subarray(0,-16)),decipher.final()]);
     const index=JSON.parse(zlib.gunzipSync(compressed,{maxOutputLength:150*1024*1024}));
-    if (index.format!==FORMAT || index.build!==config.build || !index.files?.['index.html']) throw new Error('Invalid authenticated archive.');
+    if (index.format!==config.format || index.build!==config.build || !index.files?.['index.html']) throw new Error('Invalid authenticated archive.');
     return index;
   } finally {key.fill(0);}
 }
-function recover({encryptedRoot=project,password,output=path.join(project,'.private/source')}={}) {
-  const index=readArchive(encryptedRoot,password); output=path.resolve(output);
+function recover({encryptedRoot=project,access,password,basePath,output=path.join(project,'.private/source')}={}) {
+  const index=readArchive(encryptedRoot,{access,password,basePath}); output=path.resolve(output);
   if (fs.existsSync(output)) throw new Error('Recovery requires a new, empty destination. Existing editable source will not be overwritten.');
   const records=Object.entries(index.files);
   for (const [name,record] of records) {
@@ -114,17 +128,21 @@ function recover({encryptedRoot=project,password,output=path.join(project,'.priv
     fs.renameSync(staging,output); return records.length;
   } finally {fs.rmSync(staging,{recursive:true,force:true});}
 }
+function readPasskeyAccess() {
+  const file=process.env.LUNAR_PASSKEY_ACCESS_FILE || path.join(project,'.private/lunar-vault-access.json');
+  if (!fs.existsSync(file)) throw new Error('Private Lunar Vault passkey configuration is required.');
+  return JSON.parse(fs.readFileSync(file,'utf8'));
+}
 if (require.main===module) {
   try {
-    const password=readPassword();
-    if (process.argv.includes('--recover')) console.log(`Recovered ${recover({password})} original source files into .private/source/.`);
-    else {const access=readPasskeyAccess();const result=buildVault({password,access,basePath:process.env.VAULT_BASE_PATH||'/lunarvow/'});console.log(`Encrypted ${result.count} source files. Publish only the verified .encrypted-dist/ output.`);}
-  } catch(error) {console.error(error.code==='ENOENT'?'Private password or editable source is missing. See README.md.':error.message);process.exitCode=1;}
+    const basePath = process.env.VAULT_BASE_PATH || '/lunarvow/';
+    if (process.argv.includes('--recover')) {
+      const options = archiveConfig(project).format === LEGACY_FORMAT ? {password:readPassword()} : {access:readPasskeyAccess()};
+      console.log(`Recovered ${recover({...options,basePath})} source files into .private/source/.`);
+    } else {
+      const result = buildVault({access:readPasskeyAccess(),basePath});
+      console.log(`Encrypted ${result.count} source files. Publish only the verified .encrypted-dist/ output.`);
+    }
+  } catch(error) {console.error(error.code==='ENOENT'?'Private configuration or editable source is missing. See README.md.':error.message);process.exitCode=1;}
 }
-function readPasskeyAccess(){
-  const pointer=path.join(project,'.private/passkey-config-path.txt');
-  const file=process.env.LUNAR_PASSKEY_ACCESS_FILE||(fs.existsSync(pointer)?fs.readFileSync(pointer,'utf8').trim():null);
-  if(file)return JSON.parse(fs.readFileSync(file,'utf8'));
-  if(fs.existsSync(path.join(project,'_vault/config.json'))&&JSON.parse(fs.readFileSync(path.join(project,'_vault/config.json'),'utf8')).passkeys)throw Error('Private passkey configuration is required to preserve existing passkey access.');
-}
-module.exports={buildVault,readArchive,recover,readPassword,readPasskeyAccess,FORMAT,ITERATIONS};
+module.exports={buildVault,readArchive,recover,readPassword,readPasskeyAccess,archiveConfig,FORMAT,LEGACY_FORMAT,ITERATIONS};

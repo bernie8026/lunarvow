@@ -6,38 +6,39 @@ const http = require('node:http');
 const { execFileSync } = require('node:child_process');
 const { chromium } = require('playwright');
 const { buildVault } = require('../scripts/build-vault.cjs');
+const { fixtureAccess, unlock, attachPasskey } = require('./passkey-browser-fixture.cjs');
 // The production ciphertext contains these exact pre-encryption source bytes.
 // Read the existing public history into an ephemeral local test directory only.
 // Never upload plaintext, screenshots, an unlocked archive or production secrets.
 const SOURCE = 'b7f17e5e4c5d2f67d6a43fd9cb2dafc27ab81ee0';
-const PASSWORD = 'layout-fixture-only-not-the-production-password';
 (async () => {
   const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'lunar-layout-'));
-  const source = path.join(temp, 'source'); fs.mkdirSync(source);
-  const archive = execFileSync('git', ['archive', SOURCE], { maxBuffer:128*1024*1024 });
-  execFileSync('tar', ['-x', '-C', source], { input:archive });
-  const built = buildVault({ root:source, password:PASSWORD, output:path.join(temp, 'dist') });
-  const types = { '.html':'text/html; charset=utf-8', '.css':'text/css', '.js':'text/javascript', '.json':'application/json' };
-  const server = http.createServer((req,res) => {
-    const url = new URL(req.url, 'http://localhost');
-    if (!url.pathname.startsWith('/lunarvow/')) { res.writeHead(404).end(); return; }
-    const name = decodeURIComponent(url.pathname.slice(10)) || 'index.html';
-    const file = path.resolve(built.output, name);
-    if (!file.startsWith(built.output + path.sep)) { res.writeHead(404).end(); return; }
-    fs.readFile(file,(error,body) => { if(error) res.writeHead(404).end(); else res.writeHead(200,{'Content-Type':types[path.extname(file)] || 'application/octet-stream','Cache-Control':'no-store'}).end(body); });
-  });
-  let browser;
+  let browser,server;
   try {
+    const source = path.join(temp, 'source'); fs.mkdirSync(source);
+    // A shallow checkout can point at an isolated repository with this pinned object.
+    const archive = execFileSync('git', ['archive', SOURCE], { cwd:process.env.LUNAR_LAYOUT_FIXTURE_REPO || path.resolve(__dirname,'..'), maxBuffer:128*1024*1024 });
+    execFileSync('tar', ['-x', '-C', source], { input:archive });
+    const access = fixtureAccess();
+    const built = buildVault({ root:source, access, output:path.join(temp, 'dist') });
+    const types = { '.html':'text/html; charset=utf-8', '.css':'text/css', '.js':'text/javascript', '.json':'application/json' };
+    server = http.createServer((req,res) => {
+      const url = new URL(req.url, 'http://localhost');
+      if (!url.pathname.startsWith('/lunarvow/')) { res.writeHead(404).end(); return; }
+      const name = decodeURIComponent(url.pathname.slice(10)) || 'index.html';
+      const file = path.resolve(built.output, name);
+      if (!file.startsWith(built.output + path.sep)) { res.writeHead(404).end(); return; }
+      fs.readFile(file,(error,body) => { if(error) res.writeHead(404).end(); else res.writeHead(200,{'Content-Type':types[path.extname(file)] || 'application/octet-stream','Cache-Control':'no-store'}).end(body); });
+    });
     await new Promise(r => server.listen(0,'127.0.0.1',r));
-    const base = `http://127.0.0.1:${server.address().port}/lunarvow/`;
-    browser = await chromium.launch({headless:true});
+    const base = `http://localhost:${server.address().port}/lunarvow/`;
+    browser = await chromium.launch({headless:true,channel:process.env.PLAYWRIGHT_CHANNEL||undefined});
     const context = await browser.newContext({viewport:{width:1280,height:800},reducedMotion:'reduce'});
     const page = await context.newPage(); page.setDefaultTimeout(90000);
     const errors=[]; page.on('pageerror',error => errors.push(error.message));
-    await page.goto(base);
-    await page.locator('[data-vault-password]:enabled').fill(PASSWORD);
-    await page.locator('[data-vault-submit]').click();
-    await page.locator('[data-vault-content]').waitFor({state:'attached'});
+    const auth=await attachPasskey(context,page,base,access);
+    await auth.enroll();
+    await unlock(page);
     await page.waitForFunction(() => document.readyState==='complete' && window.BHR_I18N && document.querySelector('.boot-screen'));
     await page.locator('.boot-screen').waitFor({state:'detached'});
     await page.waitForFunction(() => document.querySelector('.vault-session-controls .music-console'));
@@ -91,5 +92,5 @@ const PASSWORD = 'layout-fixture-only-not-the-production-password';
     assert.deepEqual(errors,[]);
     console.log('PASS original encrypted layout: 12 widths x 3 languages, full preload, header containment, heading spacing, portrait, controls, mobile menu, inner navigation and lock');
     await context.close();
-  } finally { await browser?.close(); await new Promise(r=>server.close(r)); fs.rmSync(temp,{recursive:true,force:true}); }
+  } finally { await browser?.close(); if(server?.listening)await new Promise(r=>server.close(r)); fs.rmSync(temp,{recursive:true,force:true}); }
 })().catch(error => { console.error(error); process.exitCode=1; });

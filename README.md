@@ -1,52 +1,43 @@
-# 月下誓約檔案庫：密碼加密版
+# 月下誓約檔案庫：通行密鑰版
 
-## 通行密鑰（Passkey）
+入口只接受已登記嘅 WebAuthn 通行密鑰。撳「使用通行密鑰」後，可用 Face ID、Touch ID、裝置 PIN 或相容安全金鑰確認。月下同個人作品集共用 `bernie8026.github.io` 嘅通行密鑰登記；新增密鑰只限擁有人發出嘅一次性邀請，專用入口 `unlock.html#passkey-setup=…` 會立即移除網址入面嘅邀請。
 
-入口亦支援 Face ID／Touch ID 或其他 WebAuthn 通行密鑰。Passkey 與個人作品集共用擁有人嘅 Cloudflare 驗證服務及 `bernie8026.github.io` RP ID，已登記嘅通行密鑰可以解鎖兩個網站。新增通行密鑰只限擁有人發出嘅一次性邀請；`unlock.html#passkey-setup=…` 係專用登記入口，邀請會立即從網址移除。
+新封包每次建置用獨立嘅 256 位元隨機金鑰同 AES-256-GCM 加密。Cloudflare 驗證成功後，只發出月下封包所需嘅封套金鑰；佢同作品集嘅金鑰分開，作品集舊密碼同月下舊密碼都解唔開新封包。Git 只包含加密封包、公開入口、建置工具同測試。
 
-月下原有密碼及加密封包保持不變。公開設定只多一份以驗證服務金鑰加密、綁定網站路徑／建置版本嘅 AES-256-GCM 密鑰封套。瀏覽器完成伺服器 WebAuthn 簽署、來源、RP ID 及使用者驗證後，先可以解開封套，再解密原網站。公開檔案不包含密碼、原始解密金鑰、擁有人憑證或私人通行密鑰。原有密碼仍由本機驗證；新增 Passkey 不會將舊密碼流程改成 IP 次數鎖定。
+## 正式切換
 
-本機 `.private/passkey-config-path.txt` 保存私人驗證服務設定檔路徑，亦可以用 `LUNAR_PASSKEY_ACCESS_FILE` 指定。設定檔含服務金鑰，必須留喺 Git 以外。只更新入口及 Passkey 封套、保留現有密文時可執行 `npm run setup:passkeys`；此指令會先驗證私人密碼可以解開現有封包。完整重新建置會自動重新建立封套；已有 Passkey 設定而私人設定缺失時，建置會停止，避免意外移除 Passkey。
+保留 GitHub Pages 嘅 `main / (root)` 發佈方式同 `/lunarvow/` 網址。合併之前：
 
-新增檢查 `tests/passkey-bridge.cjs` 驗證正確解包、錯誤金鑰、跨網站路徑、篡改拒絕及公開資料無私人憑證。瀏覽器 WebAuthn 整合另外以本機真實驗證 Worker、SQLite 同 Chrome 虛擬認證器驗證；實體 Face ID／Touch ID、iCloud 同步及其他裝置 QR 提示需要由使用者喺裝置確認。
+1. 喺真實裝置試用已登記嘅通行密鑰，準備第二個可用通行密鑰或擁有人重新發邀請嘅方法，並備份私人封套設定。
+2. 用 [作品集 Passkey 分支嘅共用 Cloudflare Worker](https://github.com/bernie8026/lunarvow-united/blob/passkey-only/cloudflare/README.md) 準備部署。保留現有通行密鑰登記同 Durable Object，將私人設定嘅 `archiveId` 設為 `LUNAR_VAULT_ARCHIVE_ID`，將 `archiveKeyB64` 加入 Worker secret `LUNAR_VAULT_KEY_B64`。唔好用作品集封包金鑰。
+3. Worker 同兩個網站入口要一齊安排切換：停用 Worker 舊密碼路徑後，舊作品集入口嘅密碼掣會失效。驗證兩邊都可用通行密鑰，再確認 Pages 發佈成功。
 
-GitHub Pages 保留現有 `main / (root)` 發佈方式及 `/lunarvow/` 網址。公開倉庫只保留密碼入口、少量解鎖／建置程式、測試及一份加密封包，不需要 Private 倉庫、GitHub Pro 或 Actions Secret。
+舊月下密碼只用於本機由舊版 v2 遷移或還原舊備份。已下載嘅舊封包、公開 Git 歷史同第三方副本無法由新分支收回。已解鎖嘅使用者仍可保存瀏覽器收到嘅內容。
 
-**合併本次加密發佈後，等待原有 Pages build and deployment 成功才會上鎖。** 正式密碼另存於私人密碼檔，沒有寫入 Git、URL、程式或建置日誌。
+## 私人備份與建置
 
-## 密碼與可編輯原始碼
-
-本機 `.private/access-password.txt` 為一行入站密碼（至少 16 字元）。可用 `LUNAR_VAULT_PASSWORD_FILE` 指向另一個私人檔案，或在私人環境注入 `LUNAR_VAULT_PASSWORD`。請保管交付的密碼檔；密碼不會由網站傳到伺服器。
-
-`.private/source/` 是完整可編輯備份，全部原始網站檔案、資料、圖片、音樂、舊建置程式及測試也可從加密封包還原。`.private/` 與 `.encrypted-dist/` 均排除於 Git。恢復到另一台電腦時，先把密碼檔放到上述位置，再執行：
+`.private/lunar-vault-access.json` 或 `LUNAR_PASSKEY_ACCESS_FILE` 指定嘅私人檔案須包含 `authOrigin`、`archiveId` 同 `archiveKeyB64`。保管獨立備份，唔好提交到 Git。此檔案可離線還原新版封包：
 
 ```sh
 npm run recover:source
 ```
 
-還原只接受全新目錄，不會覆蓋已有原始碼。請在 `.private/source/` 修改網站；內容／素材更新後，在該目錄執行原有 `scripts/build-news.cjs` 及 `scripts/build-preload-manifest.cjs`，再於倉庫根目錄執行：
+還原只接受全新目錄，唔會覆蓋已有嘅 `.private/source/`。喺該目錄修改網站，更新原有新聞及預載清單後，喺倉庫根目錄執行：
 
 ```sh
 npm run build:encrypted
 npm run prepare:publish
 npm test
+npm run test:layout
 ```
 
-檢查通過後只提交公開加密輸出及建置程式。密碼或原始碼缺失、素材不齊、完整性驗證失敗時不會改成發佈明文。更改私人密碼檔後重新建置與提交，即可更改新部署的入站密碼。
+`npm run setup:passkeys` 只用於由 v2 本機遷移：會讀取私人舊密碼檔及獨立月下封套設定，驗證舊包，再將新版寫入 `.encrypted-dist/`。遷移成功先執行 `npm run prepare:publish`。缺少私人設定、素材唔齊或完整性驗證失敗時，工具會停止。
 
-## 保護範圍
+## 保護同檢查
 
-完整原始碼先 gzip 壓縮，再用 AES-256-GCM 加密；PBKDF2-HMAC-SHA-256 使用 600,000 次迭代、每次建置獨立的 256-bit salt 及 96-bit IV，並將建置編號納入 AAD。瀏覽器先驗證完整密文，再在記憶體解壓與提供原有網址；JSON、圖片、音樂及分頁在未解鎖時均無明文公開副本。
+網站依賴 HTTPS、JavaScript、Web Crypto、Service Worker 同 gzip 解壓。按「鎖定檔案」會清除解鎖分頁嘅暫存金鑰並返回入口。分頁可暫存金鑰以喚醒被瀏覽器回收嘅背景程序；明文網站唔會寫入 CacheStorage 或 IndexedDB。
 
-需要 HTTPS／localhost、JavaScript、Web Crypto、Service Worker 及 gzip DecompressionStream。原有三語、十秒入站及只在按掣後播放音樂的行為保留。按「鎖定檔案」會清除已開啟分頁的暫存金鑰並返回入口。金鑰可暫存在已解鎖分頁的 sessionStorage，以恢復被瀏覽器回收的背景程序；密碼本身及明文檔案不會寫入 CacheStorage 或 IndexedDB。
-
-持有密碼者仍可檢視、保存及分享解鎖後的內容與代碼。此為共用密碼加密，不是逐人帳戶。已公開的歷史提交、舊副本及第三方快取不能靠新部署收回；此更新不改寫 Git 歷史。素材與遊戲相關權利屬原權利人。
-
-## 檢查
-
-公開 CI 驗證發佈目錄、加密／還原及使用測試內容的瀏覽器流程。版面回歸另從既有公開歷史還原與目前封包相同的原網站，在臨時目錄用測試密碼驗證 12 種闊度及三語，結束後刪除；不讀取正式密碼、不上傳明文或解鎖畫面。完整原網站回歸可在本機有私人備份時執行 `npm run test:source`。
-
-解鎖後的音樂、鎖定及動畫控制集中於頁尾，採正常排版，避免浮動控制遮住內容。
+公開 CI 用自製金鑰同 Chrome 虛擬通行密鑰測試封套、還原、訪問檔案、重新上鎖及七語入口。版面回歸從既有 Git 歷史提取固定測試版本，在臨時目錄測試 12 種闊度及三語，完成後清除。已安裝相鄰作品集倉庫嘅 Cloudflare 測試依賴後，亦可執行 `npm run test:integration` 測試實際驗證程式同兩個獨立封包。實體 Face ID、Touch ID 同跨裝置登入仍要喺你嘅裝置確認。
 
 ## 語言版本
 
