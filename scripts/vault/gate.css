@@ -2,10 +2,10 @@
 html { overflow-x:clip; }
 * { box-sizing:border-box; }
 body { overflow-x:clip; margin:0; min-height:100svh; color:var(--paper); background:radial-gradient(ellipse at 23% 48%,#58263855,transparent 52%),radial-gradient(ellipse at 84% 70%,#5c21452e,transparent 42%),var(--ink); font-family:system-ui,-apple-system,"PingFang HK","Microsoft JhengHei",sans-serif; }
-button,input { font:inherit; }
+button { font:inherit; }
 button,a { -webkit-tap-highlight-color:transparent; }
 button { cursor:pointer; }
-button:disabled { cursor:wait; opacity:.5; }
+button:disabled { cursor:not-allowed; opacity:.5; }
 :focus-visible { outline:2px solid var(--rose); outline-offset:6px; }
 .vault-header,.vault-footer { display:flex; justify-content:space-between; align-items:center; gap:1.5rem; padding:2rem 5vw; }
 .vault-wordmark { display:flex; align-items:center; gap:1rem; color:var(--paper); font-family:Georgia,serif; font-size:1.65rem; text-decoration:none; letter-spacing:.05em; }
@@ -21,11 +21,6 @@ h1 { margin:0; max-width:9em; font-family:Georgia,"Songti TC",serif; font-weight
 .vault-signature { font-family:Georgia,serif; font-size:1.5rem; font-style:italic; color:#cc7e96; margin-top:4rem; }
 .vault-signature span { display:block; font:normal .53rem system-ui,sans-serif; letter-spacing:.4em; margin-top:.6rem; }
 .vault-access { padding:1.5rem 0 1.5rem 2.5rem; border-left:1px solid #bb6d8740; }
-.vault-access label { display:block; font-size:.8rem; color:var(--muted); }
-.vault-password-row { display:flex; align-items:center; border-bottom:1px solid #b17b8e88; margin-top:.5rem; transition:border-color .25s; }
-.vault-password-row:focus-within { border-color:var(--rose); }
-.vault-password-row input { min-width:0; width:100%; padding:1rem 0; background:none; border:0; color:var(--paper); letter-spacing:.08em; font-size:1.1rem; outline:none; border-radius:0; }
-.vault-show { flex-shrink:0; padding:.8rem 0 .8rem 1rem; color:var(--muted); background:none; border:0; font-size:.68rem; }
 .vault-status { margin:1rem 0 1.5rem; min-height:2.5em; color:var(--muted); font-size:.76rem; line-height:1.6; overflow-wrap:anywhere; }
 .vault-status.is-error { color:#ffadbc; }
 .vault-submit { width:100%; min-height:52px; border:1px solid #e590aa88; background:linear-gradient(110deg,#d3719540,#ac4c701a); color:var(--paper); padding:.9rem 1.4rem; text-align:left; letter-spacing:.1em; font-size:.85rem; transition:background .25s,border-color .25s; }
@@ -56,7 +51,9 @@ h1 { margin:0; max-width:9em; font-family:Georgia,"Songti TC",serif; font-weight
 html[lang="th"] .vault-intro h1 { line-height:1.5; }
 .vault-intro h1,.vault-description,.vault-note,.vault-submit { overflow-wrap:anywhere; }
 .vault-passkey-controls { margin-top:1rem; }
-.vault-passkey-controls[hidden],.vault-passkey-setup[hidden] { display:none; }
+.vault-passkey-setup[hidden] { display:none; }
+.vault-passkey-controls .vault-note { margin-top:.75rem; }
+.vault-status + .vault-note { margin-top:0; }
 .vault-passkey { border-radius:12px; background:#edb5ca12; letter-spacing:.02em; }
 .vault-passkey-setup { margin-top:1.5rem; padding-top:1.5rem; border-top:1px solid #bb6d8740; }
 .vault-passkey-setup h2 { font-size:1.1rem; font-weight:500; }

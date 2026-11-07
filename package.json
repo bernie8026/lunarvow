@@ -10,6 +10,7 @@
     "prepare:publish": "node scripts/prepare-publication.cjs",
     "recover:source": "node scripts/build-vault.cjs --recover",
     "test:layout": "node tests/vault-layout.cjs",
+    "test:integration": "node tests/vault-passkey-integration.cjs",
     "setup:passkeys": "node scripts/setup-passkeys.cjs"
   },
   "devDependencies": {

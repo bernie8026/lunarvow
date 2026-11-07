@@ -1,5 +1,5 @@
 'use strict';
-const FORMAT = 'lunarvow-vault-v2';
+const FORMAT = 'lunarvow-vault-v3';
 const BUILD = '@@BUILD@@';
 const ROOT = new URL(self.registration.scope);
 const encoder = new TextEncoder();
@@ -26,8 +26,8 @@ async function download(url) {
 async function config() {
   if (!configPromise) configPromise = download('_vault/config.json').then(buffer => {
     const value = JSON.parse(decoder.decode(buffer));
-    if (value.format !== FORMAT || value.build !== BUILD || value.compression !== 'gzip' || value.iterations !== 600000 ||
-        !/^[A-Za-z0-9+/]{43}=$/.test(value.salt) || !/^[a-f0-9]{48}\.bin$/.test(value.archive?.file) ||
+    if (value.format !== FORMAT || value.build !== BUILD || value.compression !== 'gzip' ||
+        !/^[a-f0-9]{48}\.bin$/.test(value.archive?.file) ||
         !/^[A-Za-z0-9+/]{16}$/.test(value.archive?.iv)) throw new Error('changed');
     return value;
   }).catch(error => { configPromise = null; throw error; });
@@ -49,7 +49,7 @@ async function unlock(rawKey, build) {
     const stream = new Blob([compressed]).stream().pipeThrough(new DecompressionStream('gzip'));
     index = JSON.parse(await new Response(stream).text());
   }
-  catch (error) { throw new Error(error.name === 'OperationError' ? 'password' : 'network'); }
+  catch (error) { throw new Error(error.name === 'OperationError' ? 'archive' : 'network'); }
   if (index.format !== FORMAT || index.build !== BUILD || !index.files?.['index.html'] || attempt !== epoch) throw new Error('locked');
   session = { key, files: index.files };
   canRestore = true;
@@ -100,7 +100,7 @@ async function serve(request, name) {
     if (body.byteLength !== record.bytes) throw new Error('invalid');
     if (name.endsWith('.html')) {
       let html = decoder.decode(body).replace(/<html\b/i, '<html data-vault-content data-vault-pending');
-      const bootstrap = `<link rel="stylesheet" href="${ROOT.pathname}_vault/session.css?v=${BUILD}-passkeys-1"><script src="${ROOT.pathname}_vault/runtime.js?v=${BUILD}-passkeys-1" defer></script>`;
+      const bootstrap = `<link rel="stylesheet" href="${ROOT.pathname}_vault/session.css?v=${BUILD}-passkeys-2"><script src="${ROOT.pathname}_vault/runtime.js?v=${BUILD}-passkeys-2" defer></script>`;
       html = html.replace(/<head\b[^>]*>/i, match => match + bootstrap);
       body = encoder.encode(html);
     }
@@ -151,7 +151,7 @@ self.addEventListener('message', event => {
         }
         reply({ ok: true });
       }
-    } catch (error) { reply({ ok: false, error: error.message === 'password' ? 'password' : error.message === 'changed' ? 'changed' : 'network' }); }
+    } catch (error) { reply({ ok: false, error: ['archive', 'changed'].includes(error.message) ? error.message : 'network' }); }
   })());
 });
 self.addEventListener('fetch', event => {
