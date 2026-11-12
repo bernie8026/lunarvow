@@ -25,8 +25,9 @@ const defaultRoot = '/default-archive-fixture/';
 const access = { ...testAccess(), authOrigin: `https://${apiHost}` };
 const defaultAccess = { ...testAccess(), authOrigin: access.authOrigin };
 const admin = randomBytes(32).toString('base64url');
+const teacherPassword=randomBytes(24).toString('base64url');
 const ipKey = randomBytes(32).toString('base64');
-const secrets = [admin, ipKey, access.archiveKeyB64, defaultAccess.archiveKeyB64];
+const secrets = [teacherPassword,admin, ipKey, access.archiveKeyB64, defaultAccess.archiveKeyB64];
 const types = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json; charset=utf-8' };
 const sha = value => createHash('sha256').update(value).digest('hex');
 const events = [];
@@ -112,7 +113,7 @@ async function main() {
     durableObjects: { IP_GUARD: { className: 'IpAttemptGuard', useSQLite: true }, PASSKEYS: { className: 'PasskeyRegistry', useSQLite: true } },
     bindings: {
       SITE_ORIGIN: siteOrigin, ARCHIVE_ID: defaultAccess.archiveId, ARCHIVE_KEY_B64: defaultAccess.archiveKeyB64,
-      LUNAR_VAULT_ARCHIVE_ID: access.archiveId, LUNAR_VAULT_KEY_B64: access.archiveKeyB64,
+      LUNAR_VAULT_ARCHIVE_ID: access.archiveId, LUNAR_VAULT_KEY_B64: access.archiveKeyB64, LUNAR_VAULT_PASSWORD_SHA256:sha(teacherPassword),
       IP_HMAC_KEY_B64: ipKey, ADMIN_TOKEN_SHA256: sha(admin),
     },
     log: new Log(LogLevel.NONE),
@@ -138,13 +139,21 @@ async function main() {
   const privateContent = page.locator('[data-vault-content] #main-content');
   await page.goto(base);
   await page.locator('[data-vault-passkey]:enabled').waitFor();
-  assert.equal(await page.locator('input[type=password]').count(), 0);
+  assert.equal(await page.locator('input[type=password]').count(), 1);
   assert.equal((await page.evaluate(async () => (await fetch('data/characters.json')).status)), 403);
   assert.equal(events.length, 0, 'opening the gate does not request a WebAuthn challenge');
-  const retired = await invoke('/v1/unlock', { body: { archiveId: access.archiveId, password: 'synthetic-retired-password' } });
-  assert.equal(retired.status, 410);
-  assert.deepEqual(retired.value, { ok: false, code: 'passkey_required' });
-  console.log('PASS locked archive and retired password path');
+  await page.locator('[data-vault-password]').fill('synthetic-incorrect-password');
+  await page.locator('[data-vault-password-submit]').click();
+  await page.waitForFunction(()=>document.querySelector('[data-vault-status]').textContent.includes('密碼唔正確'));
+  assert.equal(await privateContent.count(),0);
+  assert.equal(await page.locator('[data-vault-password]').inputValue(),'');
+  await page.locator('[data-vault-password]').fill(teacherPassword);
+  await page.locator('[data-vault-password-submit]').click();
+  await privateContent.waitFor();
+  assert.match(await privateContent.textContent(),/PRIVATE_LUNAR_CONTENT/);
+  await page.locator('.vault-session-lock').click();
+  await page.locator('[data-vault-passkey]:enabled').waitFor();
+  console.log('PASS password unlock without any registered passkey; wrong password remains locked');
 
   await button.click();
   await page.waitForFunction(() => document.querySelector('[data-vault-status]').textContent.includes('未登記通行密鑰'));

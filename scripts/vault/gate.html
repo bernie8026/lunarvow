@@ -7,8 +7,8 @@
   <meta name="referrer" content="no-referrer">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self' @@AUTH_ORIGIN@@; worker-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'none'">
   <title>月下檔案已封存 // Lunar Vow</title>
-  <link rel="stylesheet" href="@@ROOT@@_vault/gate.css?v=@@BUILD@@-moon-2">
-  <script src="@@ROOT@@_vault/runtime.js?v=@@BUILD@@-passkeys-2" defer></script>
+  <link rel="stylesheet" href="@@ROOT@@_vault/gate.css?v=@@BUILD@@-moon-3">
+  <script src="@@ROOT@@_vault/runtime.js?v=@@BUILD@@-access-3" defer></script>
 </head>
 <body>
   <header class="vault-header">
@@ -22,11 +22,16 @@
     <section class="vault-intro" aria-labelledby="vault-title">
       <p class="vault-kicker">A PRIVATE CONSTELLATION</p>
       <h1 id="vault-title" data-vault-text="title">月下檔案已封存</h1>
-      <p class="vault-description" data-vault-text="intro">用已登記嘅通行密鑰，解鎖完整檔案庫。</p>
+      <p class="vault-description" data-vault-text="intro">用入站密碼或通行密鑰，解鎖完整檔案庫。</p>
       <div class="vault-signature" aria-hidden="true">Lunar Vow<span>CRIMSON LOVE</span></div>
     </section>
     <section class="vault-access" aria-labelledby="vault-access-heading">
       <p id="vault-access-heading" class="vault-eyebrow">CAPTAIN ACCESS</p>
+      <form method="post" data-vault-form>
+        <label for="vault-password" data-vault-text="passwordLabel">入站密碼</label>
+        <input id="vault-password" data-vault-password type="password" autocomplete="current-password" autocapitalize="off" spellcheck="false" maxlength="512" required disabled aria-describedby="vault-status">
+        <button type="submit" class="vault-submit" data-vault-password-submit data-vault-text="passwordSubmit" disabled>用密碼解鎖</button>
+      </form>
       <div class="vault-passkey-controls" data-vault-passkeys>
         <button type="button" class="vault-submit vault-passkey" data-vault-passkey aria-describedby="vault-passkey-note vault-status" disabled>使用通行密鑰</button>
         <p id="vault-passkey-note" class="vault-note" data-vault-passkey-note>使用 Face ID、Touch ID，或選擇另一部裝置。</p>

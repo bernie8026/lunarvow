@@ -118,6 +118,9 @@
       history.replaceState(null,'',location.pathname+location.search);
     }
   }catch{}
+  const passwordForm=document.querySelector('[data-vault-form]');
+  const passwordInput=document.querySelector('[data-vault-password]');
+  const passwordSubmit=document.querySelector('[data-vault-password-submit]');
   const passkeyButton=document.querySelector('[data-vault-passkey]');
   const registerButton=document.querySelector('[data-vault-passkey-register]');
   const setupPanel=document.querySelector('[data-vault-passkey-setup]');
@@ -132,17 +135,27 @@
     ru:{passkey:'Войти с ключом доступа',passkeyHint:'Используйте Face ID, Touch ID или выберите другое устройство.',passkeyUnavailable:"Этот браузер не поддерживает ключи доступа. Откройте сайт в совместимом браузере или на другом устройстве.",setupTitle:'Добавить ключ доступа',setupHelp:"Это одноразовое приглашение от владельца. После подтверждения ключ доступа сохранится на устройстве или у поставщика ключей доступа.",registerPasskey:'Добавить ключ доступа',passkeyWaiting:'Подтвердите ключ доступа на устройстве…',registering:'Подтвердите новый ключ доступа на устройстве…',passkeyCancelled:"Запрос отменён или время ожидания истекло. Можно повторить попытку.",passkeyRejected:"Не удалось проверить ключ доступа. Повторите попытку с зарегистрированным ключом доступа.",passkeyRegistered:'Ключ доступа добавлен. Выберите «Войти с ключом доступа» для разблокировки.',inviteInvalid:'Приглашение истекло или уже использовано. Запросите новое у владельца.',passkeyDuplicate:'На этом устройстве уже есть зарегистрированный ключ доступа. Используйте его для входа.',passkeyThrottled:'Слишком много запросов ключа доступа. Попробуйте позже.'}
   };
 
+  const passwordCopy={
+    'zh-HK':['用入站密碼或通行密鑰，解鎖完整檔案庫。','入站密碼','用密碼解鎖','正在驗證密碼…','密碼唔正確。','呢個網絡暫時鎖定，請稍後再試。','呢個網絡已鎖定，請聯絡網站擁有人。','暫未開放密碼登入，請聯絡網站擁有人。'],
+    en:['Use the access password or a passkey to unlock the archive.','Access password','Unlock with password','Verifying password…','Incorrect password.','This network is temporarily locked. Try again shortly.','This network is locked. Contact the site owner.','Password access is unavailable. Contact the site owner.'],
+    'zh-CN':['使用入站密码或通行密钥解锁完整档案库。','入站密码','使用密码解锁','正在验证密码…','密码不正确。','此网络暂时被锁定，请稍后重试。','此网络已锁定，请联系网站所有者。','密码登录暂不可用，请联系网站所有者。'],
+    ja:['パスワードまたはパスキーでアーカイブを開けます。','アクセスパスワード','パスワードで開く','パスワードを確認中…','パスワードが正しくありません。','このネットワークは一時的にロックされています。','このネットワークはロックされています。管理者にお問い合わせください。','パスワードでログインできません。管理者にお問い合わせください。'],
+    ko:['암호 또는 패스키로 아카이브를 열 수 있습니다.','접근 암호','암호로 잠금 해제','암호 확인 중…','암호가 올바르지 않습니다.','이 네트워크는 일시적으로 잠겨 있습니다.','이 네트워크는 잠겨 있습니다. 관리자에게 문의하세요.','암호 로그인을 사용할 수 없습니다. 관리자에게 문의하세요.'],
+    th:['ใช้รหัสผ่านหรือพาสคีย์เพื่อปลดล็อกคลังข้อมูล','รหัสผ่านเข้าเว็บไซต์','ปลดล็อกด้วยรหัสผ่าน','กำลังตรวจสอบรหัสผ่าน…','รหัสผ่านไม่ถูกต้อง','เครือข่ายนี้ถูกล็อกชั่วคราว โปรดลองใหม่ภายหลัง','เครือข่ายนี้ถูกล็อก โปรดติดต่อเจ้าของเว็บไซต์','ยังไม่สามารถใช้รหัสผ่านได้ โปรดติดต่อเจ้าของเว็บไซต์'],
+    ru:['Используйте пароль или ключ доступа, чтобы открыть архив.','Пароль доступа','Открыть с паролем','Проверка пароля…','Неверный пароль.','Эта сеть временно заблокирована. Повторите попытку позже.','Эта сеть заблокирована. Обратитесь к владельцу сайта.','Вход по паролю недоступен. Обратитесь к владельцу сайта.']
+  };
+  const passwordLabels=['intro','passwordLabel','passwordSubmit','passwordWaiting','passwordWrong','passwordCooldown','passwordLocked','passwordUnavailable'];
+  for(const [locale,copy] of Object.entries(passwordCopy))passwordLabels.forEach((key,index)=>{strings[locale][key]=copy[index];});
   for(const locale of Object.keys(passkeyCopy))Object.assign(strings[locale],passkeyCopy[locale]);
   const noPasskeys={
-    "zh-HK":"目前未登記通行密鑰。請向網站擁有人索取登記邀請。",
-    "en":"No passkey is registered yet. Ask the website owner for a registration invitation.",
-    "zh-CN":"目前尚未登记通行密钥。请向网站所有者索取登记邀请。",
-    "ja":"パスキーはまだ登録されていません。管理者に登録招待を依頼してください。",
-    "ko":"등록된 패스키가 없습니다. 관리자에게 등록 초대를 요청해 주세요.",
-    "th":"ยังไม่มีพาสคีย์ที่ลงทะเบียน โปรดขอคำเชิญลงทะเบียนจากเจ้าของเว็บไซต์",
-    "ru":"Ключ доступа ещё не зарегистрирован. Запросите приглашение для регистрации у владельца сайта."
+    "zh-HK":"目前未登記通行密鑰。請用密碼登入，或向擁有人索取登記邀請。",
+    en:"No passkey is registered yet. Use the password or ask the owner for an invitation.",
+    "zh-CN":"目前尚未登记通行密钥。请用密码登录，或向所有者索取登记邀请。",
+    ja:"パスキーはまだ登録されていません。パスワードを使うか、管理者に登録招待を依頼してください。",
+    ko:"등록된 패스키가 없습니다. 비밀번호를 사용하거나 관리자에게 등록 초대를 요청하세요.",
+    th:"ยังไม่มีพาสคีย์ที่ลงทะเบียน โปรดใช้รหัสผ่านหรือขอคำเชิญจากเจ้าของเว็บไซต์",
+    ru:"Ключ доступа ещё не зарегистрирован. Используйте пароль или запросите приглашение у владельца."
   };
-
   for(const locale of Object.keys(noPasskeys))strings[locale].noPasskeys=noPasskeys[locale];
   let checking = null;
   try { language = localStorage.getItem('bhr-language') || language; } catch {}
@@ -225,13 +238,16 @@
     const status = document.querySelector('[data-vault-status]');
     if (status) {
       status.textContent = copy[statusName] || copy.network;
-      status.classList.toggle('is-error', ['archiveError','network','changed','unsupported','passkeyUnavailable','passkeyRejected','inviteInvalid','passkeyThrottled','passkeyDuplicate'].includes(statusName));
+      status.classList.toggle('is-error', ['archiveError','network','changed','unsupported','passkeyUnavailable','passkeyRejected','inviteInvalid','passkeyThrottled','passkeyDuplicate','passwordWrong','passwordCooldown','passwordLocked','passwordUnavailable'].includes(statusName));
     }
     document.querySelector('[data-vault-passkeys]')?.setAttribute('aria-busy', String(busy));
+    passwordForm?.setAttribute('aria-busy',String(busy));
+    if(passwordInput)passwordInput.disabled=busy||!gateReady;
+    if(passwordSubmit)passwordSubmit.disabled=busy||!gateReady;
     if(passkeyButton){passkeyButton.textContent=copy.passkey;passkeyButton.disabled=busy||!gateReady||!passkeySupported;}
     if(registerButton){registerButton.textContent=copy.registerPasskey;registerButton.disabled=busy||!gateReady||!passkeySupported||!setupToken;}
     const note=document.querySelector('[data-vault-passkey-note]');
-    if(note){note.textContent=copy.passkeyHint;note.hidden=!passkeySupported;}
+    if(note){note.textContent=passkeySupported?copy.passkeyHint:copy.passkeyUnavailable;note.hidden=false;}
     for(const element of document.querySelectorAll('[data-passkey-text]'))element.textContent=copy[element.dataset.passkeyText]||'';
   }
   function closeContent() {
@@ -308,14 +324,8 @@
       render();
       button.focus({preventScroll:true});
     }
-    passkeyButton?.addEventListener('click',async()=>{
-      if(busy||!gateReady||!settings.passkeys||!passkeySupported)return;
-      busy=true;statusName='passkeyWaiting';render();
-      try{
+    async function openWithAccess(access){
         const bridge=settings.passkeys;
-        const start=await accessRequest('/v1/passkeys/auth/options',{});
-        const credential=await navigator.credentials.get({publicKey:credentialOptions(start.options,false)});
-        const access=await accessRequest('/v1/passkeys/auth/verify',{flowId:start.flowId,response:credentialJSON(credential,false)});
         if(access.archiveId!==bridge.archiveId)throw Error('Archive mismatch');
         const raw=decode(access.key);access.key='';if(raw.length!==32){raw.fill(0);throw Error('Invalid key');}
         let wrappingKey;try{wrappingKey=await crypto.subtle.importKey('raw',raw,'AES-GCM',false,['decrypt']);}finally{raw.fill(0);}
@@ -324,6 +334,29 @@
         const aad=new TextEncoder().encode(`lunarvow-passkey-bridge-v1:${BUILD}:${bridge.archiveId}:${root.pathname}`);
         const archiveKey=new Uint8Array(await crypto.subtle.decrypt({name:'AES-GCM',iv,additionalData:aad},wrappingKey,wrapped));
         try{if(archiveKey.length!==32)throw Error('Invalid archive key');await openWithKey(encode(archiveKey));}finally{archiveKey.fill(0);}
+    }
+    passwordForm?.addEventListener('submit',async event=>{
+      event.preventDefault();
+      if(busy||!gateReady||!passwordInput.value)return;
+      const password=passwordInput.value;
+      passwordInput.value='';
+      busy=true;statusName='passwordWaiting';render();
+      try{await openWithAccess(await accessRequest('/v1/unlock',{password}));}
+      catch(error){
+        busy=false;
+        statusName=({invalid_password:'passwordWrong',cooldown:'passwordCooldown',permanent_lock:'passwordLocked',
+          passkey_required:'passwordUnavailable',archive_mismatch:'changed'})[error.accessCode]||
+          (error.name==='OperationError'||error.message==='archive'?'archiveError':'network');
+        render();passwordInput.focus({preventScroll:true});
+      }
+    });
+    passkeyButton?.addEventListener('click',async()=>{
+      if(busy||!gateReady||!settings.passkeys||!passkeySupported)return;
+      busy=true;statusName='passkeyWaiting';render();
+      try{
+        const start=await accessRequest('/v1/passkeys/auth/options',{});
+        const credential=await navigator.credentials.get({publicKey:credentialOptions(start.options,false)});
+        await openWithAccess(await accessRequest('/v1/passkeys/auth/verify',{flowId:start.flowId,response:credentialJSON(credential,false)}));
       }catch(error){failPasskey(error,passkeyButton);}
     });
     registerButton?.addEventListener('click',async()=>{
@@ -360,7 +393,7 @@
         if (state.ok && state.build === BUILD) { enter(); return; }
       }
       setupPanel.hidden=!setupToken||!passkeySupported;
-      gateReady=true;statusName=passkeySupported?'ready':'passkeyUnavailable';render();
+      gateReady=true;statusName='ready';render();
     } catch (error) { statusName = ['unsupported', 'changed'].includes(error.message) ? error.message : 'network'; render(); }
   }
 

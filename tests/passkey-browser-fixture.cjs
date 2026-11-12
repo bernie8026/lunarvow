@@ -11,7 +11,8 @@ function fixtureAccess(){
 
 async function gate(page){
   await page.locator('[data-vault-gate]').waitFor();
-  assert.equal(await page.locator('input[type=password], [data-vault-password], [data-vault-submit]').count(),0);
+  assert.equal(await page.locator('input[type=password][data-vault-password]').count(),1);
+  await page.locator('[data-vault-password-submit]:enabled').waitFor();
   await page.locator('[data-vault-passkey]:enabled').waitFor();
 }
 

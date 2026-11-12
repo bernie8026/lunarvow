@@ -10,7 +10,7 @@ walk(output);
 for(const name of files){
   if(name.endsWith('.html')) {
     const gate=fs.readFileSync(path.join(output,name),'utf8');
-    if(!gate.includes('data-vault-gate') || /type\s*=\s*['"]password['"]/i.test(gate)) throw new Error('Only the passkey entry pages can be published.');
+    if(!gate.includes('data-vault-gate') || !gate.includes('data-vault-password') || !gate.includes('data-vault-passkey')) throw new Error('Only encrypted archive entry pages can be published.');
   }
   if(!name.endsWith('.html')&&!['vault-sw.js','.nojekyll','.vault-output'].includes(name)&&!name.startsWith('_vault'+path.sep))throw new Error('Unexpected public file.');
 }

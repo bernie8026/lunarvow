@@ -80,6 +80,6 @@ async function unlocked(page){await page.locator('[data-vault-content]').waitFor
     await corruptPage.locator('[data-vault-passkey]').click();await corruptPage.waitForFunction(()=>document.querySelector('[data-vault-status]').classList.contains('is-error'));
     assert.equal(await corruptPage.locator('[data-vault-content]').count(),0);damaged=false;await corrupt.close();
     const noJS=await browser.newContext({javaScriptEnabled:false}),disabled=await noJS.newPage();await disabled.goto(base+'guide.html');assert(await disabled.locator('noscript').isVisible());assert.equal(await disabled.locator('[data-vault-content]').count(),0);await noJS.close();
-    console.log('PASS public encrypted runtime: passkey-only gate, enrollment, signed unlock, invalid user verification, languages, assets, ranges, navigation, worker restart, multi-tab lock, Back, blocked storage, tampering and no JavaScript');
+    console.log('PASS public encrypted runtime: dual access gate, enrollment, signed unlock, invalid user verification, languages, assets, ranges, navigation, worker restart, multi-tab lock, Back, blocked storage, tampering and no JavaScript');
   }finally{await browser?.close();await new Promise(r=>server.close(r));fs.rmSync(root,{recursive:true,force:true});}
 })().catch(error=>{console.error(error);process.exitCode=1;});

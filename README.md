@@ -1,18 +1,18 @@
-# 月下誓約檔案庫：通行密鑰版
+# 月下誓約檔案庫：密碼及通行密鑰版
 
-入口只接受已登記嘅 WebAuthn 通行密鑰。撳「使用通行密鑰」後，可用 Face ID、Touch ID、裝置 PIN 或相容安全金鑰確認。月下同個人作品集共用 `bernie8026.github.io` 嘅通行密鑰登記；新增密鑰只限擁有人發出嘅一次性邀請，專用入口 `unlock.html#passkey-setup=…` 會立即移除網址入面嘅邀請。
+入口支援網站密碼，以及已登記嘅 WebAuthn 通行密鑰。老師或未登記裝置嘅訪客可直接輸入原有月下網站密碼，唔需要先登記裝置。撳「使用通行密鑰」後，可用 Face ID、Touch ID、裝置 PIN 或相容安全金鑰確認。月下同個人作品集共用 `bernie8026.github.io` 嘅通行密鑰登記；新增密鑰只限擁有人發出嘅一次性邀請，專用入口 `unlock.html#passkey-setup=…` 會立即移除網址入面嘅邀請。
 
-新封包每次建置用獨立嘅 256 位元隨機金鑰同 AES-256-GCM 加密。Cloudflare 驗證成功後，只發出月下封包所需嘅封套金鑰；佢同作品集嘅金鑰分開，作品集舊密碼同月下舊密碼都解唔開新封包。Git 只包含加密封包、公開入口、建置工具同測試。
+新封包每次建置用獨立嘅 256 位元隨機金鑰同 AES-256-GCM 加密。Cloudflare 驗證成功後，只發出月下封包所需嘅封套金鑰；佢同作品集嘅金鑰分開，密碼由伺服器驗證，唔會直接用作本機解密金鑰；每個網站只會取得各自嘅封套金鑰。Git 只包含加密封包、公開入口、建置工具同測試。
 
 ## 正式切換
 
 保留 GitHub Pages 嘅 `main / (root)` 發佈方式同 `/lunarvow/` 網址。合併之前：
 
 1. 喺真實裝置試用已登記嘅通行密鑰，準備第二個可用通行密鑰或擁有人重新發邀請嘅方法，並備份私人封套設定。
-2. 用 [作品集 Passkey 分支嘅共用 Cloudflare Worker](https://github.com/bernie8026/lunarvow-united/blob/passkey-only/cloudflare/README.md) 準備部署。保留現有通行密鑰登記同 Durable Object，將私人設定嘅 `archiveId` 設為 `LUNAR_VAULT_ARCHIVE_ID`，將 `archiveKeyB64` 加入 Worker secret `LUNAR_VAULT_KEY_B64`。唔好用作品集封包金鑰。
-3. Worker 同兩個網站入口要一齊安排切換：停用 Worker 舊密碼路徑後，舊作品集入口嘅密碼掣會失效。驗證兩邊都可用通行密鑰，再確認 Pages 發佈成功。
+2. 用 [作品集嘅共用 Cloudflare Worker](https://github.com/bernie8026/lunarvow-united/blob/main/cloudflare/README.md) 準備部署。保留現有通行密鑰登記同 Durable Object，將私人設定嘅 `archiveId` 設為 `LUNAR_VAULT_ARCHIVE_ID`，將 `archiveKeyB64` 加入 Worker secret `LUNAR_VAULT_KEY_B64`。唔好用作品集封包金鑰。
+3. 將私人保存嘅月下網站密碼嘅 SHA-256 摘要加入 Worker secret `LUNAR_VAULT_PASSWORD_SHA256`；作品集使用自己嘅 `AUTH_PASSWORD_SHA256`。先部署保留現有金鑰及登記資料嘅 Worker，再發佈兩個網站嘅登入入口。驗證兩邊嘅密碼及通行密鑰流程。
 
-舊月下密碼只用於本機由舊版 v2 遷移或還原舊備份。已下載嘅舊封包、公開 Git 歷史同第三方副本無法由新分支收回。已解鎖嘅使用者仍可保存瀏覽器收到嘅內容。
+沿用月下密碼作伺服器驗證，唔會將密碼、摘要或金鑰放入公開 Git。伺服器按 IP 記錄失敗次數：第 3、6、9 次會鎖五分鐘，第 10 次會永久鎖定，直至擁有人重設。成功登入唔會抹走累計失敗次數。已下載嘅舊封包、公開 Git 歷史同第三方副本無法由新分支收回。已解鎖嘅使用者仍可保存瀏覽器收到嘅內容。
 
 ## 私人備份與建置
 
@@ -37,7 +37,7 @@ npm run test:layout
 
 網站依賴 HTTPS、JavaScript、Web Crypto、Service Worker 同 gzip 解壓。按「鎖定檔案」會清除解鎖分頁嘅暫存金鑰並返回入口。分頁可暫存金鑰以喚醒被瀏覽器回收嘅背景程序；明文網站唔會寫入 CacheStorage 或 IndexedDB。
 
-公開 CI 用自製金鑰同 Chrome 虛擬通行密鑰測試封套、還原、訪問檔案、重新上鎖及七語入口。版面回歸從既有 Git 歷史提取固定測試版本，在臨時目錄測試 12 種闊度及三語，完成後清除。已安裝相鄰作品集倉庫嘅 Cloudflare 測試依賴後，亦可執行 `npm run test:integration` 測試實際驗證程式同兩個獨立封包。實體 Face ID、Touch ID 同跨裝置登入仍要喺你嘅裝置確認。
+公開 CI 用自製金鑰同 Chrome 虛擬通行密鑰測試封套、還原、訪問檔案、重新上鎖及七語入口。版面回歸從既有 Git 歷史提取固定測試版本，在臨時目錄測試 12 種闊度及三語，完成後清除。已安裝相鄰作品集倉庫嘅 Cloudflare 測試依賴後，亦可執行 `npm run test:integration` 測試實際驗證程式、無登記裝置嘅密碼登入、錯誤密碼拒絕及兩個獨立封包。實體 Face ID、Touch ID 同跨裝置登入仍要喺你嘅裝置確認。
 
 ## 語言版本
 

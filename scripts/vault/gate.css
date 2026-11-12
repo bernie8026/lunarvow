@@ -2,7 +2,7 @@
 html { overflow-x:clip; }
 * { box-sizing:border-box; }
 body { overflow-x:clip; margin:0; min-height:100svh; color:var(--paper); background:radial-gradient(ellipse at 23% 48%,#58263855,transparent 52%),radial-gradient(ellipse at 84% 70%,#5c21452e,transparent 42%),var(--ink); font-family:system-ui,-apple-system,"PingFang HK","Microsoft JhengHei",sans-serif; }
-button { font:inherit; }
+button,input { font:inherit; }
 button,a { -webkit-tap-highlight-color:transparent; }
 button { cursor:pointer; }
 button:disabled { cursor:not-allowed; opacity:.5; }
@@ -21,6 +21,9 @@ h1 { margin:0; max-width:9em; font-family:Georgia,"Songti TC",serif; font-weight
 .vault-signature { font-family:Georgia,serif; font-size:1.5rem; font-style:italic; color:#cc7e96; margin-top:4rem; }
 .vault-signature span { display:block; font:normal .53rem system-ui,sans-serif; letter-spacing:.4em; margin-top:.6rem; }
 .vault-access { padding:1.5rem 0 1.5rem 2.5rem; border-left:1px solid #bb6d8740; }
+[data-vault-form] label { display:block; font-size:.8rem; color:var(--muted); }
+[data-vault-password] { width:100%; min-height:48px; margin:.5rem 0 .75rem; padding:.65rem .8rem; color:var(--paper); background:#1b121c; border:1px solid #b17b8e88; border-radius:.5rem; }
+[data-vault-password]:disabled { opacity:.5; }
 .vault-status { margin:1rem 0 1.5rem; min-height:2.5em; color:var(--muted); font-size:.76rem; line-height:1.6; overflow-wrap:anywhere; }
 .vault-status.is-error { color:#ffadbc; }
 .vault-submit { width:100%; min-height:52px; border:1px solid #e590aa88; background:linear-gradient(110deg,#d3719540,#ac4c701a); color:var(--paper); padding:.9rem 1.4rem; text-align:left; letter-spacing:.1em; font-size:.85rem; transition:background .25s,border-color .25s; }

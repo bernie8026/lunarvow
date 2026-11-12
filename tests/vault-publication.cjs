@@ -21,10 +21,10 @@ const pages=['index.html','guide.html','lunar-vow-guide.html','hi3.html','galler
 for(const page of pages){
   const html=fs.readFileSync(path.join(root,page),'utf8');
   assert(html.includes('data-vault-gate'));assert(!html.includes('data-vault-content'));assert(!html.includes('@@ROOT@@'));
-  assert(!/<input\b[^>]*\btype=['"]?password\b/i.test(html),`${page} must not ask for a password`);
+  assert(/<input\b[^>]*\btype=['"]?password\b/i.test(html),`${page} must offer server-verified password access`);
   assert(html.includes(config.passkeys.authOrigin),`${page} must permit the configured authentication service`);
 }
 const data=fs.readdirSync(path.join(root,'_vault/data'));assert.deepEqual(data,[config.archive.file]);
 assert(fs.statSync(path.join(root,'_vault/data',config.archive.file)).size>16);
 assert(fs.existsSync(path.join(root,'.nojekyll')));
-console.log('PASS encrypted publication: eleven passkey gates; only v3 ciphertext contains the original source and assets');
+console.log('PASS encrypted publication: eleven password and passkey gates; only v3 ciphertext contains the original source and assets');
