@@ -11,7 +11,7 @@
     "ready": "等待艦長解鎖",
     "preparing": "正在準備入口…",
     "network": "暫時讀取唔到加密檔案，請檢查連線後再試。",
-    "changed": "檔案已更新，請重新載入再用通行密鑰解鎖。",
+    "changed": "檔案已更新，請重新載入再用密碼或通行密鑰解鎖。",
     "unsupported": "請用支援 Service Worker 嘅瀏覽器，透過 HTTPS 開啟網站。",
     "note": "解鎖後可隨時按「鎖定檔案」關閉存取。",
     "lock": "鎖定檔案",
@@ -25,7 +25,7 @@
     "ready": "Awaiting the Captain",
     "preparing": "Preparing the entrance…",
     "network": "The encrypted files could not be loaded. Check your connection and try again.",
-    "changed": "The archive has changed. Reload and unlock with your passkey.",
+    "changed": "The archive has changed. Reload and unlock with your password or passkey.",
     "unsupported": "Open this site over HTTPS in a browser that supports service workers.",
     "note": "Use “Lock archive” whenever you want to close access.",
     "lock": "Lock archive",
@@ -39,7 +39,7 @@
     "ready": "等待舰长解锁",
     "preparing": "正在准备入口…",
     "network": "暂时无法读取加密文件，请检查连接后重试。",
-    "changed": "档案已更新，请重新加载并使用通行密钥解锁。",
+    "changed": "档案已更新，请重新加载并使用密码或通行密钥解锁。",
     "unsupported": "请用支持 Service Worker 的浏览器，通过 HTTPS 打开网站。",
     "note": "解锁后可随时按“锁定档案”关闭访问。",
     "lock": "锁定档案",
@@ -53,7 +53,7 @@
     "ready": "艦長の到着を待機中",
     "preparing": "入口を準備中…",
     "network": "暗号化ファイルを読み込めません。接続を確認して再試行してください。",
-    "changed": "アーカイブが更新されました。再読み込みしてパスキーで解除してください。",
+    "changed": "アーカイブが更新されました。再読み込みしてパスワードまたはパスキーで解除してください。",
     "unsupported": "Service Worker対応ブラウザーでHTTPS経由で開いてください。",
     "note": "閲覧を終えるときは「アーカイブをロック」を押してください。",
     "lock": "アーカイブをロック",
@@ -67,7 +67,7 @@
     "ready": "함장 입장 대기 중",
     "preparing": "입구 준비 중…",
     "network": "암호화 파일을 불러올 수 없습니다. 연결을 확인하고 다시 시도하세요.",
-    "changed": "기록실이 업데이트됐습니다. 새로고침 후 패스키로 잠금을 해제하세요.",
+    "changed": "기록실이 업데이트됐습니다. 새로고침 후 비밀번호 또는 패스키로 잠금을 해제하세요.",
     "unsupported": "Service Worker 지원 브라우저에서 HTTPS로 열어 주세요.",
     "note": "열람을 끝내려면 ‘기록실 잠금’을 누르세요.",
     "lock": "기록실 잠금",
@@ -81,7 +81,7 @@
     "ready": "รอกัปตันปลดล็อก",
     "preparing": "กำลังเตรียมทางเข้า…",
     "network": "โหลดไฟล์เข้ารหัสไม่ได้ ตรวจสอบการเชื่อมต่อแล้วลองใหม่",
-    "changed": "คลังข้อมูลอัปเดตแล้ว โปรดโหลดหน้าใหม่แล้วใช้พาสคีย์เพื่อปลดล็อก",
+    "changed": "คลังข้อมูลอัปเดตแล้ว โปรดโหลดหน้าใหม่แล้วใช้รหัสผ่านหรือพาสคีย์เพื่อปลดล็อก",
     "unsupported": "เปิดผ่าน HTTPS ด้วยเบราว์เซอร์ที่รองรับ Service Worker",
     "note": "กด “ล็อกคลังข้อมูล” เมื่อต้องการปิดการเข้าถึง",
     "lock": "ล็อกคลังข้อมูล",
@@ -95,7 +95,7 @@
     "ready": "Ожидаем Капитана",
     "preparing": "Подготовка входа…",
     "network": "Не удалось загрузить зашифрованные файлы. Проверьте соединение и повторите попытку.",
-    "changed": "Архив обновился. Перезагрузите страницу и войдите с ключом доступа.",
+    "changed": "Архив обновился. Перезагрузите страницу и войдите с паролем или ключом доступа.",
     "unsupported": "Откройте сайт через HTTPS в браузере с поддержкой Service Worker.",
     "note": "Чтобы закрыть доступ, нажмите «Закрыть архив».",
     "lock": "Закрыть архив",
@@ -126,13 +126,13 @@
   const setupPanel=document.querySelector('[data-vault-passkey-setup]');
   const passkeySupported=!!(window.PublicKeyCredential&&navigator.credentials?.get&&navigator.credentials?.create);
   const passkeyCopy={
-    'zh-HK':{passkey:'使用通行密鑰',passkeyHint:'使用 Face ID、Touch ID，或選擇另一部裝置。',passkeyUnavailable:"呢個瀏覽器唔支援通行密鑰。請用支援嘅瀏覽器或裝置開啟。",setupTitle:'新增你嘅通行密鑰',setupHelp:"呢個係擁有人提供嘅一次性登記邀請。確認後，通行密鑰會由你嘅裝置或通行密鑰管理工具保存。",registerPasskey:'新增通行密鑰',passkeyWaiting:'請喺裝置確認通行密鑰…',registering:'請喺裝置確認新增通行密鑰…',passkeyCancelled:"已取消通行密鑰操作，或者操作已逾時。你可以再試。",passkeyRejected:"通行密鑰未能通過驗證。請用已登記嘅通行密鑰再試。",passkeyRegistered:'通行密鑰已新增。撳「使用通行密鑰」即可解鎖。',inviteInvalid:'登記邀請已失效或已使用，請向擁有人取得新邀請。',passkeyDuplicate:'呢部裝置已有登記嘅通行密鑰，請使用佢登入。',passkeyThrottled:'通行密鑰請求太頻密，請稍後再試。'},
-    en:{passkey:'Use a passkey',passkeyHint:'Use Face ID, Touch ID, or choose another device.',passkeyUnavailable:"This browser does not support passkeys. Open the site in a supported browser or on another device.",setupTitle:'Add your passkey',setupHelp:"This is a one-time invitation from the owner. Your device or passkey provider will save the passkey after you confirm.",registerPasskey:'Add a passkey',passkeyWaiting:'Confirm the passkey on your device…',registering:'Confirm the new passkey on your device…',passkeyCancelled:"The passkey request was cancelled or timed out. You can try again.",passkeyRejected:"The passkey could not be verified. Try again with a registered passkey.",passkeyRegistered:'Passkey added. Choose “Use a passkey” to unlock.',inviteInvalid:'The invitation has expired or was already used. Ask the owner for a new invitation.',passkeyDuplicate:'A passkey is already registered on this device. Use it to sign in.',passkeyThrottled:'Too many passkey requests. Please try again shortly.'},
-    'zh-CN':{passkey:'使用通行密钥',passkeyHint:'使用 Face ID、Touch ID，或选择另一台设备。',passkeyUnavailable:"此浏览器不支持通行密钥。请使用受支持的浏览器或设备打开。",setupTitle:'新增你的通行密钥',setupHelp:"这是网站所有者提供的一次性登记邀请。确认后，通行密钥由你的设备或通行密钥管理工具保存。",registerPasskey:'新增通行密钥',passkeyWaiting:'请在设备上确认通行密钥…',registering:'请在设备上确认新增通行密钥…',passkeyCancelled:"通行密钥操作已取消或超时。你可以重试。",passkeyRejected:"通行密钥未能通过验证。请使用已登记的通行密钥重试。",passkeyRegistered:'通行密钥已新增。点击“使用通行密钥”即可解锁。',inviteInvalid:'登记邀请已失效或已使用，请向网站所有者获取新邀请。',passkeyDuplicate:'此设备已有登记的通行密钥，请使用它登录。',passkeyThrottled:'通行密钥请求过于频繁，请稍后重试。'},
-    ja:{passkey:'パスキーを使う',passkeyHint:'Face ID、Touch ID、または別のデバイスを選択します。',passkeyUnavailable:"このブラウザーではパスキーを利用できません。対応するブラウザーまたはデバイスで開いてください。",setupTitle:'パスキーを追加',setupHelp:"管理者からの一度限りの登録招待です。確認後、パスキーはデバイスまたはパスキー管理ツールに保存されます。",registerPasskey:'パスキーを追加',passkeyWaiting:'デバイスでパスキーを確認してください…',registering:'デバイスで新しいパスキーを確認してください…',passkeyCancelled:"操作がキャンセルされたか、時間切れになりました。再試行できます。",passkeyRejected:"パスキーを確認できませんでした。登録済みのパスキーで再試行してください。",passkeyRegistered:'パスキーを追加しました。「パスキーを使う」でロックを解除できます。',inviteInvalid:'招待は期限切れか使用済みです。管理者に新しい招待を依頼してください。',passkeyDuplicate:'このデバイスには登録済みのパスキーがあります。それを使ってログインしてください。',passkeyThrottled:'パスキーの要求が多すぎます。しばらくしてから再試行してください。'},
-    ko:{passkey:'패스키 사용',passkeyHint:'Face ID, Touch ID 또는 다른 기기를 선택하세요.',passkeyUnavailable:"이 브라우저에서 패스키를 사용할 수 없습니다. 지원되는 브라우저나 기기에서 열어 주세요.",setupTitle:'패스키 추가',setupHelp:"관리자가 보낸 일회용 등록 초대입니다. 확인 후 기기나 패스키 관리 도구에 패스키가 저장됩니다.",registerPasskey:'패스키 추가',passkeyWaiting:'기기에서 패스키를 확인해 주세요…',registering:'기기에서 새 패스키를 확인해 주세요…',passkeyCancelled:"패스키 요청을 취소했거나 시간이 초과되었습니다. 다시 시도할 수 있습니다.",passkeyRejected:"패스키를 확인하지 못했습니다. 등록된 패스키로 다시 시도해 주세요.",passkeyRegistered:'패스키를 추가했습니다. “패스키 사용”을 선택하여 잠금을 해제하세요.',inviteInvalid:'초대가 만료되었거나 이미 사용되었습니다. 관리자에게 새 초대를 요청하세요.',passkeyDuplicate:'이 기기에 등록된 패스키가 있습니다. 해당 패스키로 로그인하세요.',passkeyThrottled:'패스키 요청이 너무 많습니다. 잠시 후 다시 시도하세요.'},
-    th:{passkey:'ใช้พาสคีย์',passkeyHint:'ใช้ Face ID, Touch ID หรือเลือกอุปกรณ์อื่น',passkeyUnavailable:"เบราว์เซอร์นี้ไม่รองรับพาสคีย์ โปรดเปิดด้วยเบราว์เซอร์หรืออุปกรณ์ที่รองรับ",setupTitle:'เพิ่มพาสคีย์ของคุณ',setupHelp:"นี่คือคำเชิญลงทะเบียนแบบใช้ครั้งเดียวจากเจ้าของเว็บไซต์ หลังยืนยัน อุปกรณ์หรือเครื่องมือจัดการพาสคีย์จะบันทึกพาสคีย์",registerPasskey:'เพิ่มพาสคีย์',passkeyWaiting:'โปรดยืนยันพาสคีย์บนอุปกรณ์ของคุณ…',registering:'โปรดยืนยันพาสคีย์ใหม่บนอุปกรณ์ของคุณ…',passkeyCancelled:"ยกเลิกคำขอพาสคีย์หรือหมดเวลาแล้ว คุณสามารถลองอีกครั้งได้",passkeyRejected:"ตรวจสอบพาสคีย์ไม่สำเร็จ โปรดลองอีกครั้งด้วยพาสคีย์ที่ลงทะเบียนไว้",passkeyRegistered:'เพิ่มพาสคีย์แล้ว เลือก “ใช้พาสคีย์” เพื่อปลดล็อก',inviteInvalid:'คำเชิญหมดอายุหรือถูกใช้แล้ว โปรดขอคำเชิญใหม่จากเจ้าของเว็บไซต์',passkeyDuplicate:'อุปกรณ์นี้มีพาสคีย์ที่ลงทะเบียนแล้ว โปรดใช้พาสคีย์นั้นเข้าสู่ระบบ',passkeyThrottled:'มีคำขอพาสคีย์มากเกินไป โปรดลองอีกครั้งภายหลัง'},
-    ru:{passkey:'Войти с ключом доступа',passkeyHint:'Используйте Face ID, Touch ID или выберите другое устройство.',passkeyUnavailable:"Этот браузер не поддерживает ключи доступа. Откройте сайт в совместимом браузере или на другом устройстве.",setupTitle:'Добавить ключ доступа',setupHelp:"Это одноразовое приглашение от владельца. После подтверждения ключ доступа сохранится на устройстве или у поставщика ключей доступа.",registerPasskey:'Добавить ключ доступа',passkeyWaiting:'Подтвердите ключ доступа на устройстве…',registering:'Подтвердите новый ключ доступа на устройстве…',passkeyCancelled:"Запрос отменён или время ожидания истекло. Можно повторить попытку.",passkeyRejected:"Не удалось проверить ключ доступа. Повторите попытку с зарегистрированным ключом доступа.",passkeyRegistered:'Ключ доступа добавлен. Выберите «Войти с ключом доступа» для разблокировки.',inviteInvalid:'Приглашение истекло или уже использовано. Запросите новое у владельца.',passkeyDuplicate:'На этом устройстве уже есть зарегистрированный ключ доступа. Используйте его для входа.',passkeyThrottled:'Слишком много запросов ключа доступа. Попробуйте позже.'}
+    'zh-HK':{passkey:'使用通行密鑰',passkeyHint:'使用 Face ID、Touch ID，或選擇另一部裝置。',passkeyUnavailable:"呢個瀏覽器唔支援通行密鑰。你仍然可以用上方嘅入站密碼登入。",setupTitle:'新增你嘅通行密鑰',setupHelp:"呢個係擁有人提供嘅一次性登記邀請。確認後，通行密鑰會由你嘅裝置或通行密鑰管理工具保存。",registerPasskey:'新增通行密鑰',passkeyWaiting:'請喺裝置確認通行密鑰…',registering:'請喺裝置確認新增通行密鑰…',passkeyCancelled:"已取消通行密鑰操作，或者操作已逾時。你可以再試。",passkeyRejected:"通行密鑰未能通過驗證。請用已登記嘅通行密鑰再試。",passkeyRegistered:'通行密鑰已新增。撳「使用通行密鑰」即可解鎖。',inviteInvalid:'登記邀請已失效或已使用，請向擁有人取得新邀請。',passkeyDuplicate:'呢部裝置已有登記嘅通行密鑰，請使用佢登入。',passkeyThrottled:'通行密鑰請求太頻密，請稍後再試。'},
+    en:{passkey:'Use a passkey',passkeyHint:'Use Face ID, Touch ID, or choose another device.',passkeyUnavailable:"This browser does not support passkeys. You can still sign in with the access password above.",setupTitle:'Add your passkey',setupHelp:"This is a one-time invitation from the owner. Your device or passkey provider will save the passkey after you confirm.",registerPasskey:'Add a passkey',passkeyWaiting:'Confirm the passkey on your device…',registering:'Confirm the new passkey on your device…',passkeyCancelled:"The passkey request was cancelled or timed out. You can try again.",passkeyRejected:"The passkey could not be verified. Try again with a registered passkey.",passkeyRegistered:'Passkey added. Choose “Use a passkey” to unlock.',inviteInvalid:'The invitation has expired or was already used. Ask the owner for a new invitation.',passkeyDuplicate:'A passkey is already registered on this device. Use it to sign in.',passkeyThrottled:'Too many passkey requests. Please try again shortly.'},
+    'zh-CN':{passkey:'使用通行密钥',passkeyHint:'使用 Face ID、Touch ID，或选择另一台设备。',passkeyUnavailable:"此浏览器不支持通行密钥。你仍可使用上方的入站密码登录。",setupTitle:'新增你的通行密钥',setupHelp:"这是网站所有者提供的一次性登记邀请。确认后，通行密钥由你的设备或通行密钥管理工具保存。",registerPasskey:'新增通行密钥',passkeyWaiting:'请在设备上确认通行密钥…',registering:'请在设备上确认新增通行密钥…',passkeyCancelled:"通行密钥操作已取消或超时。你可以重试。",passkeyRejected:"通行密钥未能通过验证。请使用已登记的通行密钥重试。",passkeyRegistered:'通行密钥已新增。点击“使用通行密钥”即可解锁。',inviteInvalid:'登记邀请已失效或已使用，请向网站所有者获取新邀请。',passkeyDuplicate:'此设备已有登记的通行密钥，请使用它登录。',passkeyThrottled:'通行密钥请求过于频繁，请稍后重试。'},
+    ja:{passkey:'パスキーを使う',passkeyHint:'Face ID、Touch ID、または別のデバイスを選択します。',passkeyUnavailable:"このブラウザーではパスキーを利用できません。上のアクセスパスワードでログインできます。",setupTitle:'パスキーを追加',setupHelp:"管理者からの一度限りの登録招待です。確認後、パスキーはデバイスまたはパスキー管理ツールに保存されます。",registerPasskey:'パスキーを追加',passkeyWaiting:'デバイスでパスキーを確認してください…',registering:'デバイスで新しいパスキーを確認してください…',passkeyCancelled:"操作がキャンセルされたか、時間切れになりました。再試行できます。",passkeyRejected:"パスキーを確認できませんでした。登録済みのパスキーで再試行してください。",passkeyRegistered:'パスキーを追加しました。「パスキーを使う」でロックを解除できます。',inviteInvalid:'招待は期限切れか使用済みです。管理者に新しい招待を依頼してください。',passkeyDuplicate:'このデバイスには登録済みのパスキーがあります。それを使ってログインしてください。',passkeyThrottled:'パスキーの要求が多すぎます。しばらくしてから再試行してください。'},
+    ko:{passkey:'패스키 사용',passkeyHint:'Face ID, Touch ID 또는 다른 기기를 선택하세요.',passkeyUnavailable:"이 브라우저에서 패스키를 사용할 수 없습니다. 위의 접속 비밀번호로 로그인할 수 있습니다.",setupTitle:'패스키 추가',setupHelp:"관리자가 보낸 일회용 등록 초대입니다. 확인 후 기기나 패스키 관리 도구에 패스키가 저장됩니다.",registerPasskey:'패스키 추가',passkeyWaiting:'기기에서 패스키를 확인해 주세요…',registering:'기기에서 새 패스키를 확인해 주세요…',passkeyCancelled:"패스키 요청을 취소했거나 시간이 초과되었습니다. 다시 시도할 수 있습니다.",passkeyRejected:"패스키를 확인하지 못했습니다. 등록된 패스키로 다시 시도해 주세요.",passkeyRegistered:'패스키를 추가했습니다. “패스키 사용”을 선택하여 잠금을 해제하세요.',inviteInvalid:'초대가 만료되었거나 이미 사용되었습니다. 관리자에게 새 초대를 요청하세요.',passkeyDuplicate:'이 기기에 등록된 패스키가 있습니다. 해당 패스키로 로그인하세요.',passkeyThrottled:'패스키 요청이 너무 많습니다. 잠시 후 다시 시도하세요.'},
+    th:{passkey:'ใช้พาสคีย์',passkeyHint:'ใช้ Face ID, Touch ID หรือเลือกอุปกรณ์อื่น',passkeyUnavailable:"เบราว์เซอร์นี้ไม่รองรับพาสคีย์ คุณยังเข้าสู่ระบบด้วยรหัสผ่านด้านบนได้",setupTitle:'เพิ่มพาสคีย์ของคุณ',setupHelp:"นี่คือคำเชิญลงทะเบียนแบบใช้ครั้งเดียวจากเจ้าของเว็บไซต์ หลังยืนยัน อุปกรณ์หรือเครื่องมือจัดการพาสคีย์จะบันทึกพาสคีย์",registerPasskey:'เพิ่มพาสคีย์',passkeyWaiting:'โปรดยืนยันพาสคีย์บนอุปกรณ์ของคุณ…',registering:'โปรดยืนยันพาสคีย์ใหม่บนอุปกรณ์ของคุณ…',passkeyCancelled:"ยกเลิกคำขอพาสคีย์หรือหมดเวลาแล้ว คุณสามารถลองอีกครั้งได้",passkeyRejected:"ตรวจสอบพาสคีย์ไม่สำเร็จ โปรดลองอีกครั้งด้วยพาสคีย์ที่ลงทะเบียนไว้",passkeyRegistered:'เพิ่มพาสคีย์แล้ว เลือก “ใช้พาสคีย์” เพื่อปลดล็อก',inviteInvalid:'คำเชิญหมดอายุหรือถูกใช้แล้ว โปรดขอคำเชิญใหม่จากเจ้าของเว็บไซต์',passkeyDuplicate:'อุปกรณ์นี้มีพาสคีย์ที่ลงทะเบียนแล้ว โปรดใช้พาสคีย์นั้นเข้าสู่ระบบ',passkeyThrottled:'มีคำขอพาสคีย์มากเกินไป โปรดลองอีกครั้งภายหลัง'},
+    ru:{passkey:'Войти с ключом доступа',passkeyHint:'Используйте Face ID, Touch ID или выберите другое устройство.',passkeyUnavailable:"Этот браузер не поддерживает ключи доступа. Вы можете войти с паролем доступа выше.",setupTitle:'Добавить ключ доступа',setupHelp:"Это одноразовое приглашение от владельца. После подтверждения ключ доступа сохранится на устройстве или у поставщика ключей доступа.",registerPasskey:'Добавить ключ доступа',passkeyWaiting:'Подтвердите ключ доступа на устройстве…',registering:'Подтвердите новый ключ доступа на устройстве…',passkeyCancelled:"Запрос отменён или время ожидания истекло. Можно повторить попытку.",passkeyRejected:"Не удалось проверить ключ доступа. Повторите попытку с зарегистрированным ключом доступа.",passkeyRegistered:'Ключ доступа добавлен. Выберите «Войти с ключом доступа» для разблокировки.',inviteInvalid:'Приглашение истекло или уже использовано. Запросите новое у владельца.',passkeyDuplicate:'На этом устройстве уже есть зарегистрированный ключ доступа. Используйте его для входа.',passkeyThrottled:'Слишком много запросов ключа доступа. Попробуйте позже.'}
   };
 
   const passwordCopy={
@@ -159,7 +159,14 @@
   for(const locale of Object.keys(noPasskeys))strings[locale].noPasskeys=noPasskeys[locale];
   let checking = null;
   try { language = localStorage.getItem('bhr-language') || language; } catch {}
-  if (!strings[language]) language = 'zh-HK';
+  try {
+    const requestedLanguage = new URLSearchParams(location.search).get('lang');
+    if (Object.hasOwn(strings, requestedLanguage)) {
+      language = requestedLanguage;
+      try { localStorage.setItem('bhr-language', language); } catch {}
+    }
+  } catch {}
+  if (!Object.hasOwn(strings, language)) language = 'zh-HK';
   const readKey = () => {
     try { memoryKey = JSON.parse(sessionStorage.getItem(storageKey)) || memoryKey; } catch {}
     if (memoryKey?.build !== BUILD) return null;
@@ -307,8 +314,13 @@
     async function accessRequest(path,body){
       const bridge=settings.passkeys,origin=new URL(bridge.authOrigin);
       if(origin.protocol!=='https:'||origin.origin!==bridge.authOrigin||!origin.hostname.endsWith('.workers.dev'))throw Error('Invalid authentication origin');
-      const response=await fetch(new URL(path,origin),{method:'POST',mode:'cors',credentials:'omit',cache:'no-store',redirect:'error',referrerPolicy:'no-referrer',signal:AbortSignal.timeout(20000),headers:{'Content-Type':'application/json'},body:JSON.stringify({...body,archiveId:bridge.archiveId})});
-      const reply=await response.json();
+      let response,reply;
+      try{
+        response=await fetch(new URL(path,origin),{method:'POST',mode:'cors',credentials:'omit',cache:'no-store',redirect:'error',referrerPolicy:'no-referrer',signal:AbortSignal.timeout(20000),headers:{'Content-Type':'application/json'},body:JSON.stringify({...body,archiveId:bridge.archiveId})});
+        reply=await response.json();
+      }catch{throw Error('network');}
+      // Transport failures are distinct from a rejected or cancelled credential.
+      if(response.status>=500||!reply||typeof reply!=='object')throw Error('network');
       if(!response.ok||reply.ok!==true){const error=Error('Passkey access denied');error.accessCode=reply.code;throw error;}
       return reply;
     }
@@ -370,12 +382,19 @@
         setupToken='';setupPanel.hidden=true;busy=false;statusName='passkeyRegistered';render();passkeyButton.focus();
       }catch(error){failPasskey(error,registerButton);}
     });
-    for (const button of document.querySelectorAll('[data-vault-language]')) button.addEventListener('click', () => {
-      language = button.dataset.vaultLanguage;
+    const selectLanguage = value => {
+      if (!Object.hasOwn(strings, value)) return;
+      language = value;
       try { localStorage.setItem('bhr-language', language); } catch {}
+      try {
+        const url = new URL(location.href);
+        url.searchParams.set('lang', language);
+        history.replaceState(history.state, '', url.pathname + url.search + url.hash);
+      } catch {}
       render();
-    });
-    document.querySelector('[data-vault-language-select]')?.addEventListener('change',event=>{language=event.target.value;try{localStorage.setItem('bhr-language',language);}catch{}render();});
+    };
+    for (const button of document.querySelectorAll('[data-vault-language]')) button.addEventListener('click', () => selectLanguage(button.dataset.vaultLanguage));
+    document.querySelector('[data-vault-language-select]')?.addEventListener('change', event => selectLanguage(event.target.value));
     render();
     try {
       await worker();
