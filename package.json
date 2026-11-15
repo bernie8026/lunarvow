@@ -2,7 +2,7 @@
   "name": "lunarvow-protected-archive",
   "private": true,
   "scripts": {
-    "test": "node tests/passkey-bridge.cjs && node tests/vault-publication.cjs && node tests/vault-runtime.cjs",
+    "test": "node tests/passkey-bridge.cjs && node tests/vault-publication.cjs && node tests/vault-gate-feedback.cjs && node tests/vault-runtime.cjs",
     "test:vault:unit": "node tests/vault-unit.cjs",
     "test:vault": "node tests/vault-runtime.cjs",
     "test:source": "node .private/source/tests/run.cjs",
