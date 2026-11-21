@@ -1,6 +1,6 @@
 (() => {
   'use strict';
-  const BUILD = '821677572d2b701c983ad1733dba04a7';
+  const BUILD = '66e7a7674c489207d1be1bb55b6d6d1b';
   const root = new URL('../', document.currentScript.src);
   const storageKey = `lunar-vault:${root.pathname}`;
   const isContent = document.documentElement.hasAttribute('data-vault-content');

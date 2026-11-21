@@ -17,7 +17,7 @@ for(const file of tracked){
   assert(!/(?:access-password|\.env(?:\.|$))/.test(file),`Secret file tracked: ${file}`);
 }
 assert(!fs.existsSync(path.join(root,'site.js')));assert(!fs.existsSync(path.join(root,'style.css')));
-const pages=['index.html','guide.html','lunar-vow-guide.html','hi3.html','gallery.html','story.html','captain-line.html','honkai-info.html','news.html','404.html','unlock.html'];
+const pages=['index.html','guide.html','lunar-vow-guide.html','hi3.html','weapons.html','gallery.html','story.html','captain-line.html','honkai-info.html','news.html','404.html','unlock.html'];
 for(const page of pages){
   const html=fs.readFileSync(path.join(root,page),'utf8');
   assert(html.includes('data-vault-gate'));assert(!html.includes('data-vault-content'));assert(!html.includes('@@ROOT@@'));
@@ -27,4 +27,4 @@ for(const page of pages){
 const data=fs.readdirSync(path.join(root,'_vault/data'));assert.deepEqual(data,[config.archive.file]);
 assert(fs.statSync(path.join(root,'_vault/data',config.archive.file)).size>16);
 assert(fs.existsSync(path.join(root,'.nojekyll')));
-console.log('PASS encrypted publication: eleven password and passkey gates; only v3 ciphertext contains the original source and assets');
+console.log('PASS encrypted publication: all password and passkey gates; only v3 ciphertext contains the original source and assets');
